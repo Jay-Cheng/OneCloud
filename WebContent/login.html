@@ -27,7 +27,7 @@
   	<div class="row" style="margin-top:8%;">
   		<div class="col-md-4 col-md-offset-4">
   			<h1 style="text-align: center;">一个<img src="img/favicon/cloud.png" alt="cloud">网盘</h1>
-  			<form action="">
+  			<form action="" id="loginForm">
   				<div class="form-group">
     				<input type="text" class="form-control" id="username" placeholder="用户名">
     				<br />
@@ -46,22 +46,23 @@
   <script src="js/bootstrap.min.js"></script>
   <script>
   	$(document).ready(function(){
-  		$("button").click(function(e){
+  		$("#loginForm").submit(function(e){
   			$.ajax({
-  				type: "POST",
-  				url: "doLoginServlet",
-  				contentType: "application/json; charset=utf-8",
-  				data: JSON.stringify(getUser()),
-  				success: function(message){
-  					if(message=="success"){
-  						window.location.href = "login_succeed.html";
+                type: "POST",
+                url: "doLoginServlet",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(getUser()),
+                success: function(message){
+                    if(message=="success"){
+                    	sessionStorage.setItem("username", $("#username").val());
+                        window.location.href = "login_succeed.html";
                         return;
-  					} else {
-  						$(".error").text("登录失败，请确认是否输入正确的用户名和密码");
-  					}
-  				}
-  			});
-  			return e.preventDefault();
+                    } else {
+                        $(".error").text("登录失败，请确认是否输入正确的用户名和密码");
+                    }
+                }
+            });
+            return e.preventDefault();//没有return好像也可以？
   		});
 
   		function getUser(){
