@@ -1,0 +1,95 @@
+    	body, html {
+    		height: 100%;
+    		overflow: hidden;
+    	}
+    	.layout-wrapper {
+    		height: 100%;
+    		background-color: #fff;
+    		margin: 0;
+    		padding: 0;
+    		outline: 0;
+    		min-width: 1220px;
+    	}
+    	.layout-header {
+    		height: 61px;
+    		margin: 0;
+    		padding: 0;
+    		outline: 0;
+    		background: #F5F6F9;
+    		border-bottom: 1px solid #E6E7EC;
+    	}
+    	#logo {
+    		height: 60px;
+    		width: auto;
+    	}
+    	#heading {
+			margin: auto;
+			display: inline;
+			vertical-align: middle;
+			font-weight: bold;
+    	}
+    	.layout-body {
+    		height:692px;
+    		margin: 0;
+    		padding: 0;
+    		outline: 0;
+    	}
+        #btn-transfer {
+            float: right;
+            padding: 0px;
+            margin-top: 15px;
+        }
+        #sort {
+            margin-top: 14px;
+            float: right;
+
+        }
+        #view {
+            margin-top: 14px;
+        }
+
+        #btn-upload {
+            padding: 0 45px;
+            border-radius: 20px;
+            background: #337ab7;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            outline: 0;
+            border: none;
+            height: 36px;
+            line-height: 36px;
+            margin-top: 12px;
+        }
+        .layout-user {
+            width: 100%;
+            height: 130px;
+        }
+        .layout-body-nav {
+            border-right: 1px solid #E6E7EC;
+        }
+        #user-photo{
+            width: 50px;
+            height: 50px;
+            margin: 20px auto 0px;
+            display:block;
+        }
+        #user-nickname{
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 0px;
+        }
+        #user-capacity{
+            margin-top: 10px;
+        }
+        .nav-title{
+            display: inline-block;
+            margin-left: 10px;
+        }
+        /*.test {
+            height: 100%;
+            border: 1px solid;
+        }
+        .addBorder {
+            border: 1px solid;
+        }*/
