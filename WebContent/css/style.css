@@ -8,7 +8,7 @@
     		margin: 0;
     		padding: 0;
     		outline: 0;
-    		min-width: 1220px;
+    		min-width: 1400px;
     	}
     	.layout-header {
     		height: 61px;
@@ -82,14 +82,6 @@
         #user-capacity{
             margin-top: 10px;
         }
-        .nav-title{
-            display: inline-block;
-            margin-left: 10px;
+        .nav-title-icon{
+            margin-right: 10px;
         }
-        /*.test {
-            height: 100%;
-            border: 1px solid;
-        }
-        .addBorder {
-            border: 1px solid;
-        }*/

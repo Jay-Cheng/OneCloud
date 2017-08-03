@@ -20,17 +20,17 @@
 	<div class="container-fluid layout-wrapper">
 		<div class="row layout-header">
 
-			<div class="col-xs-2 test">
+			<div class="col-xs-2" style="text-align: center;">
 				<h3 id="heading">一个<img src="img/favicon/cloud.png" id="logo"/>网盘</h3>
 			</div>
 
-			<div class="col-xs-1 test">
+			<div class="col-xs-1">
 				<button class="btn btn-default btn-circle" id="btn-transfer" title="文件管理">
 					<img src="img/icon/transfer.png" style="height: 20px;width: 20px;" />
 				</button>
 			</div>
 
-			<div class="col-xs-2 test">
+			<div class="col-xs-2">
                 <div class="input-group stylish-input-group input-append">
                     <input type="text" class="form-control"  placeholder="输入文件名" >
                     <span class="input-group-addon">
@@ -41,7 +41,7 @@
                 </div>
 			</div>
 
-			<div class="col-xs-2 col-xs-offset-2 test">
+			<div class="col-xs-2 col-xs-offset-2">
 
 				<div class="btn-group" data-toggle="buttons" id="view">
 					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-2 col-xs-offset-1 test">
+			<div class="col-xs-2 col-xs-offset-1">
 				<button type="button" class="btn btn-default" id="btn-upload">上传文件</button>
 			</div>
 
@@ -71,7 +71,7 @@
 
 
 		<div class="row layout-body">
-			<div class="col-xs-2 layout-body-nav test">
+			<div class="col-xs-2 layout-body-nav">
 				<div class="layout-user">
 					<img src="users/photo/001.jpg" alt="img/favicon/cloud.png" class="img-circle" id="user-photo"/>
 					<p id="user-nickname">nickname</p>
@@ -84,40 +84,59 @@
 
 				<div>
 					<ul class="nav nav-pills nav-stacked">
-  						<li role="presentation" class=""><a href="#">
-  						<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-  						<span >最近</span>
+  						<li role="presentation"><a data-toggle="pill" href="#lately">
+  						<span class="glyphicon glyphicon-time nav-title-icon"></span>
+  						最近
   						</a></li>
-  						<li role="presentation"><a href="#">
-  						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>	
+  						<li role="presentation"><a data-toggle="pill" href="#all">
+  						<span class="glyphicon glyphicon-list-alt nav-title-icon"></span>
   						全部
   						</a></li>
-  						<li role="presentation"><a href="#">
-  						<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+  						<li role="presentation"><a data-toggle="pill" href="#document">
+  						<span class="glyphicon glyphicon-file nav-title-icon"></span>
   						文档
   						</a></li>
-  						<li role="presentation"><a href="#">
-						<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+  						<li role="presentation"><a data-toggle="pill" href="#picture">
+						<span class="glyphicon glyphicon-picture nav-title-icon"></span>
   						图片
   						</a></li>
-  						<li role="presentation"><a href="#">
-  						<span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+  						<li role="presentation"><a data-toggle="pill" href="#video">
+  						<span class="glyphicon glyphicon-facetime-video nav-title-icon"></span>
   						视频
   						</a></li>
-  						<li role="presentation"><a href="#">
-  						<span class="glyphicon glyphicon-music" aria-hidden="true"></span>
+  						<li role="presentation"><a data-toggle="pill" href="#music">
+  						<span class="glyphicon glyphicon-music nav-title-icon"></span>
   						音乐
   						</a></li>
-					</ul>
-					<br />
-					<ul class="nav nav-pills nav-stacked">
-						<li role="presentation"><a href="#">保险箱</a></li>
-  						<li role="presentation"><a href="#">分享链接</a></li>
-  						<li role="presentation"><a href="#">回收站</a></li>
+  						<br />
+						<li role="presentation"><a data-toggle="pill" href="#safe">
+						<span class="glyphicon glyphicon-lock nav-title-icon"></span>
+						保险箱
+						</a></li>
+  						<li role="presentation"><a data-toggle="pill" href="#share">
+  						<span class="glyphicon glyphicon-share nav-title-icon"></span>
+  						分享链接
+  						</a></li>
+  						<li role="presentation"><a data-toggle="pill" href="#trash">
+  						<span class="glyphicon glyphicon-trash nav-title-icon"></span>
+  						回收站
+  						</a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="col-xs-10 test"></div>
+			<div class="col-xs-10">
+				<div class="tab-content">
+					<div id="lately" class="tab-pane">lately</div>
+					<div id="all" class="tab-pane">all</div>
+					<div id="document" class="tab-pane">document</div>
+					<div id="picture" class="tab-pane">picture</div>
+					<div id="video" class="tab-pane">video</div>
+					<div id="music" class="tab-pane">music</div>
+					<div id="safe" class="tab-pane">safe</div>
+					<div id="share" class="tab-pane">share</div>
+					<div id="trash" class="tab-pane">trash</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	
