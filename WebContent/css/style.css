@@ -2,13 +2,21 @@
     		height: 100%;
     		overflow: hidden;
     	}
+        div, ol, ul{
+            margin: 0;
+            padding: 0;
+            outline: 0;
+        }
+        ol, ul{
+            list-style: none;
+        }
     	.layout-wrapper {
     		height: 100%;
     		background-color: #fff;
     		margin: 0;
     		padding: 0;
     		outline: 0;
-    		min-width: 1400px;
+    		min-width: 1535px;
     	}
     	.layout-header {
     		height: 61px;
@@ -29,7 +37,7 @@
 			font-weight: bold;
     	}
     	.layout-body {
-    		height:692px;
+    		height:755px;
     		margin: 0;
     		padding: 0;
     		outline: 0;
@@ -67,6 +75,7 @@
         }
         .layout-body-nav {
             border-right: 1px solid #E6E7EC;
+            height: 100%;
         }
         #user-photo{
             width: 50px;
@@ -84,4 +93,73 @@
         }
         .nav-title-icon{
             margin-right: 10px;
+        }
+        .layout-content{
+            height: 100%;
+            padding: 0px 50px 0px 30px;
+        }
+
+
+
+        /* 文件路径 */
+        .disk-file-path{
+            border-bottom: 1px solid #E6E7EC;
+            line-height: 60px;
+            background-color: #fff;
+            margin: 0px;
+            padding: 0px;
+        }
+        #select-all{
+            padding-right: 11px;
+            margin-right: 10px;
+            height: 60px;
+            width: 47px;
+            display: inline-block;
+            text-align: center;
+        }
+        #select-all > input{
+            height: 18px;
+            width: 18px;
+            vertical-align: middle;
+            position: relative;
+            top: -3px;
+        }
+        .path{
+            display: inline-block;
+            background-color: #fff;
+            margin: 0px;
+            padding: 0px;
+        }
+
+
+
+        /*列表视图的文件*/
+        .disk-file-item{
+            line-height: 56px;
+            height: 56px;
+        }
+        .select{
+            height: 56px;
+            width: 36px;
+            text-align: center;
+            float: left;
+        }
+        .select > input{
+            height: 18px;
+            width: 18px;
+            vertical-align: middle;
+            position: relative;
+            top: -3px;       
+        }
+        .thumb{
+            float: left;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            margin: 8px 15px 0 0;
+        }
+        .thumb-icon{
+            height: 40px;
+            width: 40px;
+            float: left;/*!!!!!*/
         }

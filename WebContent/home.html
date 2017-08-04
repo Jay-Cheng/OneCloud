@@ -14,6 +14,11 @@
       <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .breadcrumb > li + li:before {
+            content: "> ";
+        }
+    </style>
   </head>
 
   <body>
@@ -41,7 +46,7 @@
                 </div>
 			</div>
 
-			<div class="col-xs-2 col-xs-offset-2">
+			<div class="col-xs-2 col-xs-offset-1">
 
 				<div class="btn-group" data-toggle="buttons" id="view">
 					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
@@ -62,7 +67,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-2 col-xs-offset-1">
+			<div class="col-xs-2 col-xs-offset-2">
 				<button type="button" class="btn btn-default" id="btn-upload">上传文件</button>
 			</div>
 
@@ -88,7 +93,7 @@
   						<span class="glyphicon glyphicon-time nav-title-icon"></span>
   						最近
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#all">
+  						<li role="presentation" class="active"><a data-toggle="pill" href="#all">
   						<span class="glyphicon glyphicon-list-alt nav-title-icon"></span>
   						全部
   						</a></li>
@@ -124,10 +129,37 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col-xs-10">
+			<div class="col-xs-10 layout-content">
 				<div class="tab-content">
 					<div id="lately" class="tab-pane">lately</div>
-					<div id="all" class="tab-pane">all</div>
+
+
+					<div id="all" class="tab-pane">
+						<div class="disk-file-path">
+							<div id="select-all">
+								<input type="checkbox">
+							</div>
+							<ol class="breadcrumb path">		
+    							<li><a href="#">我的网盘</a></li>
+    							<li><a href="#">文件夹</a></li>
+							</ol>
+						</div>
+						<ul>
+							<li class="disk-file-item">
+								<div class="select">
+									<input type="checkbox">
+								</div>
+								<div class="thumb">
+									<img src="img/icon/folder.png" class="thumb-icon">
+								</div>
+								<div class="info">
+
+								</div>								
+							</li>
+						</ul>
+						
+					</div>
+
 					<div id="document" class="tab-pane">document</div>
 					<div id="picture" class="tab-pane">picture</div>
 					<div id="video" class="tab-pane">video</div>
