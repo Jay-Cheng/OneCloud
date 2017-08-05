@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>一个网盘</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
     <link href="css/btn-circle.css" rel="stylesheet">
     <link href="css/search-bar.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -17,6 +18,10 @@
     <style>
         .breadcrumb > li + li:before {
             content: "> ";
+        }
+        .action-style > a {
+			color: #337ab7 !important;
+			font-size: 17px !important;
         }
     </style>
   </head>
@@ -78,7 +83,7 @@
 		<div class="row layout-body">
 			<div class="col-xs-2 layout-body-nav">
 				<div class="layout-user">
-					<img src="users/photo/001.jpg" alt="img/favicon/cloud.png" class="img-circle" id="user-photo"/>
+					<img src="users/head/001.jpg" alt="img/favicon/cloud.png" class="img-circle" id="user-photo"/>
 					<p id="user-nickname">nickname</p>
 					<div class="progress" id="user-capacity">
   						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
@@ -134,6 +139,8 @@
 					<div id="lately" class="tab-pane">lately</div>
 
 
+
+
 					<div id="all" class="tab-pane">
 						<div class="disk-file-path">
 							<div id="select-all">
@@ -146,24 +153,129 @@
 						</div>
 						<ul>
 							<li class="disk-file-item">
-								<div class="select">
-									<input type="checkbox">
+								<div class="file-head">
+									<div class="select">
+										<input type="checkbox">
+									</div>
+									<div class="thumb">
+										<img src="img/icon/folder.png" class="thumb-icon">
+									</div>
+									<div class="file-title">
+										<span class="file-name">文件夹1</span>
+									</div>
 								</div>
-								<div class="thumb">
-									<img src="img/icon/folder.png" class="thumb-icon">
-								</div>
-								<div class="info">
 
+								<div class="file-info">
+									<span class="file-size"></span>
+									<span class="file-time">2017-07-07 07:07</span>
+								</div>								
+							</li>
+							<li class="disk-file-item">
+								<div class="file-head">
+									<div class="select">
+										<input type="checkbox">
+									</div>
+									<div class="thumb">
+										<img src="img/icon/folder.png" class="thumb-icon">
+									</div>
+									<div class="file-title">
+										<span class="file-name">文件夹2</span>
+									</div>
+								</div>
+
+								<div class="file-info">
+									<span class="file-size"></span>
+									<span class="file-time">2017-07-07 07:07</span>
 								</div>								
 							</li>
 						</ul>
 						
 					</div>
 
-					<div id="document" class="tab-pane">document</div>
-					<div id="picture" class="tab-pane">picture</div>
+					<div id="document" class="tab-pane">
+						<ul>
+							<li class="disk-file-item">
+								<div class="file-head">
+									<div class="select">
+										<input type="checkbox">
+									</div>
+									<div class="thumb">
+										<img src="img/icon/word.png" class="thumb-icon">
+									</div>
+									<div class="file-title">
+										<span class="file-name">文档.word</span>
+									</div>
+								</div>
+
+								<div class="file-info">
+									<span class="file-size">1.5M</span>
+									<span class="file-time">2017-07-07 07:07</span>
+								</div>								
+							</li>
+							<li class="disk-file-item">
+								<div class="file-head">
+									<div class="select">
+										<input type="checkbox">
+									</div>
+									<div class="thumb">
+										<img src="img/icon/ppt.png" class="thumb-icon">
+									</div>
+									<div class="file-title">
+										<span class="file-name">演示.ppt</span>
+									</div>
+								</div>
+
+								<div class="file-info">
+									<span class="file-size">1.5M</span>
+									<span class="file-time">2017-07-07 07:07</span>
+								</div>								
+							</li>
+							<li class="disk-file-item">
+								<div class="file-head">
+									<div class="select">
+										<input type="checkbox">
+									</div>
+									<div class="thumb">
+										<img src="img/icon/xls.png" class="thumb-icon">
+									</div>
+									<div class="file-title">
+										<span class="file-name">表格.xls</span>
+									</div>
+								</div>
+
+								<div class="file-info">
+									<span class="file-size">1.5M</span>
+									<span class="file-time">2017-07-07 07:07</span>
+								</div>								
+							</li>
+						</ul>
+					</div>
+
+					<div id="picture" class="tab-pane">
+						<div class="picture-wall">
+							<ul>
+								<li class="picture">
+									<div class="picture-img">
+										<img src="users/picture/example.jpg">
+									</div>
+									<div class="picture-info">
+										<p>
+											<span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span>
+											<span class="picture-info-tit">example.jpg</span>
+										</p>
+									</div>
+								</li>
+
+								
+							</ul>
+						</div>
+					</div>
+
 					<div id="video" class="tab-pane">video</div>
 					<div id="music" class="tab-pane">music</div>
+
+
+
 					<div id="safe" class="tab-pane">safe</div>
 					<div id="share" class="tab-pane">share</div>
 					<div id="trash" class="tab-pane">trash</div>
@@ -197,10 +309,66 @@
 
 
 
-    <script src="jQuery/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/BootstrapMenu.min.js"></script>
     <script>
+    	var menu = new BootstrapMenu(".disk-file-item", {
+    		actionsGroups: [
+    			["download", "moveTo", "rename"],
+    			["moveToSafe"],
+    			["remove"]
+    		],
+    		actions: {
+    			share: {
+    				name: "分享",
+    				iconClass: "fa-share-alt",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("分享");
+    				}
 
+    			},
+    			download: {
+    				name: "下载",
+    				iconClass: "fa-cloud-download",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("下载");
+    				}
+    			},
+    			moveTo: {
+    				name: "移动到",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("移动到");
+    				}
+    			},
+    			rename: {
+    				name: "重命名",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("重命名");
+    				}
+    			},
+    			moveToSafe: {
+    				name: "移至保险箱",
+    				iconClass: "fa-shield",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("移至保险箱");
+    				}
+    			},
+    			remove: {
+    				name: "删除",
+    				iconClass: "fa-trash",
+    				classNames: "action-style",
+    				onClick: function() {
+    					alert("删除");
+    				}
+    			}
+    		}
+    	});
     </script>
   </body>
 </html>

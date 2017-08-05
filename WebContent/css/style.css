@@ -16,7 +16,7 @@
     		margin: 0;
     		padding: 0;
     		outline: 0;
-    		min-width: 1535px;
+    		min-width: 1200px;
     	}
     	.layout-header {
     		height: 61px;
@@ -37,7 +37,7 @@
 			font-weight: bold;
     	}
     	.layout-body {
-    		height:755px;
+    		height:700px;
     		margin: 0;
     		padding: 0;
     		outline: 0;
@@ -96,7 +96,8 @@
         }
         .layout-content{
             height: 100%;
-            padding: 0px 50px 0px 30px;
+            padding: 0px 0px 0px 0px;
+            overflow: auto;
         }
 
 
@@ -107,7 +108,7 @@
             line-height: 60px;
             background-color: #fff;
             margin: 0px;
-            padding: 0px;
+            padding: 0px 50px 0px 30px;
         }
         #select-all{
             padding-right: 11px;
@@ -137,6 +138,16 @@
         .disk-file-item{
             line-height: 56px;
             height: 56px;
+            border-bottom: 1px solid #E6E7EC;
+            padding: 0px 50px 0px 30px;
+        }
+        .disk-file-item:hover{
+            text-decoration: none;
+            background-color: #eee;
+        }
+        .file-head{
+            width: 35%;
+            float: left;
         }
         .select{
             height: 56px;
@@ -162,4 +173,77 @@
             height: 40px;
             width: 40px;
             float: left;/*!!!!!*/
+        }
+        .file-title{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 56px;
+        }
+        .file-name{}
+        .file-info{
+            width: 65%;
+            text-align: right;
+            float: left;
+            color: #74787C;
+            font-size: 12px;
+            height: 100%;
+            overflow-y: hidden;
+        }
+        .file-size{
+            display: inline-block;
+            width: 9%;
+            margin: 0 0 0 1%;
+        }
+        .file-time{
+            display: inline-block;
+            margin: 0 0 0 5%;
+        }
+
+
+        /* 照片墙 */
+        .picture-wall{
+            padding-left: 50px;
+            padding-top: 30px;
+        }
+        .picture{
+            width: 184px;
+            height: 184px;
+            position: relative;
+            float: left;
+            margin: 0 15px 15px 0;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid transparent;    
+        }
+        .picture:hover{
+            border: 2px solid #337ab7;
+            border-radius: 2px;
+        }
+        .picture-img{
+            height: 137px;
+            width: 100%;
+            border: 1px solid #D5D7DF;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 5px 0 rgba(15,32,65,.06);
+        }
+        .picture-img img{
+            width: 100%;
+            height: auto;
+            min-height: 100%!important;
+            background-image: none!important;
+            margin: 0;
+            background-color: #EBECF0;
+        }
+        .picture-info p{
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .picture-info-tit{
+            font-size: 18px;
         }
