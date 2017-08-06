@@ -43,9 +43,26 @@
     		outline: 0;
     	}
         #btn-transfer {
-            float: right;
-            padding: 0px;
-            margin-top: 15px;
+            /*width: 49px;
+            height: 49px;*/
+            margin-top: 5.5px;
+            margin-left: 8px;
+            position: relative;
+        }
+        #btn-transfer img{
+            height: 37px;
+            width: 37px;
+            position: relative;
+            top: -3px;
+            left: 1px;
+        }
+        #btn-transfer span{
+            position: absolute;
+            font-size: 12px;
+            background: #F74B4B;
+            color: #fff;
+            top: -4px;
+            left: 34px;
         }
         #sort {
             margin-top: 14px;
@@ -68,6 +85,7 @@
             height: 36px;
             line-height: 36px;
             margin-top: 12px;
+            margin-left: 20px;
         }
         .layout-user {
             width: 100%;
@@ -103,7 +121,7 @@
 
 
         /* 文件路径 */
-        .disk-file-path{
+        .disk-file-path, .mission-list-title{
             border-bottom: 1px solid #E6E7EC;
             line-height: 60px;
             background-color: #fff;
@@ -140,6 +158,7 @@
             height: 56px;
             border-bottom: 1px solid #E6E7EC;
             padding: 0px 50px 0px 30px;
+            cursor: pointer;
         }
         .disk-file-item:hover{
             text-decoration: none;
@@ -246,4 +265,10 @@
         }
         .picture-info-tit{
             font-size: 18px;
+        }
+        .mission-list-title{
+            height: 60px;
+        }
+        .mission-list-title span{
+            color: #777;
         }
