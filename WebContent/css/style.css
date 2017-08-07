@@ -271,4 +271,73 @@
         }
         .mission-list-title span{
             color: #777;
+        }   
+        #input-safePassword{
+            height: 150px;
+            width: 500px;
+            margin-top: 200px;
+        }
+        .loading-file-item{
+            height: 64px;
+            line-height: 64px;
+            padding: 0 40px 0 30px;
+            cursor: pointer;
+            position: relative;
+        }
+        .loading-file-item:hover{
+            text-decoration: none;
+            background-color: #eee;
+        }
+        .loading-file-head{
+            width: 40%;
+            float: left;
+        }
+        .loading-icon-wrapper{
+            width: 36px;
+            text-align: center;
+            float: left;
+            cursor: default;
+        }
+        .loading-file-info{
+            position: relative;
+            z-index: 0;
+            line-height: 1.5;
+            padding-top: 16px;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 56px;
+            white-space: nowrap;
+            overflow-y: hidden;
+        }
+        .loading-file-info .loading-file-name{
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        .loading-file-info .loading-file-size{
+            position: absolute;
+            z-index: 0;
+            top: 35px;
+            left: 0;
+            font-size: 12px;
+            color: #74787C;
+        }
+        .loading-progress{
+            width: 40%;
+            margin: 0;
+        }
+        .loading-control{
+            display: inline-block;
+            margin: 0 0 0 30px;
+            float: right;
+        }
+        .loading-control a{
+            display: block;
+            float: left;
+            margin: 0 22px 0 0;
+            outline: 0;
+            text-decoration: none;
         }

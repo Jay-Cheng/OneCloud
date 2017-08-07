@@ -74,7 +74,9 @@
 			</div>
 
 			<div class="col-xs-2 col-xs-offset-2">
-				<button type="button" class="btn btn-default" id="btn-upload">上传文件</button>
+				<button type="button" class="btn btn-default" id="btn-upload">
+				上传文件
+				</button>
 			</div>
 
 		</div>
@@ -141,6 +143,31 @@
 						<div class="mission-list-title">
 							<span>任务列表</span>
 						</div>
+						<ul>
+							<li class="loading-file-item">
+								<div class="loading-file-head">
+									<div class="loading-icon-wrapper">
+										<span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span>
+									</div>
+									<div class="thumb">
+										<img src="img/icon/file.png" class="thumb-icon">
+									</div>
+									<div class="loading-file-info">
+										<span class="loading-file-name">正在上传的文件.file</span>
+										<span class="loading-file-size">6.6MB</span>
+									</div>
+								</div>
+								<!-- <div class="progress loading-progress" style="">
+  									<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" style="width: 45%">
+    								45%
+  									</div>
+								</div> -->
+								<div class="loading-control">
+									<a><span class="glyphicon glyphicon-pause"></span></a>
+									<a><span class="glyphicon glyphicon-remove"></span></a>
+								</div>
+							</li>
+						</ul>		
 					</div>
 					<div id="lately" class="tab-pane">lately</div>
 
@@ -324,7 +351,19 @@
 
 
 
-					<div id="safe" class="tab-pane">safe</div>
+					<div id="safe" class="tab-pane">
+						<div class="panel panel-primary center-block" id="input-safePassword">
+  							<div class="panel-heading">请输入保险箱密码</div>
+  							<div class="panel-body">
+    							<form>
+    	  							<div class="form-group">
+    									<input type="password" class="form-control" id="safePassword" placeholder="密码">
+  									</div>
+  									<button class="btn btn-primary" style="width: 100%;">确认</button>
+    							</form>
+  							</div>
+						</div>
+					</div>
 					<div id="share" class="tab-pane">share</div>
 					<div id="trash" class="tab-pane">trash</div>
 				</div>
