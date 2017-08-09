@@ -18,10 +18,10 @@ import po.User;
  * Servlet implementation class doLoginServlet
  */
 @WebServlet("/doLoginServlet")
-public class doLoginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public doLoginServlet() {
+    public LoginServlet() {
         super();
     }
 
