@@ -26,7 +26,7 @@ public class UploadServlet extends HttpServlet {
 
         if (request.getParameter("getfile") != null && !request.getParameter("getfile").isEmpty()) {
             System.out.println("getfile:" + request.getParameter("getfile"));
-            File file = new File(request.getServletContext().getRealPath("/")+"imgs/"+request.getParameter("getfile"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+request.getParameter("getfile"));
             if (file.exists()) {
                 int bytes = 0;
                 ServletOutputStream op = response.getOutputStream();
@@ -47,7 +47,7 @@ public class UploadServlet extends HttpServlet {
                 op.close();
             }
         } else if (request.getParameter("delfile") != null && !request.getParameter("delfile").isEmpty()) {
-            File file = new File(request.getServletContext().getRealPath("/")+"imgs/"+ request.getParameter("delfile"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+ request.getParameter("delfile"));
             if (file.exists()) {
                 if (file.delete()) {
                     System.out.println("delfile:" + request.getParameter("delfile"));            
@@ -66,7 +66,7 @@ public class UploadServlet extends HttpServlet {
             }
         } else if (request.getParameter("getthumb") != null && !request.getParameter("getthumb").isEmpty()) {
             System.out.println("getthumb:" + request.getParameter("getthumb"));
-            File file = new File(request.getServletContext().getRealPath("/")+"imgs/"+request.getParameter("getthumb"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+request.getParameter("getthumb"));
                 if (file.exists()) {
                     String mimetype = getMimeType(file);
                     if (mimetype.endsWith("png") || mimetype.endsWith("jpeg")|| mimetype.endsWith("jpg") || mimetype.endsWith("gif")) {
@@ -120,7 +120,7 @@ public class UploadServlet extends HttpServlet {
             List<FileItem> items = uploadHandler.parseRequest(request);
             for (FileItem item : items) {
                 if (!item.isFormField()) {
-                        File file = new File(request.getServletContext().getRealPath("/")+"imgs/", item.getName());
+                        File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/", item.getName());
                         item.write(file);
                         JSONObject jsono = new JSONObject();
                         jsono.put("name", item.getName());

@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>一个网盘</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/btn-circle.css" rel="stylesheet">
-    <link href="css/search-bar.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css"><!-- 右键菜单需要用到的图标 -->
+    <link rel="stylesheet" href="css/btn-circle.css">
+    <link rel="stylesheet" href="css/search-bar.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/jquery.fileupload.css"><!-- 美化选择文件的图标和进度条 -->
     <link rel="icon" type="image/png" href="img/favicon/cloud.png" sizes="16x16">
     <!--[if lt IE 9]>
       <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,19 +32,19 @@
 		<div class="row layout-header">
 
 			<div class="col-xs-2" style="text-align: center;">
-				<h3 id="heading">一个<img src="img/favicon/cloud.png" id="logo"/>网盘</h3>
+				<h3 class="logo">一个<img src="img/favicon/cloud.png" />网盘</h3>
 			</div>
 
 			<div class="col-xs-1">
-				<a href="#transfer" data-toggle="pill" class="btn btn-circle btn-default" id="btn-transfer">
+				<a href="#transfer" data-toggle="pill" class="btn btn-default btn-circle btn-transfer" id="btn_transfer">
 					<img src="img/icon/transfer.png" />
-					<span class="badge">1</span>
+					<span class="badge loading_mission_count"></span>
 				</a>
 			</div>
 
 			<div class="col-xs-2">
-                <div class="input-group stylish-input-group input-append">
-                    <input type="text" class="form-control"  placeholder="输入文件名" >
+                <div class="input-group stylish-input-group">
+                    <input type="text" class="form-control"  placeholder="输入文件名" />
                     <span class="input-group-addon">
                         <button type="submit">
                             <span class="glyphicon glyphicon-search"></span>
@@ -53,30 +54,34 @@
 			</div>
 
 			<div class="col-xs-2 col-xs-offset-1">
-
-				<div class="btn-group" data-toggle="buttons" id="view">
+				
+				<div class="btn-group btn-group-view" data-toggle="buttons">
 					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
-						<input type="radio" name="view" id="byList" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
+						<input type="radio" name="view" id="view_by_list" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 					<label class="btn btn-default" style="border: 0px;" title="略缩图视图">
-						<input type="radio" name="view" id="byBlock" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
+						<input type="radio" name="view" id="view_by_block" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 				</div>
 				
-				<div class="btn-group" data-toggle="buttons" id="sort">
+				<div class="btn-group btn-group-sort" data-toggle="buttons">
 					<label class="btn btn-default active" style="border: 0px;" title="按字母排序">
-						<input type="radio" name="sort" id="byAlpha" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" style="color: #337ab7;"></span>
+						<input type="radio" name="sort" id="sort_by_alpha" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 					<label class="btn btn-default" style="border: 0px;" title="按时间排序">
-						<input type="radio" name="sort" id="byTime" autocomplete="off" /><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #337ab7;"></span>
+						<input type="radio" name="sort" id="sort_by_time" autocomplete="off" /><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 				</div>
+				
 			</div>
 
 			<div class="col-xs-2 col-xs-offset-2">
-				<button type="button" class="btn btn-default" id="btn-upload">
-				上传文件
+
+				<button type="button" class="btn btn-primary fileinput-button btn-upload" id="btn_upload">
+                    <span>添加文件</span>
+				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple>
 				</button>
+
 			</div>
 
 		</div>
@@ -84,24 +89,24 @@
 
 
 		<div class="row layout-body">
-			<div class="col-xs-2 layout-body-nav">
+			<div class="col-xs-2 layout-body-left">
 				<div class="layout-user">
-					<img src="img/icon/user.png" alt="img/favicon/cloud.png" class="img-circle" id="user-photo"/>
-					<p id="user-nickname">nickname</p>
-					<div class="progress" id="user-capacity">
-  						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-							1024MB used
+					<img src="img/icon/user.png" alt="img/favicon/cloud.png" class="img-circle" id="user_photo" />
+					<p id="user_nickname">nickname</p>
+					<div class="progress">
+  						<div class="progress-bar" role="progressbar" id="user_capacity" style="width: 50%;">
+							已用1024MB
   						</div>
 					</div>
 				</div>
 
-				<div>
+				<div class="layout-nav">
 					<ul class="nav nav-pills nav-stacked">
   						<li role="presentation"><a data-toggle="pill" href="#lately">
   						<span class="glyphicon glyphicon-time nav-title-icon"></span>
   						最近
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#all" id="nav-all">
+  						<li role="presentation"><a data-toggle="pill" href="#all" id="nav_all">
   						<span class="glyphicon glyphicon-list-alt nav-title-icon"></span>
   						全部
   						</a></li>
@@ -137,49 +142,87 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col-xs-10 layout-content">
+			<div class="col-xs-10 layout-body-content">
 				<div class="tab-content">
 					<div id="transfer" class="tab-pane">
 						<div class="mission-list-title">
 							<span>任务列表</span>
 						</div>
-						<ul>
-							<li class="loading-file-item">
-								<div class="loading-file-head">
-									<div class="loading-icon-wrapper">
+						<div class="dynamic-mission-list-title">
+							<p>进行中 (剩余<span class="loading_mission_count"></span>)</p>
+							<div class="btn-modify-all">
+								<button class="btn btn-default" id="cancel_all_mission">取消全部</button>
+							</div>
+						</div>
+						<ul id="loading_mission_list"></ul>
+						<!-- 备份 -->
+						<!--
+						<ul id="loading_mission_list">
+							<li>
+								<div class="mission-head">
+									<div class="mission-icon-wrapper">
 										<span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span>
 									</div>
 									<div class="thumb">
 										<img src="img/icon/file.png" class="thumb-icon">
 									</div>
-									<div class="loading-file-info">
-										<span class="loading-file-name">正在上传的文件.file</span>
-										<span class="loading-file-size">6.6MB</span>
+									<div class="mission-info">
+										<span class="mission-file-name">无法移除的模板.file</span>
+										<span class="mission-file-size">6.6MB</span>
 									</div>
 								</div>
-								<div class="progress loading-progress">
+								<div class="progress mission-progress">
   									<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" style="width: 66%">
     								66%
   									</div>
 								</div>
-								<div class="loading-control">
+								<div class="mission-control">
 									<a><span class="glyphicon glyphicon-pause"></span></a>
 									<a><span class="glyphicon glyphicon-remove"></span></a>
 								</div>
 							</li>
-						</ul>		
+						</ul>
+						-->
+						<div class="dynamic-mission-list-title">
+							<p>已完成 (<span id="complete_mission_count">0</span>)</p>
+							<div class="btn-modify-all" id="remove_all_record">
+								<button class="btn btn-default">清空记录</button>
+							</div>
+						</div>
+						<ul id="complete_mission_list"></ul>
+						<!-- 备份 -->
+						<!--
+						<ul id="complete_mission_list">
+							<li>
+								<div class="mission-head">
+									<div class="mission-icon-wrapper">
+										<span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span>
+									</div>
+									<div class="thumb">
+										<img src="img/icon/file.png" class="thumb-icon">
+									</div>
+									<div class="mission-info">
+										<span class="mission-file-name">无法移除的模板(已完成).file</span>
+										<span class="mission-file-size">6.6MB</span>
+									</div>
+								</div>
+								<div class="mission-complete">
+								</div>
+								<div class="mission-control">
+									<a><span class="glyphicon glyphicon-remove"></span></a>
+								</div>
+							</li>
+						</ul>
+						-->
 					</div>
 					<div id="lately" class="tab-pane">lately</div>
 
-
-
-
 					<div id="all" class="tab-pane">
-						<div class="disk-file-path">
-							<div id="select-all">
+						<div class="disk-file-path-wrapper">
+							<div class="select-all">
 								<input type="checkbox">
 							</div>
-							<ol class="breadcrumb path">		
+							<ol class="breadcrumb disk-file-path">		
     							<li><a href="#">我的网盘</a></li>
     							<li><a href="#">文件夹</a></li>
 							</ol>
@@ -294,12 +337,10 @@
 									<div class="picture-info">
 										<p>
 											<span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span>
-											<span class="picture-info-tit">example.jpg</span>
+											<span class="picture-info-title">example.jpg</span>
 										</p>
 									</div>
 								</li>
-
-								
 							</ul>
 						</div>
 					</div>
@@ -352,12 +393,12 @@
 
 
 					<div id="safe" class="tab-pane">
-						<div class="panel panel-primary center-block" id="input-safePassword">
+						<div class="panel panel-primary center-block input-safePassword">
   							<div class="panel-heading">请输入保险箱密码</div>
   							<div class="panel-body">
     							<form>
     	  							<div class="form-group">
-    									<input type="password" class="form-control" id="safePassword" placeholder="密码">
+    									<input type="password" class="form-control" placeholder="密码">
   									</div>
   									<button class="btn btn-primary" style="width: 100%;">确认</button>
     							</form>
@@ -400,12 +441,19 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/BootstrapMenu.min.js"></script>
     <script src="js/right-click-menu.js"></script>
+    
+    <!-- js files that provide upload service -->
+    <script src="js/jquery.ui.widget.js"></script>
+    <script src="js/jquery.iframe-transport.js"></script>
+    <script src="js/jquery.fileupload.js"></script>
+    <script src="js/fileupload.do.js"></script>
+    
     <script>
     	$(document).ready(function(){
-    		document.getElementById("nav-all").click();
+    		document.getElementById("nav_all").click();
     	});
-    	$("#btn-transfer").click(function(){
-    		$("[role='presentation'][class='active']").removeClass("active");
+    	$("#btn_transfer").click(function(){
+    		$('[role="presentation"][class="active"]').removeClass("active");
     	});
     </script>
   </body>

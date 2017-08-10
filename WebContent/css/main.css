@@ -13,106 +13,92 @@
     	.layout-wrapper {
     		height: 100%;
     		background-color: #fff;
-    		margin: 0;
-    		padding: 0;
-    		outline: 0;
     		min-width: 1200px;
     	}
     	.layout-header {
     		height: 61px;
-    		margin: 0;
-    		padding: 0;
-    		outline: 0;
     		background: #F5F6F9;
     		border-bottom: 1px solid #E6E7EC;
     	}
-    	#logo {
-    		height: 60px;
-    		width: auto;
-    	}
-    	#heading {
+    	.logo {
 			margin: auto;
 			display: inline;
 			vertical-align: middle;
 			font-weight: bold;
     	}
-    	.layout-body {
-    		height:700px;
-    		margin: 0;
-    		padding: 0;
-    		outline: 0;
-    	}
-        #btn-transfer {
-            /*width: 49px;
-            height: 49px;*/
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+        .btn-transfer {
             margin-top: 5.5px;
             margin-left: 8px;
             position: relative;
         }
-        #btn-transfer img{
+        .btn-transfer img{
             height: 37px;
             width: 37px;
             position: relative;
             top: -3px;
             left: 1px;
         }
-        #btn-transfer span{
-            position: absolute;
+        .btn-transfer span{
+            position: absolute !important;
             font-size: 12px;
-            background: #F74B4B;
-            color: #fff;
-            top: -4px;
+            background-color: #F74B4B !important;
+            color: #fff !important;
+            top: -4px !important;
             left: 34px;
         }
-        #sort {
+        .btn-group-sort {
             margin-top: 14px;
             float: right;
 
         }
-        #view {
+        .btn-group-view {
             margin-top: 14px;
         }
 
-        #btn-upload {
+        .btn-upload {
             padding: 0 45px;
             border-radius: 20px;
-            background: #337ab7;
-            color: #fff;
-            text-align: center;
             cursor: pointer;
-            outline: 0;
-            border: none;
             height: 36px;
             line-height: 36px;
             margin-top: 12px;
             margin-left: 20px;
         }
+        .layout-body {
+            height:700px;
+        }
+
+        .layout-body-left {
+            border-right: 1px solid #E6E7EC;
+            height: 100%;
+        }
         .layout-user {
             width: 100%;
             height: 130px;
         }
-        .layout-body-nav {
-            border-right: 1px solid #E6E7EC;
-            height: 100%;
-        }
-        #user-photo{
+        .layout-user img {
             width: 50px;
             height: 50px;
             margin: 20px auto 0px;
-            display:block;
+            display:block; 
         }
-        #user-nickname{
+        .layout-user p {
             text-align: center;
             margin-top: 5px;
             margin-bottom: 0px;
         }
-        #user-capacity{
-            margin-top: 10px;
+        .layout-user .progress {
+            margin-top: 10px;  
         }
+
         .nav-title-icon{
             margin-right: 10px;
         }
-        .layout-content{
+        .layout-body-content{
             height: 100%;
             padding: 0px 0px 0px 0px;
             overflow: auto;
@@ -120,66 +106,34 @@
 
 
 
-        /* 文件路径 */
-        .disk-file-path, .mission-list-title{
-            border-bottom: 1px solid #E6E7EC;
-            line-height: 60px;
-            background-color: #fff;
-            margin: 0px;
-            padding: 0px 50px 0px 30px;
-        }
-        #select-all{
-            padding-right: 11px;
-            margin-right: 10px;
+
+
+        .mission-list-title{
             height: 60px;
-            width: 47px;
-            display: inline-block;
-            text-align: center;
         }
-        #select-all > input{
-            height: 18px;
-            width: 18px;
-            vertical-align: middle;
+        .mission-list-title span{
+            color: #777;
+        }
+        #loading_mission_list li, #complete_mission_list li{
+            height: 64px;
+            line-height: 64px;
+            padding: 0 40px 0 30px;
             position: relative;
-            top: -3px;
+            border-bottom: 1px solid #E6E7EC;  
         }
-        .path{
-            display: inline-block;
-            background-color: #fff;
-            margin: 0px;
-            padding: 0px;
-        }
-
-
-
-        /*列表视图的文件*/
-        .disk-file-item{
-            line-height: 56px;
-            height: 56px;
-            border-bottom: 1px solid #E6E7EC;
-            padding: 0px 50px 0px 30px;
-            cursor: pointer;
-        }
-        .disk-file-item:hover{
+        #loading_mission_list li:hover, #complete_mission_list li:hover{
             text-decoration: none;
             background-color: #eee;
         }
-        .file-head{
-            width: 35%;
+        .mission-head {
+            width: 40%;
             float: left;
         }
-        .select{
-            height: 56px;
+        .mission-icon-wrapper{
             width: 36px;
             text-align: center;
             float: left;
-        }
-        .select > input{
-            height: 18px;
-            width: 18px;
-            vertical-align: middle;
-            position: relative;
-            top: -3px;       
+            cursor: default;
         }
         .thumb{
             float: left;
@@ -188,116 +142,12 @@
             text-align: center;
             margin: 8px 15px 0 0;
         }
-        .thumb-icon{
+        .thumb .thumb-icon{
             height: 40px;
             width: 40px;
             float: left;/*!!!!!*/
         }
-        .file-title{
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            height: 56px;
-        }
-        .file-name{}
-        .file-info{
-            width: 65%;
-            text-align: right;
-            float: left;
-            color: #74787C;
-            font-size: 12px;
-            height: 100%;
-            overflow-y: hidden;
-        }
-        .file-size{
-            display: inline-block;
-            width: 9%;
-            margin: 0 0 0 1%;
-        }
-        .file-time{
-            display: inline-block;
-            margin: 0 0 0 5%;
-        }
-
-
-        /* 照片墙 */
-        .picture-wall{
-            padding-left: 50px;
-            padding-top: 30px;
-        }
-        .picture{
-            width: 184px;
-            height: 184px;
-            position: relative;
-            float: left;
-            margin: 0 15px 15px 0;
-            cursor: pointer;
-            overflow: hidden;
-            border: 2px solid transparent;    
-        }
-        .picture:hover{
-            border: 2px solid #337ab7;
-            border-radius: 2px;
-        }
-        .picture-img{
-            height: 137px;
-            width: 100%;
-            border: 1px solid #D5D7DF;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 3px 5px 0 rgba(15,32,65,.06);
-        }
-        .picture-img img{
-            width: 100%;
-            height: auto;
-            min-height: 100%!important;
-            background-image: none!important;
-            margin: 0;
-            background-color: #EBECF0;
-        }
-        .picture-info p{
-            height: 40px;
-            line-height: 40px;
-            padding: 0 10px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-        .picture-info-tit{
-            font-size: 18px;
-        }
-        .mission-list-title{
-            height: 60px;
-        }
-        .mission-list-title span{
-            color: #777;
-        }   
-        #input-safePassword{
-            height: 150px;
-            width: 500px;
-            margin-top: 200px;
-        }
-        .loading-file-item{
-            height: 64px;
-            line-height: 64px;
-            padding: 0 40px 0 30px;
-            position: relative;
-        }
-        .loading-file-item:hover{
-            text-decoration: none;
-            background-color: #eee;
-        }
-        .loading-file-head{
-            width: 40%;
-            float: left;
-        }
-        .loading-icon-wrapper{
-            width: 36px;
-            text-align: center;
-            float: left;
-            cursor: default;
-        }
-        .loading-file-info{
+        .mission-info {
             position: relative;
             z-index: 0;
             line-height: 1.5;
@@ -309,14 +159,14 @@
             white-space: nowrap;
             overflow-y: hidden;
         }
-        .loading-file-info .loading-file-name{
+        .mission-info .mission-file-name{
             display: inline-block;
             white-space: nowrap;
             word-wrap: normal;
             text-overflow: ellipsis;
             max-width: 100%;
         }
-        .loading-file-info .loading-file-size{
+        .mission-info .mission-file-size{
             position: absolute;
             z-index: 0;
             top: 35px;
@@ -324,22 +174,178 @@
             font-size: 12px;
             color: #74787C;
         }
-        .loading-progress{
+        .mission-progress, .mission-complete{
             display: inline-block;
             width: 45%;
             margin-top: 22px;
             margin-left: 30px;
         }
-        .loading-control{
+        .mission-control{
             display: inline-block;
             margin: 0 0 0 30px;
             float: right;
         }
-        .loading-control a{
+        .mission-control a{
             display: block;
             float: left;
             margin: 0 22px 0 0;
-            outline: 0;
             text-decoration: none;
             cursor: pointer;
+        }
+        .dynamic-mission-list-title {
+            position: relative;
+            height: 60px;
+            padding: 0 0 0 40px;
+            line-height: 60px;
+            border-bottom: 1px solid #E6E7EC;
+        }
+        .dynamic-mission-list-title p{
+            font-size: 14px;
+            color: #74787C;
+        }
+        .dynamic-mission-list-title .btn-modify-all{
+            position: absolute;
+            z-index: 0;
+            right: 50px;
+            top: 0;
+            bottom: 0;
+        }  
+
+
+
+
+
+        .disk-file-path-wrapper, .mission-list-title{
+            border-bottom: 1px solid #E6E7EC;
+            line-height: 60px;
+            padding: 0px 50px 0px 30px;
+        }
+        .disk-file-path-wrapper .select-all{
+            padding-right: 11px;
+            margin-right: 10px;
+            height: 60px;
+            width: 47px;
+            display: inline-block;
+            text-align: center;
+        }
+        .disk-file-path-wrapper .select-all > input{
+            height: 18px;
+            width: 18px;
+            vertical-align: middle;
+            position: relative;
+            top: -3px;
+        }
+        .disk-file-path-wrapper .disk-file-path{
+            display: inline-block;
+            background-color: #fff;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .disk-file-item{
+            line-height: 56px;
+            height: 56px;
+            border-bottom: 1px solid #E6E7EC;
+            padding: 0px 50px 0px 30px;
+            cursor: pointer;
+        }
+        .disk-file-item:hover{
+            text-decoration: none;
+            background-color: #eee;
+        }
+        .disk-file-item .file-head{
+            width: 35%;
+            float: left;
+        }
+        .disk-file-item .file-head .select{
+            height: 56px;
+            width: 36px;
+            text-align: center;
+            float: left;
+        }
+        .disk-file-item .file-head .select > input{
+            height: 18px;
+            width: 18px;
+            vertical-align: middle;
+            position: relative;
+            top: -3px;       
+        }
+
+        .disk-file-item .file-head .file-title{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 56px;
+        }
+        .disk-file-item .file-info{
+            width: 65%;
+            text-align: right;
+            float: left;
+            color: #74787C;
+            font-size: 12px;
+            height: 100%;
+            overflow-y: hidden;
+        }
+        .disk-file-item .file-info .file-size{
+            display: inline-block;
+            width: 9%;
+            margin: 0 0 0 1%;
+        }
+        .disk-file-item .file-info .file-time{
+            display: inline-block;
+            margin: 0 0 0 5%;
+        }
+
+
+
+        .picture-wall{
+            padding-left: 50px;
+            padding-top: 30px;
+        }
+        .picture-wall .picture{
+            width: 184px;
+            height: 184px;
+            position: relative;
+            float: left;
+            margin: 0 15px 15px 0;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid transparent;    
+        }
+        .picture-wall .picture:hover{
+            border: 2px solid #337ab7;
+            border-radius: 2px;
+        }
+        .picture-wall .picture .picture-img{
+            height: 137px;
+            width: 100%;
+            border: 1px solid #D5D7DF;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 5px 0 rgba(15,32,65,.06);
+        }
+        .picture-wall .picture .picture-img img{
+            width: 100%;
+            height: auto;
+            min-height: 100%!important;
+            background-image: none!important;
+            margin: 0;
+            background-color: #EBECF0;
+        }
+        .picture-wall .picture .picture-info p{
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .picture-wall .picture .picture-info .picture-info-title{
+            font-size: 18px;
+        }
+
+        .input-safePassword{
+            height: 150px;
+            width: 500px;
+            margin-top: 200px;
         }
