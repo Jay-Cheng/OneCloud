@@ -15,9 +15,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.imgscalr.Scalr;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+
 @WebServlet("/UploadServlet")
 public class UploadServlet extends HttpServlet {
     
@@ -55,7 +57,7 @@ public class UploadServlet extends HttpServlet {
                         JSONObject json = new JSONObject();
                         json.put(request.getParameter("delfile").toString(), true);
                         JSONArray temp = new JSONArray();
-                        temp.put(json);
+                        temp.add(json);
                         JSONObject finalJson = new JSONObject();
                         finalJson.put("files", temp);
                         response.getWriter().write(finalJson.toString());
@@ -104,7 +106,6 @@ public class UploadServlet extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         if (!ServletFileUpload.isMultipartContent(request)) {
             throw new IllegalArgumentException("Request is not multipart, please 'multipart/form-data' enctype for your form.");
         }
@@ -129,15 +130,20 @@ public class UploadServlet extends HttpServlet {
                         jsono.put("thumbnailUrl", "copyedUploadServlet?getthumb=" + item.getName());
                         jsono.put("deleteUrl", "copyedUploadServlet?delfile=" + item.getName());
                         jsono.put("deleteType", "GET");
-                        temp.put(jsono);
+                        temp.add(jsono);
                 }
             }
             json.put("files", temp);
             System.out.println(json);
-        } catch (FileUploadException e) {
+        } catch(FileUploadException e) {
+            /* 处理客户端取消文件上传时抛出的EOFException */
+            if (e.getCause().getClass().equals(EOFException.class)) {
+                System.out.println("client cancel a file upload");
+            } else {
                 throw new RuntimeException(e);
-        } catch (Exception e) {
-                throw new RuntimeException(e);
+            }
+        } catch(Exception e) {
+            throw new RuntimeException(e);
         } finally {
             writer.write(json.toString());
             writer.close();
