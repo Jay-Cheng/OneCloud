@@ -28,7 +28,7 @@ public class UploadServlet extends HttpServlet {
 
         if (request.getParameter("getfile") != null && !request.getParameter("getfile").isEmpty()) {
             System.out.println("getfile:" + request.getParameter("getfile"));
-            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+request.getParameter("getfile"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + request.getParameter("getfile"));
             if (file.exists()) {
                 int bytes = 0;
                 ServletOutputStream op = response.getOutputStream();
@@ -49,7 +49,7 @@ public class UploadServlet extends HttpServlet {
                 op.close();
             }
         } else if (request.getParameter("delfile") != null && !request.getParameter("delfile").isEmpty()) {
-            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+ request.getParameter("delfile"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + request.getParameter("delfile"));
             if (file.exists()) {
                 if (file.delete()) {
                     System.out.println("delfile:" + request.getParameter("delfile"));            
@@ -68,7 +68,7 @@ public class UploadServlet extends HttpServlet {
             }
         } else if (request.getParameter("getthumb") != null && !request.getParameter("getthumb").isEmpty()) {
             System.out.println("getthumb:" + request.getParameter("getthumb"));
-            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/"+request.getParameter("getthumb"));
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + request.getParameter("getthumb"));
                 if (file.exists()) {
                     String mimetype = getMimeType(file);
                     if (mimetype.endsWith("png") || mimetype.endsWith("jpeg")|| mimetype.endsWith("jpg") || mimetype.endsWith("gif")) {
@@ -98,7 +98,17 @@ public class UploadServlet extends HttpServlet {
                         }
                     }
             } // TODO: check and report success
+        } else if (request.getParameter("resfile") != null && !request.getParameter("resfile").isEmpty()) {
+            String filename = request.getParameter("resfile");
+            File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + filename); 
+            if (file.exists()) {
+                Long uploadedBytes = file.length();
+                System.out.println("uploadedBytes: " + uploadedBytes);
+                response.setContentType("text/html;charset=UTF-8");
+                response.getWriter().write(uploadedBytes.toString());
+            }
         } else {
+            System.err.println("wtf?");
             PrintWriter writer = response.getWriter();
             writer.write("call POST with multipart form data");
         }
@@ -106,6 +116,9 @@ public class UploadServlet extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        System.out.println(request.getHeader("Content-Range"));
+        /*System.out.println(request.getHeader("Content-Disposition"));*/
         if (!ServletFileUpload.isMultipartContent(request)) {
             throw new IllegalArgumentException("Request is not multipart, please 'multipart/form-data' enctype for your form.");
         }
@@ -122,7 +135,15 @@ public class UploadServlet extends HttpServlet {
             for (FileItem item : items) {
                 if (!item.isFormField()) {
                         File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/", item.getName());
-                        item.write(file);
+                        FileOutputStream fos = new FileOutputStream(file, true);
+                        BufferedInputStream bis = new BufferedInputStream(item.getInputStream());
+                        int hasRead;
+                        byte[] buf = new byte[1024];
+                        while ((hasRead = bis.read(buf)) != -1) {
+                            fos.write(buf, 0, hasRead);
+                        }
+                        fos.close();
+                        bis.close();
                         JSONObject jsono = new JSONObject();
                         jsono.put("name", item.getName());
                         jsono.put("size", item.getSize());
@@ -134,7 +155,7 @@ public class UploadServlet extends HttpServlet {
                 }
             }
             json.put("files", temp);
-            System.out.println(json);
+            /*System.out.println(json);*/
         } catch(FileUploadException e) {
             /* 处理客户端取消文件上传时抛出的EOFException */
             if (e.getCause().getClass().equals(EOFException.class)) {

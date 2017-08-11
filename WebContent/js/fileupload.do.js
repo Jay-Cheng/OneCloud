@@ -2,7 +2,9 @@
 $(function() {
 	$("#fileupload").fileupload({
 		dataType: "json",
+		maxChunkSize: 1024000,
 		add: function(e, data) {
+			var marker = this;
 			updateLoadingCount(true);
 			var node = $("<li></li>");
 			node.append('<div class="mission-head"><div class="mission-icon-wrapper"><span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span></div><div class="thumb"><img src="img/icon/file.png" class="thumb-icon"></div><div class="mission-info"><span class="mission-file-name">' + data.files[0].name + '</span><span class="mission-file-size">' + getReadableSize(data.files[0].size) + '</span></div></div>');
@@ -10,11 +12,42 @@ $(function() {
 			node.append('<div class="mission-control"><a class="upload-pause"><span class="glyphicon glyphicon-pause"></span></a><a class="upload-cancel"><span class="glyphicon glyphicon-remove"></span></a></div>');
 			data.context = node;
 
+			/* 取消上传逻辑实现 */
 			data.context.find(".upload-cancel").click(function() {
 				updateLoadingCount(false);
                 data.abort();
-                data.context.remove();
+                $.ajax({
+                	type: "GET",
+                	url: "UploadServlet?delfile=" + data.files[0].name,
+                	success: function(message){
+                		data.context.remove();
+                	}
+                });
 			});
+			
+			/* 断点续传逻辑实现 */
+			data.context.find(".upload-pause").click(function() {
+				var icon = $(this).children();
+				if (icon.hasClass("glyphicon-pause")) {
+					/* 暂停逻辑 */
+					icon.removeClass("glyphicon-pause");
+					icon.addClass("glyphicon-play");
+					data.abort();
+				} else {
+					/* 继续逻辑 */
+					icon.removeClass("glyphicon-play");
+					icon.addClass("glyphicon-pause");
+					$.ajax({
+                		type: "GET",
+                		url: "UploadServlet?resfile=" + data.files[0].name,
+                		success: function (result) {
+                			data.uploadedBytes = Number(result);
+                			$.blueimp.fileupload.prototype.options.add.call(marker, e, data);
+                		}
+					});
+				}
+			});
+
 
 			node.appendTo("#loading_mission_list");
 			data.submit();
@@ -53,10 +86,10 @@ function getReadableSize(bytes) {
 function updateLoadingCount(plus) {
 	var loadingCount = $(".loading_mission_count");
 	if (plus) {
-		if (count.first().text() == "") {
-			count.text(1);
+		if (loadingCount.first().text() == "") {
+			loadingCount.text(1);
 		} else {
-			count.text(parseInt(count.first().text()) + 1); 
+			loadingCount.text(parseInt(loadingCount.first().text()) + 1); 
 		}
 	} else {
 		if (parseInt(loadingCount.first().text()) - 1 == 0) {
@@ -74,4 +107,14 @@ function updateCompleteCount(plus) {
 	} else {
 		completeCount.text(parseInt(completeCount.text()) - 1);
 	}
+}
+
+/* temp function */
+function printObj(obj) {
+ 	var description = ""; 
+ 	for(var i in obj){ 
+ 		var property = obj[i]; 
+ 		description += i + " = " + property + "\n"; 
+ 	} 
+ 	console.log(description);
 }
