@@ -198,6 +198,7 @@
             padding: 0 0 0 40px;
             line-height: 60px;
             border-bottom: 1px solid #E6E7EC;
+            display: none;
         }
         .dynamic-mission-list-title p{
             font-size: 14px;

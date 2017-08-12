@@ -148,7 +148,7 @@
 						<div class="mission-list-title">
 							<span>任务列表</span>
 						</div>
-						<div class="dynamic-mission-list-title">
+						<div class="dynamic-mission-list-title" id="dynamic_title_loading">
 							<p>进行中 (剩余<span class="loading_mission_count"></span>)</p>
 							<div class="btn-modify-all">
 								<button class="btn btn-default" id="cancel_all_mission">取消全部</button>
@@ -177,13 +177,13 @@
   									</div>
 								</div>
 								<div class="mission-control">
-									<a><span class="glyphicon glyphicon-pause"></span></a>
-									<a><span class="glyphicon glyphicon-remove"></span></a>
+									<a class="upload-pause"><span class="glyphicon glyphicon-pause"></span></a>
+									<a class="upload-cancel"><span class="glyphicon glyphicon-remove"></span></a>
 								</div>
 							</li>
 						</ul>
 						-->
-						<div class="dynamic-mission-list-title">
+						<div class="dynamic-mission-list-title" id="dynamic_title_complete">
 							<p>已完成 (<span id="complete_mission_count">0</span>)</p>
 							<div class="btn-modify-all" id="remove_all_record">
 								<button class="btn btn-default">清空记录</button>
@@ -209,7 +209,7 @@
 								<div class="mission-complete">
 								</div>
 								<div class="mission-control">
-									<a><span class="glyphicon glyphicon-remove"></span></a>
+									<a class="remove-record"><span class="glyphicon glyphicon-remove"></span></a>
 								</div>
 							</li>
 						</ul>
@@ -449,11 +449,43 @@
     <script src="js/fileupload.do.js"></script>
     
     <script>
-    	$(document).ready(function(){
-    		document.getElementById("nav_all").click();
+    	$(function() {
+    		$("#nav_all").click();
     	});
-    	$("#btn_transfer").click(function(){
+    	$("#btn_transfer").click(function() {
     		$('[role="presentation"][class="active"]').removeClass("active");
+    	});
+
+    	/* Test */
+    	$(function() {
+    		var file1 = {
+    			ID: 1,
+    			name: "file1",
+    			size: 1024,
+    			type: "txt",
+    			lastModifyTime: "2017-07-07 07:07",
+    			LocalURL: "home/dir1"
+    		};
+    		var file2 = {
+    			ID: 2,
+    			name: "file2",
+    			size: 2048,
+    			type: "png",
+    			lastModifyTime: "2017-07-07 07:07",
+    			LocalURL: "home/dir1"
+    		};
+    		var file3 = {
+    			ID: 3,
+    			name: "file3",
+    			size: 4096,
+    			type: "doc",
+    			lastModifyTime: "2017-07-07 07:07",
+    			LocalURL: "home/dir2"
+    		};
+    		var files = [file1, file2, file3];
+    		/* 模拟获取数据 */
+    		/* 服务端传来的JSON数据解析后获得files对象 */ 
+    		alert(files[0].LocalURL);
     	});
     </script>
   </body>
