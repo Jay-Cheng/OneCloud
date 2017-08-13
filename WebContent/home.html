@@ -222,11 +222,16 @@
 							<div class="select-all">
 								<input type="checkbox">
 							</div>
-							<ol class="breadcrumb disk-file-path">		
-    							<li><a href="#">我的网盘</a></li>
+							<ol class="breadcrumb disk-file-path" id="disk_file_path">
+    							<li data-enter="home"><a href="javascript:void(0)">我的网盘</a></li>
+								<!--		
     							<li><a href="#">文件夹</a></li>
+    							-->
 							</ol>
 						</div>
+
+						<!-- 备份 -->
+						<!--
 						<ul>
 							<li class="disk-file-item">
 								<div class="file-head">
@@ -240,32 +245,13 @@
 										<span class="file-name">文件夹1</span>
 									</div>
 								</div>
-
-								<div class="file-info">
-									<span class="file-size"></span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/folder.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">文件夹2</span>
-									</div>
-								</div>
-
 								<div class="file-info">
 									<span class="file-size"></span>
 									<span class="file-time">2017-07-07 07:07</span>
 								</div>								
 							</li>
 						</ul>
-						
+						-->
 					</div>
 
 					<div id="document" class="tab-pane">
@@ -446,46 +432,16 @@
     <script src="js/jquery.ui.widget.js"></script>
     <script src="js/jquery.iframe-transport.js"></script>
     <script src="js/jquery.fileupload.js"></script>
-    <script src="js/fileupload.do.js"></script>
-    
+    <script src="js/fileupload.main.js"></script>
+
+
+    <script src="js/file-system.js"></script>
     <script>
     	$(function() {
     		$("#nav_all").click();
     	});
     	$("#btn_transfer").click(function() {
     		$('[role="presentation"][class="active"]').removeClass("active");
-    	});
-
-    	/* Test */
-    	$(function() {
-    		var file1 = {
-    			ID: 1,
-    			name: "file1",
-    			size: 1024,
-    			type: "txt",
-    			lastModifyTime: "2017-07-07 07:07",
-    			LocalURL: "home/dir1"
-    		};
-    		var file2 = {
-    			ID: 2,
-    			name: "file2",
-    			size: 2048,
-    			type: "png",
-    			lastModifyTime: "2017-07-07 07:07",
-    			LocalURL: "home/dir1"
-    		};
-    		var file3 = {
-    			ID: 3,
-    			name: "file3",
-    			size: 4096,
-    			type: "doc",
-    			lastModifyTime: "2017-07-07 07:07",
-    			LocalURL: "home/dir2"
-    		};
-    		var files = [file1, file2, file3];
-    		/* 模拟获取数据 */
-    		/* 服务端传来的JSON数据解析后获得files对象 */ 
-    		alert(files[0].LocalURL);
     	});
     </script>
   </body>

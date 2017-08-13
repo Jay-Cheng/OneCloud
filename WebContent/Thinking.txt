@@ -1,0 +1,51 @@
+*文件系统的构建
+IDEA1：{
+	初始化：{
+		一次性从服务器读取用户所有文件信息，以JSON形式返回；
+		解析JSON，获得文件数组对象；
+		showDirContents("home");
+	}
+	/*
+	 * 通用函数：动态生成某个文件夹下的所有文件
+	 * dir是文件夹的路径	
+	 */
+	 function showDirContents(dir) {
+	 	隐藏主界面下的所有ul节点；
+	 	判断属性data-dir=dir的<ul>节点是否存在，若存在，显示它，return；否则进行下一步；
+	 	生成一个<ul>节点，设其属性data-dir=dir;
+	 	遍历文件数组：{
+	 		if (files[i].LocalURL == dir) {
+				生成一个该文件的<li>节点；
+				if (files[i].type == "dir" && files[i].size == null) {
+					设该节点的属性data-enter=dir + "/" + files[i].name;
+				}
+	 		}
+	 		把<li>节点appendTo<ul>节点;
+	 	}
+	 	<ul>节点appendTo主界面
+	 }
+	 /*
+	  * 绑定单击文件夹<li>节点的事件
+	  */
+	  $(文件节点).click({
+	  		if (本节点是文件夹) {
+	  			生成一个面包屑<li>，设置它的名字为$(this).name，设置它的data-enter=$(this).data-enter，appendTo<ul>面包屑；
+	  			showDirContents($(this).data-enter);
+	  		} 
+	  });
+	 /*
+	  * 绑定单击面包屑<li>节点的事件
+	  */
+	  $(面包屑节点).click({
+	  		把本节点之后的sibling全部移除；
+	  		showDirContents($(this).data-enter);
+	  });
+}
+IDEA2：{
+	// TODO
+	初始化：{
+
+	}
+}
+
+

@@ -102,7 +102,7 @@ $(function() {
 });
 /* 把字节数转为易读的单位 */
 function getReadableSize(bytes) {
-    var s = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    var s = ['Bytes', 'K', 'M', 'G', 'T', 'P'];
     var e = Math.floor(Math.log(bytes)/Math.log(1024));
     return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
 }
