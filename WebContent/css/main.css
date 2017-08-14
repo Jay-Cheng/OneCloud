@@ -236,13 +236,17 @@
             position: relative;
             top: -3px;
         }
-        .disk-file-path-wrapper .disk-file-path{
+        .disk-file-path-wrapper .disk-file-path {
             display: inline-block;
             background-color: #fff;
             margin: 0px;
             padding: 0px;
         }
-
+        .disk-file-path-wrapper .disk-file-path li .active{
+            text-decoration: none;
+            color: #337ab7;
+            font-weight: 700;
+        }
         .disk-file-item{
             line-height: 56px;
             height: 56px;
