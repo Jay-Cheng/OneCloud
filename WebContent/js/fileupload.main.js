@@ -104,7 +104,7 @@ $(function() {
 function getReadableSize(bytes) {
     var s = ['Bytes', 'K', 'M', 'G', 'T', 'P'];
     var e = Math.floor(Math.log(bytes)/Math.log(1024));
-    return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
+    return (bytes/Math.pow(1024, Math.floor(e))).toFixed(1)+" "+s[e];
 }
 /* 更新进行中任务的计数 */
 function updateLoadingCount(plus) {

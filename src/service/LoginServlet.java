@@ -1,4 +1,4 @@
-package servlet;
+package service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,11 +14,9 @@ import com.alibaba.fastjson.JSONObject;
 import dao.UserDAO;
 import po.User;
 
-/**
- * Servlet implementation class doLoginServlet
- */
 @WebServlet("/doLoginServlet")
 public class LoginServlet extends HttpServlet {
+    
 	private static final long serialVersionUID = 1L;
        
     public LoginServlet() {

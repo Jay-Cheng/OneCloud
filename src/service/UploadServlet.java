@@ -1,4 +1,4 @@
-package servlet;
+package service;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -23,6 +23,8 @@ import com.alibaba.fastjson.JSONObject;
 @WebServlet("/UploadServlet")
 public class UploadServlet extends HttpServlet {
     
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
