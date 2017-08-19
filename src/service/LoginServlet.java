@@ -39,7 +39,6 @@ public class LoginServlet extends HttpServlet {
 	        e.printStackTrace();
 	    }
 	    User user = JSONObject.parseObject(jsonString.toString(), User.class);
-	    System.out.println(user.getUsername());
         UserDAO userdao = new UserDAO();
         if (userdao.check(user)) {
             response.setContentType("text/html;charset=UTF-8");

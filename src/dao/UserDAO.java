@@ -10,6 +10,6 @@ public class UserDAO {
         return false;
     }
     public boolean check(User user) {
-        return check(user.getUsername(), user.getPassword());
+        return check(user.getAccount(), user.getPassword());
     }
 }

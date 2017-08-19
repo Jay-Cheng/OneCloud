@@ -1,20 +1,26 @@
 package po;
 
 public class User {
-    private String username;
+    private Long id;
+    private String account;
     private String password;
+    private String nickname;
+    private String photo_url;
     
     public User() {}
     
-    public String getUsername() {
-        return username;
+    public String getAccount() {
+        return account;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    
+    public void setAccount(String account) {
+        this.account = account;
     }
+    
     public String getPassword() {
         return password;
     }
+    
     public void setPassword(String password) {
         this.password = password;
     }
