@@ -92,11 +92,11 @@
 		<div class="row layout-body">
 			<div class="col-xs-2 layout-body-left">
 				<div class="layout-user">
-					<img src="img/icon/user.png" alt="img/favicon/cloud.png" class="img-circle" id="user_photo" />
+					<img src="img/icon/user.png" alt="头像" class="img-circle" id="user_photo" />
 					<p id="user_nickname">nickname</p>
 					<div class="progress">
-  						<div class="progress-bar" role="progressbar" id="user_capacity" style="width: 50%;">
-							已用1024MB
+  						<div class="progress-bar" role="progressbar" id="user_capacity" style="width: 0%;min-width: 2em;">
+							0%
   						</div>
 					</div>
 				</div>
@@ -438,6 +438,7 @@
 
     <!--<script src="js/file-system-allAtOnce.js"></script>-->
     <script src="js/file-system.js"></script>
+    <script src="js/initialize.js"></script>
     <script>
     	$(function() {
     		$("#nav_all").click();

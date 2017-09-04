@@ -24,7 +24,7 @@
   			<h1 style="text-align: center;">一个<img src="img/favicon/cloud.png" alt="cloud">网盘</h1>
   			<form action="" id="loginForm">
   				<div class="form-group">
-    				<input type="text" class="form-control" id="username" placeholder="用户名">
+    				<input type="text" class="form-control" id="account" placeholder="用户名">
     				<br />
    					<input type="password" class="form-control" id="password" placeholder="密码">
   				</div>
@@ -37,7 +37,7 @@
 
 
 
-  <script src="jQuery/jquery-3.2.1.min.js"></script>
+  <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script>
   	$(document).ready(function(){
@@ -47,14 +47,25 @@
                 url: "LoginServlet",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(getUser()),
-                success: function(message){
-                    if(message=="success"){
-                    	sessionStorage.setItem("username", $("#username").val());
-                        window.location.href = "login_succeed.html";
-                        return;
-                    } else {
-                        $(".error").text("登录失败，请确认是否输入正确的用户名和密码");
-                    }
+                success: function(result) {
+                  switch (result.state) {
+                    case 1:
+                      $(".error").text("登录成功");
+                      var user = result.user;
+                      sessionStorage.setItem("user_id", user.id);
+                      sessionStorage.setItem("user_account", user.account);
+                      sessionStorage.setItem("user_nickname", user.nickname);
+                      sessionStorage.setItem("user_photoURL", user.photoURL);
+                      sessionStorage.setItem("user_usedCapacity", user.usedCapacity);
+                      window.location.href = "home.html";
+                      break;
+                    case 2:
+                      $(".error").text("登录失败，密码不正确");break;
+                    case 3:
+                      $(".error").text("登录失败，用户名不存在");break;
+                    case 4:
+                      $(".error").text("数据库查询出现问题！请等待开发人员修复");break;
+                  }
                 }
             });
             return e.preventDefault();//没有return好像也可以？
@@ -62,7 +73,7 @@
 
   		function getUser(){
   			var user = {
-  				username:$("#username").val(),
+  				account:$("#account").val(),
   				password:$("#password").val()
   			};
   			return user;

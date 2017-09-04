@@ -17,9 +17,9 @@
         <!-- 使用currentSession + 本地事务 -->
         <property name="current_session_context_class">thread</property>
         
-        <mapping class="po.User" />
-        <mapping class="po.File" />
-        <mapping class="po.LocalFile" />
-        <mapping class="po.LocalFolder" />
+        <mapping class="dao.entity.UserDO" />
+        <mapping class="dao.entity.FileDO" />
+        <mapping class="dao.entity.LocalFileDO" />
+        <mapping class="dao.entity.LocalFolderDO" />
     </session-factory>
 </hibernate-configuration>

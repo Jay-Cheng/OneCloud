@@ -1,9 +1,7 @@
 package web;
 
 import java.io.IOException;
-import java.sql.Connection;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,11 +19,6 @@ public class GetFolderContentsServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    ServletContext context = request.getServletContext();
-	    Connection conn = (Connection) context.getAttribute("DBConnection");
-	    String userID = request.getParameter("userID");
-	    String folderID = request.getParameter("folderID");
-	    
 	    	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

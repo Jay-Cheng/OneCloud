@@ -12,25 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONObject;
 
 import dao.entity.UserDO;
+import manager.exception.DBQueryException;
 import manager.exception.UserNotFoundException;
 import service.LoginService;
 import service.impl.LoginServiceImpl;
 import web.dto.UserDTO;
 
-@WebServlet("/doLoginServlet")
+@WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     
 	private static final long serialVersionUID = 1L;
-       
-    public LoginServlet() {
-        super();
-    }
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    /* 获取并解析JSON */
 	    StringBuffer jsonString = new StringBuffer();
 	    String temp = null;
 	    try {
@@ -41,26 +39,29 @@ public class LoginServlet extends HttpServlet {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	    /* 只有account和password域有效 */
 	    UserDO user = JSONObject.parseObject(jsonString.toString(), UserDO.class);
+	    
 	    LoginService loginService = new LoginServiceImpl();
+	    JSONObject responseJson = new JSONObject();
 	    
 	    try {
             if (loginService.checkPassword(user.getAccount(), user.getPassword())) {
-                response.setContentType("application/json");
                 UserDTO dto = loginService.getUserDTO();
-                System.out.println(JSONObject.toJSONString(dto));
-                response.getWriter().write(JSONObject.toJSONString(dto));
+                
+                responseJson.put("state", 1);// 状态1表示登录成功
+                responseJson.put("user", JSONObject.toJSON(dto));
+            } else {
+                responseJson.put("state", 2);// 状态2表示密码错误
             }
         } catch (UserNotFoundException e) {
-            
+            responseJson.put("state", 3);// 状态3表示账户不存在
+        } catch (DBQueryException e) {
+            responseJson.put("state", 4);// 状态4表示数据库查询出现问题
         }
-        /*UserDAO userdao = new UserDAO();
-        if (userdao.check(user)) {
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().write("success");
-        } else {
-            // do nothing
-        }*/
+	    
+        response.setContentType("application/json");
+        response.getWriter().write(responseJson.toJSONString());
 	}
 
 }
