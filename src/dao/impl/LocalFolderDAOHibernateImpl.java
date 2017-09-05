@@ -14,64 +14,58 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import dao.UserDAO;
-import dao.entity.UserDO;
+import dao.LocalFolderDAO;
+import dao.entity.LocalFolderDO;
 import manager.exception.DBQueryException;
 import manager.util.HibernateUtil;
 
-public class UserDAOHibernateImpl implements UserDAO {
+public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
 
     @Override
-    public UserDO get(Map<String, Object> params) throws DBQueryException {
+    public LocalFolderDO get(Map<String, Object> params) throws DBQueryException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<LocalFolderDO> list(Map<String, Object> params) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<UserDO> cq = cb.createQuery(UserDO.class);
-        Root<UserDO> root = cq.from(UserDO.class);
+        CriteriaQuery<LocalFolderDO> cq = cb.createQuery(LocalFolderDO.class);
+        Root<LocalFolderDO> root = cq.from(LocalFolderDO.class);
         List<Predicate> predicateList = new ArrayList<>();
         for (Entry<String, Object> entry : params.entrySet()) {
             Predicate condition = cb.equal(root.get(entry.getKey()), entry.getValue());
             predicateList.add(condition);
         }
         cq.where(predicateList.toArray(new Predicate[predicateList.size()]));
-        TypedQuery<UserDO> query = session.createQuery(cq);
-        List<UserDO> result = query.getResultList();
+        TypedQuery<LocalFolderDO> query = session.createQuery(cq);
+        List<LocalFolderDO> result = query.getResultList();
         
         t.commit();
         session.close();
         
-        if (result.isEmpty()) {
-            return null;
-        } else if (result.size() == 1) {
-            return result.get(0);
-        } else {
-            throw new DBQueryException();
-        }
+        return result;
     }
 
     @Override
-    public List<UserDO> list(Map<String, Object> params) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean save(UserDO t) {
+    public boolean save(LocalFolderDO t) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean remove(UserDO t) {
+    public boolean remove(LocalFolderDO t) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean update(UserDO t) {
+    public boolean update(LocalFolderDO t) {
         // TODO Auto-generated method stub
         return false;
     }
-
+    
 }

@@ -1,13 +1,13 @@
 $(function() {
-	$("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
-	showFolderContents(0);// 约定初始文件夹ID=0
+    $("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
+    showFolderContents(0);// 约定初始文件夹ID=0
 });
 
 function showFolderContents(folderID) {
     /* 隐藏当前文件夹内容 */
     $("#all ul").hide();
     /* 如果需展示的文件夹之前已经生成过，则显示对应节点，返回 */
-    var node = $('[data-folder-id="' + folderID + '"]');
+    var node = $('ul[data-folder-id="' + folderID + '"]');// ！！标签 + 属性选择器 ！！
     if (node.length != 0) {
         node.show();
         return;
@@ -18,56 +18,55 @@ function showFolderContents(folderID) {
     node.attr("data-folder-id", folderID);
     /* 向服务器发送异步请求，获取对应folderID的内容 */
     $.ajax({
-    	type: "GET",
-    	url: "GetFolderContentsServlet?userID=" + userID + "&folderID=" + folderID,
-    	success: function(result) {
-    		var result = JSON.parse(result);
-    		var folders = result.folders;
-    		var files = result.files;
+        type: "GET",
+        url: "GetFolderContentsServlet?userID=" + sessionStorage.getItem("user_id") + "&folderID=" + folderID,
+        success: function(result) {
+            var folders = result.folders;
+            var files = result.files;
 
-    		/* 生成当前文件夹下所有文件夹节点 */
-    		for (var i = 0; i < folders.length; i++) {
-    			var folderID = folders[i].id;
-    			var folderName = folders[i].localName;
-    			var lastModifiedTime = folders[i].lastModifiedTime;
-				var folderNode = $('<li class="disk-file-item"></li>');
-            	folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
-            	folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
-    			/* 设置文件夹ID，绑定事件处理函数 */
-    			folderNode.attr("data-folder-id", folderID);
+            /* 生成当前文件夹下所有文件夹节点 */
+            for (var i = 0; i < folders.length; i++) {
+                var folderID = folders[i].id;
+                var folderName = folders[i].localName;
+                var lastModifiedTime = folders[i].gmtModified;
+                var folderNode = $('<li class="disk-file-item"></li>');
+                folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
+                folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
+                /* 设置文件夹ID，绑定事件处理函数 */
+                folderNode.attr("data-folder-id", folderID);
                 folderNode.on("click", enterFolder);
                 /* 追加该节点到当前文件夹 */
                 folderNode.appendTo(node);
-    		}
+            }
 
-    		/* 生成当前文件夹下所有文件节点 */
-    		for (var i = 0; i < files.length; i++) {
-            	var fileName = files[i].localName + "." + files[i].localType;
-            	var fileSize = getReadableSize(files[i].size);
-            	var lastModifiedTime = files[i].lastModifiedTime;
-            	/* 根据文件类型设置icon */
-    			var fileImg = "img/icon/";
-            	switch(files[i].localType) {
-                	case "mp4": 
-                	fileImg += "video";
-                	break;
-                	case "jpg": 
-                	fileImg += "picture";
-                	break;
-                	default: 
-                	fileImg += "file";
-            	}
-            	fileImg += ".png";
+            /* 生成当前文件夹下所有文件节点 */
+            for (var i = 0; i < files.length; i++) {
+                var fileName = files[i].localName + "." + files[i].localType;
+                var fileSize = getReadableSize(files[i].size);
+                var lastModifiedTime = files[i].gmtModified;
+                /* 根据文件类型设置icon */
+                var fileImg = "img/icon/";
+                switch(files[i].localType) {
+                    case "mp4": 
+                    fileImg += "video";
+                    break;
+                    case "jpg": 
+                    fileImg += "picture";
+                    break;
+                    default: 
+                    fileImg += "file";
+                }
+                fileImg += ".png";
 
-            	var fileNode = $('<li class="disk-file-item"></li>');
-            	fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
-            	fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
+                var fileNode = $('<li class="disk-file-item"></li>');
+                fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
+                fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
                 /* 追加该节点到当前文件夹 */
-                fileNode.appendTo(node);    			
-    		}
+                fileNode.appendTo(node);                
+            }
 
-    		node.appendTo($("#all"));
-    	}
+            node.appendTo($("#all"));
+        }
     });
 }
 
@@ -104,5 +103,14 @@ function goBack() {
     $(this).nextAll().remove();// 把本节点之后的sibling全部移除
     $("#disk_file_path li").children().removeClass("active");// ！！！！！！！！！！！！测试这行代码是否可以删除
     $(this).children().addClass("active");// 把当前单击的面包屑节点设置为active
-    showDirContents($(this).attr("data-folder-id"));// 显示该面包屑节点对应的文件夹
+    showFolderContents($(this).attr("data-folder-id"));// 显示该面包屑节点对应的文件夹
+}
+
+function alertObj(obj){
+    var output = "";
+    for(var i in obj){  
+        var property = obj[i];  
+        output += i + " = "+ property + "\n" ; 
+    }  
+    alert(output);
 }
