@@ -7,7 +7,7 @@
             padding: 0;
             outline: 0;
         }
-        ol, ul{
+        ol, ul, li{
             list-style: none;
         }
     	.layout-wrapper {
@@ -247,11 +247,13 @@
             color: #337ab7;
             font-weight: 700;
         }
-        .disk-file-item{
+        .disk-file-item,.modal-file{
             line-height: 56px;
             height: 56px;
             border-bottom: 1px solid #E6E7EC;
             padding: 0px 50px 0px 30px;
+        }
+        .disk-file-item{
             cursor: pointer;
         }
         .disk-file-item:hover{
@@ -353,4 +355,56 @@
             height: 150px;
             width: 500px;
             margin-top: 200px;
+        }
+
+        .modal-file .modal-file-info{
+            width: 80%;
+            float: left;
+        }
+        .modal-file .modal-file-info .modal-file-title{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 56px;
+        }
+        .modal-file .modal-addtional-info{
+            float: right;
+            color: #74787C;
+            display: block;
+        }
+        .dirbox{
+            padding: 24px;
+        }
+        .dirbox-header{
+            position: relative;
+            padding: 8px 10px;
+            border: 1px solid #dedede;
+        }
+        .dirbox-header label,.dirbox-header span{
+            color: #6c6c6c;
+        }
+        .dirbox-body{
+            border: 1px solid #dedede;
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+        }
+        .treeNode-info{
+            padding: 5px;
+            white-space: nowrap;
+            /*width:fit-content;
+            width:-webkit-fit-content;
+            width:-moz-fit-content;*/
+        }
+        .treeNode-info .glyphicon{
+            color: #337ab7;
+            padding: 0px 5px;
+
+        }
+        .treeNode-info:hover{
+            background-color: #EBF5FF;
+            cursor: pointer;
+        }
+        .treeNode-info .treeNode-info-name{
+            color: #000;
         }

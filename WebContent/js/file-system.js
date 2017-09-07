@@ -7,22 +7,40 @@ function showFolderContents(folderID) {
     /* 隐藏当前文件夹内容 */
     $("#all ul").hide();
     /* 如果需展示的文件夹之前已经生成过，则显示对应节点，返回 */
-    var node = $('ul[data-folder-id="' + folderID + '"]');// ！！标签 + 属性选择器 ！！
-    if (node.length != 0) {
+    var node = getFolderNode(folderID);
+    if (node != null) {
         node.show();
         return;
+    } else {
+        createFolderNode(folderID, true);
     }
-    /* 如果需展示的文件夹不存在 */
+}
+/*
+ * 本函数会在两处被调用(1)主界面需要显示的文件夹节点不存在时(2)“选择路径”模态框的文件夹节点不存在时
+ * 生成主界面文件夹节点（内含文件节点）的同时会生成“选择路径”模态框的文件夹节点（不含文件节点）
+ * 如果show=true则会立刻在主界面显示生成的文件夹节点，否则只生成不显示
+ * ---------------------------------------------------------------------------------------------------
+ * 注意如果在ajax success事件处理函数中返回一个值供其它函数调用，会出现获得undefined的情况（因为请求是异步的）
+ * 考虑同步请求即async=false，但是(1)deprecated(2)阻塞
+ * ---------------------------------------------------------------------------------------------------
+ * 原先思路：生成节点后始终hide，将节点返回到调用的上一级，由上一级决定是否要显示该节点
+ * 但由于请求异步，会导致上一级获得"undefined"的情况
+ */
+function createFolderNode(folderID, show) {
     /* 生成一个文件夹节点<ul>，设置data-folder-id属性，该属性是该文件夹在数据库存储的ID */
-    node = $("<ul></ul>");
+    var node = $("<ul></ul>");
     node.attr("data-folder-id", folderID);
     /* 向服务器发送异步请求，获取对应folderID的内容 */
     $.ajax({
         type: "GET",
         url: "GetFolderContentsServlet?userID=" + sessionStorage.getItem("user_id") + "&folderID=" + folderID,
+        /* 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 */
+        folderID: folderID,
         success: function(result) {
             var folders = result.folders;
             var files = result.files;
+            /* 生成“选择路径”模态框的文件夹节点 */
+            createDirNode(this.folderID, folders);/* 必须在参数前面加上this. */
 
             /* 生成当前文件夹下所有文件夹节点 */
             for (var i = 0; i < folders.length; i++) {
@@ -41,35 +59,29 @@ function showFolderContents(folderID) {
 
             /* 生成当前文件夹下所有文件节点 */
             for (var i = 0; i < files.length; i++) {
-                var fileName = files[i].localName + "." + files[i].localType;
+                var fileType = files[i].localType;
+                if (fileType != "") {
+                    fileType = "." + fileType;
+                }
+                var fileName = files[i].localName + fileType;
                 var fileSize = getReadableSize(files[i].size);
                 var lastModifiedTime = files[i].gmtModified;
-                /* 根据文件类型设置icon */
-                var fileImg = "img/icon/";
-                switch(files[i].localType) {
-                    case "mp4": 
-                    fileImg += "video";
-                    break;
-                    case "jpg": 
-                    fileImg += "picture";
-                    break;
-                    default: 
-                    fileImg += "file";
-                }
-                fileImg += ".png";
-
+                var fileID = files[i].fileID;
+                var fileImg = getFileIcon(fileName);
                 var fileNode = $('<li class="disk-file-item"></li>');
                 fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
                 fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
+                fileNode.attr("data-file-id", fileID);
                 /* 追加该节点到当前文件夹 */
                 fileNode.appendTo(node);                
             }
-
+            if (!show) {
+                node.hide();
+            }
             node.appendTo($("#all"));
         }
     });
 }
-
 /* 
  * 单击文件夹后，更新面包屑导航并列出该文件夹下的所有文件
  * 该函数绑定到文件夹<li>节点的click事件上
@@ -97,16 +109,32 @@ function enterFolder() {
 }
 
 /*
- * 面包屑导航click时绑定的事件处理函数
+ * 单击面包屑导航时绑定的事件处理函数
  */
 function goBack() {
     $(this).nextAll().remove();// 把本节点之后的sibling全部移除
-    $("#disk_file_path li").children().removeClass("active");// ！！！！！！！！！！！！测试这行代码是否可以删除
     $(this).children().addClass("active");// 把当前单击的面包屑节点设置为active
     showFolderContents($(this).attr("data-folder-id"));// 显示该面包屑节点对应的文件夹
 }
+/*
+ * 判断folderID对应的文件夹节点是否存在
+ * 是则返回该节点
+ * 否则返回null
+ */
+function getFolderNode(folderID){
+    var node = $('ul[data-folder-id="' + folderID + '"]');// ！！标签 + 属性选择器 ！！
+    if (node.length != 0) {
+        return node;
+    } else {
+        return null;
+    }
+}
 
-function alertObj(obj){
+/*
+ * 测试函数
+ * 打印js对象
+ */
+function printObj(obj){
     var output = "";
     for(var i in obj){  
         var property = obj[i];  

@@ -80,7 +80,7 @@
 
 				<button type="button" class="btn btn-primary fileinput-button btn-upload" id="btn_upload">
                     <span>添加文件</span>
-				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple>
+				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple onchange="showFileUploadModal(files[0].name, files.length);">
 				</button>
 
 			</div>
@@ -400,7 +400,97 @@
 	</div>
 	
 
-
+	<!-- 模态框 -->
+	<div class="modal fade" id="file_upload_modal" tabindex="-1" role="dialog" data-backdrop="static">
+  		<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<button type="button" class="close" data-dismiss="modal" id="modal_btn_close"><span>&times;</span></button>
+        			<h4 class="modal-title" id="myModalLabel">选择路径</h4>
+      			</div>
+      			<div class="modal-body">
+        			<div class="row">
+          				<div class="modal-file">
+							<div class="modal-file-info">
+								<div class="thumb">
+									<img src="img/icon/word.png" class="thumb-icon" id="modal_file_thumb">
+								</div>
+								<div class="modal-file-title">
+									<span class="file-name" id="modal_file_name">文档.word</span>
+								</div>
+							</div>
+							<div class="modal-addtional-info" id="modal_addtional_info">
+								等<span>3</span>个文件
+							</div>							
+						</div>
+        			</div>
+        			<div class="row">
+        				<div class="dirbox">
+        					<div class="dirbox-header">
+        						<label><span id="dirbox_header_action">上传</span>到：</label>
+        						<span id="dirbox_path">我的网盘</span>
+        					</div>
+        					<div class="dirbox-body">
+        						<ul>
+        							<li>
+        								<div class="treeNode-info"  style="padding-left: 5px;" data-folder-id="0">
+        									<span class="glyphicon glyphicon-folder-close"></span>
+        									<span class="treeNode-info-name">我的网盘</span>
+        								</div>
+        								 
+	        							<ul>
+	        							<!--
+    	        							<li>
+        										<div class="treeNode-info" style="padding-left: 25px;">
+        											<span class="glyphicon glyphicon-folder-close"></span>
+        											<span class="treeNode-info-name">新建文件夹1</span>
+        										</div>
+        										<ul></ul>
+    	        							</li>
+    	    								<li>
+        										<div class="treeNode-info" style="padding-left: 25px;">
+        											<span class="glyphicon glyphicon-folder-close"></span>
+        											<span class="treeNode-info-name">新建文件夹2</span>
+        										</div>
+        										<ul>
+        											<li>
+        												<div class="treeNode-info" style="padding-left: 45px;">
+        													<span class="glyphicon glyphicon-folder-close"></span>
+        													<span class="treeNode-info-name">新建文件夹21</span>
+        												</div>
+        												<ul></ul>
+        											</li>
+        											<li>
+        												<div class="treeNode-info" style="padding-left: 45px;">
+        													<span class="glyphicon glyphicon-folder-close"></span>
+        													<span class="treeNode-info-name">新建文件夹22</span>
+        												</div>
+        												<ul></ul>
+        											</li>
+        										</ul>
+    	    								</li>
+        									<li>
+        										<div class="treeNode-info" style="padding-left: 25px;">
+        											<span class="glyphicon glyphicon-folder-close"></span>
+        											<span class="treeNode-info-name">新建文件夹3</span>
+        										</div>
+        										<ul></ul>
+        									</li>
+        								-->    								
+        								</ul>
+        							</li>
+        						</ul>	
+        					</div>
+        				</div>
+        			</div>
+      			</div>
+      			<div class="modal-footer">
+        			<button type="button" class="btn btn-primary btn-lg" id="modal_btn_submit">开始上传</button>
+        			<button type="button" class="btn btn-default btn-lg" data-dismiss="modal" id="modal_btn_cancel">取消</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
 
 
 
@@ -428,17 +518,16 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/BootstrapMenu.min.js"></script>
     <script src="js/right-click-menu.js"></script>
+    <script src="js/initialize.js"></script>
+    <script src="js/file-system.js"></script>
     
     <!-- js files that provide upload service -->
     <script src="js/jquery.ui.widget.js"></script>
     <script src="js/jquery.iframe-transport.js"></script>
     <script src="js/jquery.fileupload.js"></script>
     <script src="js/fileupload.main.js"></script>
-
-
-    <!--<script src="js/file-system-allAtOnce.js"></script>-->
-    <script src="js/file-system.js"></script>
-    <script src="js/initialize.js"></script>
+	
+	<script src="js/modal.dirbox.js"></script>
     <script>
     	$(function() {
     		$("#nav_all").click();
