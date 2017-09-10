@@ -29,18 +29,14 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    /* 获取并解析JSON */
-	    StringBuffer jsonString = new StringBuffer();
-	    String temp = null;
-	    try {
-	      BufferedReader reader = request.getReader();
-	      while ((temp = reader.readLine()) != null) {
-	          jsonString.append(temp);
-	      }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+        StringBuilder json = new StringBuilder();
+        String temp = null;
+        BufferedReader reader = request.getReader();
+        while ((temp = reader.readLine()) != null) {
+            json.append(temp);
+        }
 	    /* 只有account和password域有效 */
-	    UserDO user = JSONObject.parseObject(jsonString.toString(), UserDO.class);
+	    UserDO user = JSONObject.parseObject(json.toString(), UserDO.class);
 	    
 	    LoginService loginService = new LoginServiceImpl();
 	    JSONObject responseJson = new JSONObject();

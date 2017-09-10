@@ -1,21 +1,22 @@
 package web;
 
 import java.io.*;
-import java.util.List;
+import java.nio.file.Paths;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import javax.servlet.http.Part;
+
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 @WebServlet("/UploadServlet")
+@MultipartConfig
 public class UploadServlet extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
@@ -47,47 +48,100 @@ public class UploadServlet extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        
         if (!ServletFileUpload.isMultipartContent(request)) {
-            throw new IllegalArgumentException("Request is not multipart, please 'multipart/form-data' enctype for your form.");
+            throw new IllegalArgumentException("Request is not multipart!!!");
         }
-
-        ServletFileUpload uploadHandler = new ServletFileUpload(new DiskFileItemFactory());
-        uploadHandler.setHeaderEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        PrintWriter writer = response.getWriter();
-        JSONArray temp = new JSONArray();
+        request.setCharacterEncoding("UTF-8");
+        /* 获取参数和文件 */
+        Part filePart = request.getPart("files[]");
+        String md5 = request.getParameter("md5");
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // IE浏览器会提交路径而非文件名，因此要这样获得文件名
+        System.out.println(fileName);
+        /* 读写文件 */
+        File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + md5);
+        FileOutputStream fos = new FileOutputStream(file, true);
+        BufferedInputStream fileContent = new BufferedInputStream(filePart.getInputStream());
+        byte[] buf = new byte[1024];
+        int hasRead;
+        while ((hasRead = fileContent.read(buf)) != -1) {
+            fos.write(buf, 0, hasRead);
+        }
+        fileContent.close();
+        fos.close();
+        /* 对客户端作出回复 */
+        JSONArray arr = new JSONArray();
         JSONObject json = new JSONObject();
-        try {
-            List<FileItem> items = uploadHandler.parseRequest(request);
-            for (FileItem item : items) {
-                if (!item.isFormField()) {
-                        File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/", item.getName());
-                        FileOutputStream fos = new FileOutputStream(file, true);
-                        BufferedInputStream bis = new BufferedInputStream(item.getInputStream());
-                        int hasRead;
-                        byte[] buf = new byte[1024];
-                        while ((hasRead = bis.read(buf)) != -1) {
-                            fos.write(buf, 0, hasRead);
-                        }
-                        fos.close();
-                        bis.close();
-                }
-            }
-        } catch(FileUploadException e) {
-            /* 处理客户端取消文件上传时抛出的EOFException */
-            if (e.getCause().getClass().equals(EOFException.class)) {
-                System.out.println("client cancel a file upload mission");
-            } else {
-                throw new RuntimeException(e);
-            }
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            json.put("files", temp);
-            writer.write(json.toString());
-            writer.close();
-        }
+        json.put("files", arr);
+        PrintWriter writer = response.getWriter();
+        writer.write(json.toString());
+        writer.close();
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+   
+        
+        
+//        request.setCharacterEncoding("UTF-8");
+//        if (!ServletFileUpload.isMultipartContent(request)) {
+//            throw new IllegalArgumentException("Request is not multipart!!!");
+//        }
+//        System.out.println(request.getParameter("md5"));
+//        ServletFileUpload uploadHandler = new ServletFileUpload(new DiskFileItemFactory());
+//        uploadHandler.setHeaderEncoding("UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("application/json");
+//        PrintWriter writer = response.getWriter();
+//        JSONArray temp = new JSONArray();
+//        JSONObject json = new JSONObject();
+//        try {
+//            List<FileItem> items = uploadHandler.parseRequest(request);
+//            for (FileItem item : items) {
+//                if (!item.isFormField()) {
+//                    Part p = request.getPart("md5");
+//                    System.out.println(p);
+//                    File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload")+"/", item.getName());
+//                    FileOutputStream fos = new FileOutputStream(file, true);
+//                    BufferedInputStream bis = new BufferedInputStream(item.getInputStream());
+//                    int hasRead;
+//                    byte[] buf = new byte[1024];
+//                    while ((hasRead = bis.read(buf)) != -1) {
+//                        fos.write(buf, 0, hasRead);
+//                    }
+//                    fos.close();
+//                    bis.close();
+//                }
+//            }
+//        } catch(FileUploadException e) {
+//            /* 处理客户端取消文件上传时抛出的EOFException */
+//            if (e.getCause().getClass().equals(EOFException.class)) {
+//                System.out.println("client cancel a file upload mission");
+//            } else {
+//                throw new RuntimeException(e);
+//            }
+//        } catch(Exception e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            json.put("files", temp);
+//            writer.write(json.toString());
+//            writer.close();
+//        }
     }
 }

@@ -34,14 +34,16 @@ function createFolderNode(folderID, show) {
     $.ajax({
         type: "GET",
         url: "GetFolderContentsServlet?userID=" + sessionStorage.getItem("user_id") + "&folderID=" + folderID,
-        /* 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 */
+        /* 
+         * 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 
+         * 修正：访问不到函数的参数，但可以访问函数内部的变量！
+         */  
         folderID: folderID,
         success: function(result) {
             var folders = result.folders;
             var files = result.files;
             /* 生成“选择路径”模态框的文件夹节点 */
             createDirNode(this.folderID, folders);/* 必须在参数前面加上this. */
-
             /* 生成当前文件夹下所有文件夹节点 */
             for (var i = 0; i < folders.length; i++) {
                 var folderID = folders[i].id;

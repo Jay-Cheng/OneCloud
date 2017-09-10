@@ -80,7 +80,7 @@
 
 				<button type="button" class="btn btn-primary fileinput-button btn-upload" id="btn_upload">
                     <span>添加文件</span>
-				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple onchange="showFileUploadModal(files[0].name, files.length);">
+				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple onchange="showFileUploadModal(files);">
 				</button>
 
 			</div>
@@ -168,17 +168,17 @@
 										<img src="img/icon/file.png" class="thumb-icon">
 									</div>
 									<div class="mission-info">
-										<span class="mission-file-name">无法移除的模板.file</span>
-										<span class="mission-file-size">6.6MB</span>
+										<span class="mission-file-name">022568.jpg</span>
+										<span class="mission-file-size">6.6M<span class="mission-file-preparing">&nbsp;&nbsp;&nbsp;准备中...</span></span>
+									
 									</div>
 								</div>
 								<div class="progress mission-progress">
-  									<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" style="width: 66%">
-    								66%
+  									<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" style="width: 0%">
   									</div>
 								</div>
 								<div class="mission-control">
-									<a class="upload-pause"><span class="glyphicon glyphicon-pause"></span></a>
+									<a class="upload-pause" style="display: none;"><span class="glyphicon glyphicon-pause"></span></a>
 									<a class="upload-cancel"><span class="glyphicon glyphicon-remove"></span></a>
 								</div>
 							</li>
@@ -406,7 +406,7 @@
     		<div class="modal-content">
       			<div class="modal-header">
         			<button type="button" class="close" data-dismiss="modal" id="modal_btn_close"><span>&times;</span></button>
-        			<h4 class="modal-title" id="myModalLabel">选择路径</h4>
+        			<h4 class="modal-title">选择路径</h4>
       			</div>
       			<div class="modal-body">
         			<div class="row">
@@ -428,12 +428,12 @@
         				<div class="dirbox">
         					<div class="dirbox-header">
         						<label><span id="dirbox_header_action">上传</span>到：</label>
-        						<span id="dirbox_path">我的网盘</span>
+        						<span id="dirbox_path" data-folder-id="0">我的网盘</span>
         					</div>
         					<div class="dirbox-body">
         						<ul>
         							<li>
-        								<div class="treeNode-info"  style="padding-left: 5px;" data-folder-id="0">
+        								<div class="treeNode-info" style="padding-left: 5px;" data-folder-id="0">
         									<span class="glyphicon glyphicon-folder-close"></span>
         									<span class="treeNode-info-name">我的网盘</span>
         								</div>
@@ -528,6 +528,7 @@
     <script src="js/fileupload.main.js"></script>
 	
 	<script src="js/modal.dirbox.js"></script>
+	<script src="js/browser-md5-file.js"></script>
     <script>
     	$(function() {
     		$("#nav_all").click();

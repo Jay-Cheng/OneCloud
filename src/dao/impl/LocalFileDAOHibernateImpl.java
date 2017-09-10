@@ -51,9 +51,15 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
     }
 
     @Override
-    public boolean save(LocalFileDO t) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean save(LocalFileDO localFile) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        session.persist(localFile);
+        
+        t.commit();
+        session.close();
+        return true;
     }
 
     @Override

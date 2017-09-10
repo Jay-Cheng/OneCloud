@@ -57,9 +57,15 @@ public class FileDAOHibernateImpl implements FileDAO {
     }
 
     @Override
-    public boolean save(FileDO t) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean save(FileDO file) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        session.persist(file);
+        
+        t.commit();
+        session.close();
+        return true;
     }
 
     @Override
