@@ -14,35 +14,20 @@ import manager.exception.DBQueryException;
 import service.MD5CheckService;
 
 public class MD5CheckServiceImpl implements MD5CheckService {
+    
     /**
-     * 检查MD5为对应值的文件记录在数据库中是否存在
-     * 若存在，且插入本地文件记录成功，返回true
-     * 否则返回false
+     * 检查MD5为对应值的文件在数据库是否存在
+     * @return 若存在，返回该文件对象，否则返回null
+     * @throws DBQueryException If 查询到了多个结果
      */
     @Override
-    public boolean check(String md5, LocalFileDO localfile) throws DBQueryException {
+    public FileDO check(String md5) throws DBQueryException {
         FileDAOFactory fileFactory = new FileDAOFactory();
         FileDAO fileDAO = fileFactory.getFileDAO("Hibernate");
         Map<String, Object> params = new HashMap<>();
         params.put("md5", md5);
         FileDO file = fileDAO.get(params);
-        if (file == null) {
-            return false;
-        } else {
-            /* 插入本地文件记录 */
-            LocalFileDAOFactory localfileDAOFactory = new LocalFileDAOFactory();
-            LocalFileDAO localfileDAO = localfileDAOFactory.getLocalFileDAO("Hibernate");
-            localfile.setFileID(file.getId());
-            localfile.setGmtCreate(LocalDateTime.now());
-            localfile.setGmtModified(LocalDateTime.now());
-            if (localfileDAO.save(localfile)) {
-                return true;
-            } else {
-                // TODO 处理插入数据失败的情况
-                return true;
-            }
-        }
+        return file;
     }
-    
     
 }

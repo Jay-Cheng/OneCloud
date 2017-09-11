@@ -48,21 +48,60 @@ function toggleExistSubDir(dir) {
  * 供file-system.js中的createFolderNode()函数调用
  * 生成主页面文件夹节点的同时会生成模态框文件夹节点
  */ 
-function createDirNode(folderID, folders) {
-	var dir = $('div[data-folder-id="' + folderID + '"]');
+function createDirNode(folderID, folders, show) {
 	var paddingParam = parseInt(dir.css("padding-left"), 10) + 20 + "px";
-	var sub = dir.next();
-	sub.hide();
+	var dir = $('div[data-folder-id="' + folderID + '"]');
+	var subDirs = dir.next();
 	for (var i = 0; i < folders.length; i++) {
         var id = folders[i].id;
         var folderName = folders[i].localName;
 		var subNode = $("<li></li>");
 		subNode.append('<div class="treeNode-info"><span class="glyphicon glyphicon-folder-close"></span><span class="treeNode-info-name">' + folderName + '</span></div>');
-		subNode.append('<ul></ul>');
+		subNode.append('<ul style="display: none;"></ul>');
 		subNode.find(".treeNode-info").css("padding-left", paddingParam);
 		subNode.find(".treeNode-info").attr("data-folder-id", id);
 		subNode.find(".treeNode-info").click(showSubDir);
-		subNode.appendTo(sub);
+		subNode.appendTo(subDirs);
 	}
-	toggleExistSubDir(dir);
+	/* 因为ajax的原因，判断是否显示的逻辑应该在本函数内实现 */ 
+	if (show) {
+		toggleExistSubDir(dir);
+	}
+}
+
+/*
+ * 模态框取消按钮和x按钮绑定的事件处理函数
+ */ 
+function removeAddedMission() {
+	/* 移除所有可操作按钮绑定的事件 */
+	$("#modal_btn_submit").off("click");
+	$("#modal_btn_cancel").off("click");
+	$("#modal_btn_close").off("click");
+}
+
+/*
+ * 显示文件上传模态框
+ */
+function showFileUploadModal(files) {
+	var firstFilename = files[0].name;
+	var nums = files.length;
+	/* 显示要上传的文件信息和数量 */
+	$("#modal_file_thumb").attr("src", getFileIcon(firstFilename));
+	$("#modal_file_name").text(firstFilename);
+	if (nums == 1) {
+		$("#modal_addtional_info").hide();
+	} else {
+		$("#modal_addtional_info span").text(nums);
+		$("#modal_addtional_info").show();
+	}
+
+	$("#file_upload_modal").modal("show");
+	$("#modal_btn_cancel").click(removeAddedMission);
+	$("#modal_btn_close").click(removeAddedMission);
+	$("#modal_btn_submit").click(function() {
+		$("#file_upload_modal").modal("hide");
+		/* 上传按钮单击后移除所有绑定的事件 */
+		$("#modal_btn_submit").off("click");
+	});
+
 }

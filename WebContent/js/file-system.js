@@ -43,12 +43,12 @@ function createFolderNode(folderID, show) {
             var folders = result.folders;
             var files = result.files;
             /* 生成“选择路径”模态框的文件夹节点 */
-            createDirNode(this.folderID, folders);/* 必须在参数前面加上this. */
+            createDirNode(this.folderID, folders, !show);/* 必须在参数前面加上this. */
             /* 生成当前文件夹下所有文件夹节点 */
             for (var i = 0; i < folders.length; i++) {
                 var folderID = folders[i].id;
                 var folderName = folders[i].localName;
-                var lastModifiedTime = folders[i].gmtModified;
+                var lastModifiedTime = getFormattedDateTime(folders[i].gmtModified);
                 var folderNode = $('<li class="disk-file-item"></li>');
                 folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
                 folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
@@ -67,7 +67,7 @@ function createFolderNode(folderID, show) {
                 }
                 var fileName = files[i].localName + fileType;
                 var fileSize = getReadableSize(files[i].size);
-                var lastModifiedTime = files[i].gmtModified;
+                var lastModifiedTime = getFormattedDateTime(files[i].gmtModified);
                 var fileID = files[i].fileID;
                 var fileImg = getFileIcon(fileName);
                 var fileNode = $('<li class="disk-file-item"></li>');

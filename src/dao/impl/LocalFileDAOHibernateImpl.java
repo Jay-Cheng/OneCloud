@@ -23,8 +23,15 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
 
     @Override
     public LocalFileDO get(Map<String, Object> params) throws DBQueryException {
-        // TODO Auto-generated method stub
-        return null;
+        List<LocalFileDO> result = list(params);
+        
+        if (result.isEmpty()) {
+            return null;
+        } else if (result.size() == 1) {
+            return result.get(0);
+        } else {
+            throw new DBQueryException();
+        }
     }
 
     @Override

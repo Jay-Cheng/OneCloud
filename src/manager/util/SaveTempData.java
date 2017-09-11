@@ -35,16 +35,17 @@ public class SaveTempData {
         UserDO user = new UserDO();
         user.setGmtCreate(LocalDateTime.now());
         user.setGmtModified(LocalDateTime.now());
-        user.setAccount("admin");
+        user.setAccount("admin3");
         user.setPassword("admin");
         user.setNickname("fakeaofu");
-        user.setPhotoURL("users/photo/001.jpg");
+        user.setPhotoURL("users/photo/003.jpg");
         user.setUsedCapacity(1024*1024*1024L);
         
         session.persist(user);
+        System.out.println(user.getId());
     }
     
-    @Test    
+//    @Test    
     public void saveFiles() {
         
         FileDO file1 = new FileDO();
@@ -113,7 +114,7 @@ public class SaveTempData {
         session.persist(folder4);
     }
     
-    @Test   
+//    @Test   
     public void saveLocalFiles() {
         
         LocalFileDO file1 = new LocalFileDO();
@@ -157,13 +158,4 @@ public class SaveTempData {
         session.persist(file3);
         session.persist(file4);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

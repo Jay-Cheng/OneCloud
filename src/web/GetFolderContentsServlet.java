@@ -47,8 +47,6 @@ public class GetFolderContentsServlet extends HttpServlet {
 	    result.put("folders", JSON.toJSON(folders));
 	    result.put("files", JSON.toJSON(files));
 	    
-	    System.out.println(result);
-	    
 	    response.setContentType("application/json;charset=utf-8");
 	    response.getWriter().write(result.toJSONString());
 	}

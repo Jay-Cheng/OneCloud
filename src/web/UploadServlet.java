@@ -2,6 +2,7 @@ package web;
 
 import java.io.*;
 import java.nio.file.Paths;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -57,7 +58,7 @@ public class UploadServlet extends HttpServlet {
         Part filePart = request.getPart("files[]");
         String md5 = request.getParameter("md5");
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // IE浏览器会提交路径而非文件名，因此要这样获得文件名
-        System.out.println(fileName);
+        System.out.println("uploading: " + fileName);
         /* 读写文件 */
         File file = new File(request.getServletContext().getRealPath("/WEB-INF/upload") + "/" + md5);
         FileOutputStream fos = new FileOutputStream(file, true);
