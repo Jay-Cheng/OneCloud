@@ -24,10 +24,10 @@ public class RequestManageServlet extends HttpServlet {
             request.getRequestDispatcher("LoginServlet").forward(request, response);break;
         case "enterFolder":
             request.getRequestDispatcher("GetFolderContentsServlet").forward(request, response);break;
-        case "fileManage":
-            request.getRequestDispatcher("FileManageServlet").forward(request, response);break;
-        case "folderManage":
-            request.getRequestDispatcher("FolderManageServlet").forward(request, response);break;
+        case "addFile":
+            request.getRequestDispatcher("AddFileServlet").forward(request, response);break;
+        case "addFolder":
+            request.getRequestDispatcher("AddFolderServlet").forward(request, response);break;
         case "rename":
             request.getRequestDispatcher("RenameServlet").forward(request, response);break;
         default:

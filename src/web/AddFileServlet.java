@@ -19,8 +19,8 @@ import service.AddFileService;
 import service.impl.AddFileServiceImpl;
 
 
-@WebServlet("/FileManageServlet")
-public class FileManageServlet extends HttpServlet {
+@WebServlet("/AddFileServlet")
+public class AddFileServlet extends HttpServlet {
     
 	private static final long serialVersionUID = 1L;
 	

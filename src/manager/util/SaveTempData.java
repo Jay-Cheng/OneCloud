@@ -83,11 +83,11 @@ public class SaveTempData {
         LocalFolderDO folder1 = new LocalFolderDO();
         folder1.setLdtCreate(LocalDateTime.now());
         folder1.setLdtModified(LocalDateTime.now());
-        folder1.setLocalName("新建文件夹1");
+        folder1.setLocalName("新建文件夹9-14");
         folder1.setUserID(1L);
         folder1.setParent(0L);
         
-        LocalFolderDO folder2 = new LocalFolderDO();
+        /*LocalFolderDO folder2 = new LocalFolderDO();
         folder2.setLdtCreate(LocalDateTime.now());
         folder2.setLdtModified(LocalDateTime.now());
         folder2.setLocalName("新建文件夹2");
@@ -106,12 +106,13 @@ public class SaveTempData {
         folder4.setLdtModified(LocalDateTime.now());
         folder4.setLocalName("新建文件夹1");
         folder4.setUserID(1L);
-        folder4.setParent(1L);
+        folder4.setParent(1L);*/
         
         session.persist(folder1);
-        session.persist(folder2);
+        System.out.println(folder1.getId());
+        /*session.persist(folder2);
         session.persist(folder3);
-        session.persist(folder4);
+        session.persist(folder4);*/
     }
     
 //    @Test   
@@ -158,7 +159,7 @@ public class SaveTempData {
         session.persist(file3);
         session.persist(file4);
     }
-    @Test
+//    @Test
     public void update() {
         LocalFolderDO folder1 = new LocalFolderDO();
         folder1.setId(1L);

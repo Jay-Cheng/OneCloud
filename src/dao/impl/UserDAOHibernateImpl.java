@@ -16,13 +16,12 @@ import org.hibernate.Transaction;
 
 import dao.UserDAO;
 import dao.entity.UserDO;
-import manager.exception.DBQueryException;
 import manager.util.HibernateUtil;
 
 public class UserDAOHibernateImpl implements UserDAO {
 
     @Override
-    public UserDO get(Map<String, Object> params) throws DBQueryException {
+    public List<UserDO> list(Map<String, Object> params) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         
@@ -40,26 +39,7 @@ public class UserDAOHibernateImpl implements UserDAO {
         
         t.commit();
         session.close();
-        
-        if (result.isEmpty()) {
-            return null;
-        } else if (result.size() == 1) {
-            return result.get(0);
-        } else {
-            throw new DBQueryException();
-        }
-    }
-
-    @Override
-    public List<UserDO> list(Map<String, Object> params) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean save(UserDO t) {
-        // TODO Auto-generated method stub
-        return false;
+        return result;
     }
 
     @Override

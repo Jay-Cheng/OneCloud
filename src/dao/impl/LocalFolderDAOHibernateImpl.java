@@ -17,16 +17,9 @@ import org.hibernate.Transaction;
 
 import dao.LocalFolderDAO;
 import dao.entity.LocalFolderDO;
-import manager.exception.DBQueryException;
 import manager.util.HibernateUtil;
 
 public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
-
-    @Override
-    public LocalFolderDO get(Map<String, Object> params) throws DBQueryException {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public List<LocalFolderDO> list(Map<String, Object> params) {
@@ -49,12 +42,6 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
         session.close();
         
         return result;
-    }
-
-    @Override
-    public boolean save(LocalFolderDO t) {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     @Override

@@ -18,7 +18,7 @@ $(function() {
 			data.fileinfo.uploaded = true;
 			$.ajax({
 				type: "POST",
-				url: "RequestManageServlet?action=fileManage",
+				url: "RequestManageServlet?action=addFile",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify(data.fileinfo),
         		success: function(result) {
@@ -106,7 +106,7 @@ function addFile(e, data, marker) {
         		data.fileinfo = fileinfo;
         		$.ajax({
         			type: "POST",
-        			url: "RequestManageServlet?action=fileManage",
+        			url: "RequestManageServlet?action=addFile",
         			contentType: "application/json; charset=utf-8",
         			data: JSON.stringify(fileinfo),
         			success: function(result) {

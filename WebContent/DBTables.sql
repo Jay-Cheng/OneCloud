@@ -44,6 +44,7 @@ CREATE TABLE local_file (
 	local_type VARCHAR(255) NOT NULL,
 	parent BIGINT UNSIGNED NOT NULL,
 	
+
 	UNIQUE(user_id, parent, local_name, local_type)
 );
 
@@ -56,6 +57,7 @@ CREATE TABLE local_folder (
 	user_id BIGINT UNSIGNED NOT NULL,
 	local_name VARCHAR(255) NOT NULL,
 	parent BIGINT UNSIGNED NOT NULL,
+
 
 	UNIQUE(user_id, parent, local_name)
 );

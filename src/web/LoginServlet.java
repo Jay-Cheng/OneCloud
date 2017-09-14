@@ -28,9 +28,9 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String jsonString = JSONUtil.getJSONString(request.getReader());
+	    String reqJSON = JSONUtil.getJSONString(request.getReader());
 	    /* 只有account和password域有效 */
-	    UserDO user = JSONObject.parseObject(jsonString.toString(), UserDO.class);
+	    UserDO user = JSONObject.parseObject(reqJSON.toString(), UserDO.class);
 	    
 	    LoginService loginService = new LoginServiceImpl();
 	    JSONObject respJSON = new JSONObject();
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 	    try {
             if (loginService.checkPassword(user.getAccount(), user.getPassword())) {
                 UserDTO dto = loginService.getUserDTO();
-//                request.getSession().setAttribute("user", dto);
+                request.getSession().setAttribute("userID", dto.getId());
                 respJSON.put("state", 1);// 状态1表示登录成功
                 respJSON.put("user", JSONObject.toJSON(dto));
             } else {

@@ -17,23 +17,9 @@ import org.hibernate.Transaction;
 
 import dao.LocalFileDAO;
 import dao.entity.LocalFileDO;
-import manager.exception.DBQueryException;
 import manager.util.HibernateUtil;
 
 public class LocalFileDAOHibernateImpl implements LocalFileDAO {
-
-    @Override
-    public LocalFileDO get(Map<String, Object> params) throws DBQueryException {
-        List<LocalFileDO> result = list(params);
-        
-        if (result.isEmpty()) {
-            return null;
-        } else if (result.size() == 1) {
-            return result.get(0);
-        } else {
-            throw new DBQueryException();
-        }
-    }
 
     @Override
     public List<LocalFileDO> list(Map<String, Object> params) {
@@ -56,19 +42,6 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
         session.close();
         
         return result;
-    }
-
-    @Override
-    public boolean save(LocalFileDO newDO) {
-        
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-        
-        session.persist(newDO);
-        
-        t.commit();
-        session.close();
-        return true;
     }
 
     @Override

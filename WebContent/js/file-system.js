@@ -5,6 +5,7 @@ $(function() {
     $("#all").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
     $("#select_all").click(selectAll);// 为全选绑定事件处理函数
 	$("body").click(resetSelectedState);
+    $("#mkfolder").click(mkfolder);
     //$("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
     showFolderContents(0);// 约定初始文件夹ID=0
 });
@@ -187,3 +188,75 @@ function getFolderNode(folderID){
     }
 }
 
+/*******************************************新建文件夹*******************************************/
+function mkfolder() {
+    var currentFolder = $("ul[data-folder-id]:visible");
+
+    var folderTag = $('<li class="disk-file-item"></li>');
+    folderTag.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title" style="display: none;"><span class="file-name"></span></div><span class="fileedit"><input type="text" /></span></div>');
+    folderTag.append('<div class="file-info"><span class="file-size"></span><span class="file-time"></span></div>');
+    folderTag.find(".fileedit").click(function(e){e.stopPropagation()});
+    folderTag.find(".fileedit input").blur(confirm);
+    folderTag.find(".fileedit input").keydown(confirmByKeyborad);
+    
+
+    /* 需要获取的数据 */
+    var id;
+
+
+
+
+
+    folderTag.prependTo(currentFolder);
+    folderTag.find(".fileedit input").focus();
+
+
+    function confirm() {
+        var itemTag = $(this).parent().parent().parent();
+        var nameTag = itemTag.find(".file-name");
+        var timeTag = itemTag.find(".file-time");
+
+        /* 需要提交的数据 */
+        var localName = $(this).val();
+        var parent = itemTag.parent().attr("data-folder-id");
+        var newFolder = {
+            localName: localName,
+            parent: parent
+        }
+
+        if (localName.length == 0) {
+            // TO DO 判断是否全为空格
+            alert("名字不能为空");
+            itemTag.remove();
+        } else if (checkDuplicateName(itemTag, localName)) {
+            alert("文件名产生冲突");
+            itemTag.remove();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "RequestManageServlet?action=addFolder",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(newFolder),
+                success: function(result) {
+                    if (result.isSuccess == true) {
+                        itemTag.attr("data-folder-id", result.id);
+                        timeTag.text(getFormattedDateTime(result.ldtModified));
+                        nameTag.text(newFolder.localName);
+                    } else {    
+                        alert("新建文件夹失败");
+                    }
+                }
+            })
+        }
+        /* 移除文件名编辑框 */
+        $(this).parent().remove();
+
+        nameTag.parent().show();
+    }
+    
+    function confirmByKeyborad(event) {
+    	if (event.keyCode == 13) {
+    		$(this).blur();
+    	}
+    }
+}

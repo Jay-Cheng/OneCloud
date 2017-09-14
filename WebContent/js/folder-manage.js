@@ -1,5 +1,0 @@
-$(function() {
-	$("#mkfolder").click(function(){
-		
-	});
-});

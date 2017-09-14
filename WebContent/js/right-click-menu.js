@@ -70,6 +70,10 @@ function getSelectedItems() {
     return selectedItem;
 }
 
+
+/*------------------------------------------------- 重命名功能 -------------------------------------------------*/
+
+
 function rename() {
     var selectedItem = getSelectedItems();
     if (selectedItem.find(".fileedit").length == 0) {// 防止插入多个文件名编辑框
@@ -88,11 +92,13 @@ function rename() {
         selectedItem.find(".fileedit input").focus();
     }
 }
+/* 按下回车键后，使输入框失去焦点 */
 function confirmEditNameByKeyboard(event) {
     if (event.keyCode == 13) {
         $(this).blur();
     }
 }
+/* 确认重命名，当输入框失去焦点后触发的事件处理函数 */
 function confirmEditName() {
     var itemTag = $(this).parent().parent().parent();
     var nameTag = $(this).parent().prev().find(".file-name");
@@ -165,3 +171,6 @@ function checkDuplicateName(itemTag, newName) {
     });
     return isDuplicate;
 }
+
+
+/*------------------------------------------------------------------------------------------------------------*/
