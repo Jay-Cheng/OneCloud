@@ -68,10 +68,4 @@ public class UserDAOHibernateImpl implements UserDAO {
         return false;
     }
 
-    @Override
-    public boolean update(UserDO t) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }

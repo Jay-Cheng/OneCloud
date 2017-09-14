@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class LocalFolderDTO {
     
     private Long id;
-    private LocalDateTime gmtModified;
+    private LocalDateTime ldtModified;
     private String localName;
     
     public Long getId() {
@@ -14,11 +14,11 @@ public class LocalFolderDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    public LocalDateTime getGmtModified() {
-        return gmtModified;
+    public LocalDateTime getLdtModified() {
+        return ldtModified;
     }
-    public void setGmtModified(LocalDateTime gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setLdtModified(LocalDateTime ldtModified) {
+        this.ldtModified = ldtModified;
     }
     public String getLocalName() {
         return localName;

@@ -260,6 +260,9 @@
             text-decoration: none;
             background-color: #eee;
         }
+        .selected{
+            background-color: #eee;
+        }
         .disk-file-item .file-head{
             width: 35%;
             float: left;
@@ -269,6 +272,8 @@
             width: 36px;
             text-align: center;
             float: left;
+            z-index: 100;
+            cursor: default;
         }
         .disk-file-item .file-head .select > input{
             height: 18px;
@@ -407,4 +412,22 @@
         }
         .treeNode-info .treeNode-info-name{
             color: #000;
+        }
+
+        .mkfolder{
+            position: relative;
+            top: 13.5px;
+            float: right;         
+        }
+
+        .fileedit{
+            display: inline-block;
+            width: 320px;
+            box-sizing: border-box;   
+        }
+        .fileedit input{
+            display: inline-block;
+            width: 100%;
+            height: 25px;
+            box-sizing: border-box;
         }

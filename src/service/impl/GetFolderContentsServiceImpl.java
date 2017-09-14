@@ -38,7 +38,7 @@ public class GetFolderContentsServiceImpl implements GetFolderContentsService {
         for (LocalFolderDO entity : list) {
             LocalFolderDTO dto = new LocalFolderDTO();
             dto.setId(entity.getId());
-            dto.setGmtModified(entity.getGmtModified());
+            dto.setLdtModified(entity.getLdtModified());
             dto.setLocalName(entity.getLocalName());
             result.add(dto);
         }
@@ -65,7 +65,7 @@ public class GetFolderContentsServiceImpl implements GetFolderContentsService {
         for (LocalFileDO entity : localFileList) {
             LocalFileDTO dto = new LocalFileDTO();
             dto.setId(entity.getId());
-            dto.setGmtModified(entity.getGmtModified());
+            dto.setLdtModified(entity.getLdtModified());
             dto.setFileID(entity.getFileID());
             dto.setLocalName(entity.getLocalName());
             dto.setLocalType(entity.getLocalType());

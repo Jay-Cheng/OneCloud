@@ -1,5 +1,8 @@
 /* 实现文件上传功能 */
 $(function() {
+	$("#btn_transfer").click(function() {
+		$('[role="presentation"][class="active"]').removeClass("active");
+	});
 	$("#fileupload").fileupload({
 		dataType: "json",
 		maxChunkSize: 1024000,
@@ -15,7 +18,7 @@ $(function() {
 			data.fileinfo.uploaded = true;
 			$.ajax({
 				type: "POST",
-				url: "FileManageServlet",
+				url: "RequestManageServlet?action=fileManage",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify(data.fileinfo),
         		success: function(result) {
@@ -76,7 +79,7 @@ function addFile(e, data, marker) {
     		};
 			/* 生成一个“准备中”的任务节点 */
 			var fileName = data.files[0].name;
-			var fileImg = getFileIcon(fileName);
+			var fileImg = getFileIcon(getSuffix(fileName));
 			var fileSize = getReadableSize(data.files[0].size);
 			var node = $("<li></li>");
 			node.append('<div class="mission-head"><div class="mission-icon-wrapper"><span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="mission-info"><span class="mission-file-name">' + fileName + '</span><span class="mission-file-size">' + fileSize + '<span class="mission-file-preparing">&nbsp;&nbsp;&nbsp;准备中...</span></span></div></div>');
@@ -103,7 +106,7 @@ function addFile(e, data, marker) {
         		data.fileinfo = fileinfo;
         		$.ajax({
         			type: "POST",
-        			url: "FileManageServlet",
+        			url: "RequestManageServlet?action=fileManage",
         			contentType: "application/json; charset=utf-8",
         			data: JSON.stringify(fileinfo),
         			success: function(result) {
@@ -202,9 +205,9 @@ function finishUpload(data) {
 	generateCompletedMissionNode(data);
 	/* 生成主界面的文件节点 */
 	var fileName = data.files[0].name;
-	var fileImg = getFileIcon(fileName);
+	var fileImg = getFileIcon(getSuffix(fileName));
 	var fileSize = getReadableSize(data.localFile.size);
-	var lastModifiedTime = getFormattedDateTime(data.localFile.gmtModified);
+	var lastModifiedTime = getFormattedDateTime(data.localFile.ldtModified);
 	var fileID = data.localFile.fileID;
     var fileNode = $('<li class="disk-file-item"></li>');
     fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
@@ -214,67 +217,4 @@ function finishUpload(data) {
     var parent = data.fileinfo.parent;
     var parentNode = $('ul[data-folder-id="' + parent + '"]');
     fileNode.appendTo(parentNode);
-}
-
-
-/* ------------------- 工具函数 ---------------------------*/
-/* 把字节数转为易读的单位 */
-function getReadableSize(bytes) {
-    var s = ['Bytes', 'K', 'M', 'G', 'T', 'P'];
-    var e = Math.floor(Math.log(bytes)/Math.log(1024));
-    return (bytes/Math.pow(1024, Math.floor(e))).toFixed(1)+" "+s[e];
-}
-function getFilenameWithoutSuffix(filename) {
-	var pos = filename.lastIndexOf(".");
-	if (pos > 0 && pos < filename.length - 1) {
-		return filename.substring(0, pos);
-	}
-	return filename;
-}
-
-function getSuffix(filename) {
-	var suffix = "";
-	var pos = filename.lastIndexOf(".");
-	if (pos > 0 && pos < filename.length - 1) {
-		suffix = filename.substring(pos + 1);
-	}
-	return suffix;
-}
-
-function getFileIcon(filename) {
-	var suffix = getSuffix(filename);
-	var src = "img/icon/";
-	switch(suffix) {
-    	case "mp4": 
-        src += "video";
-        break;
-        case "jpg":
-        case "png": 
-        src += "picture";
-        break;
-        default: 
-        src += "file";
-	}
-	src += ".png";
-	return src;
-}
-
-function getFormattedDateTime(date) {
-	function addZero(num) {
-		if (num < 10) {
-			num = "0" + num;
-		}
-		return num;
-	}
-
-	var dateObj = new Date(date);
-
-	var year = dateObj.getFullYear();
-	var month = addZero(dateObj.getMonth());
-	var day = addZero(dateObj.getDate());
-	var hour = addZero(dateObj.getHours());
-	var minute = addZero(dateObj.getMinutes());
-
-	var formattedString = year+"-"+month+"-"+day+" "+hour+":"+minute; 
-	return formattedString;
 }

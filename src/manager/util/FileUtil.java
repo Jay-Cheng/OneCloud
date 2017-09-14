@@ -16,7 +16,7 @@ public class FileUtil {
         LocalFileDTO localfileDTO = new LocalFileDTO();
         
         localfileDTO.setId(localfile.getId());
-        localfileDTO.setGmtModified(localfile.getGmtModified());
+        localfileDTO.setLdtModified(localfile.getLdtModified());
         localfileDTO.setFileID(localfile.getFileID());
         localfileDTO.setLocalName(localfile.getLocalName());
         localfileDTO.setLocalType(localfile.getLocalType());

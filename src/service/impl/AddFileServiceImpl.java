@@ -45,8 +45,8 @@ public class AddFileServiceImpl implements AddFileService {
             FileDO file = BuildFileDOByMD5(md5);
             fileDAO.save(file);
             localfile.setFileID(file.getId());
-            localfile.setGmtCreate(LocalDateTime.now());
-            localfile.setGmtModified(LocalDateTime.now());
+            localfile.setLdtCreate(LocalDateTime.now());
+            localfile.setLdtModified(LocalDateTime.now());
             localfileDAO.save(localfile);
             localfileDTO = FileUtil.BulidLocalFileDTO(file, localfile);
             return 1;// 文件刚刚上传
@@ -71,8 +71,8 @@ public class AddFileServiceImpl implements AddFileService {
                     return 5;// 文件和标记都存在
                 } else {
                     localfile.setFileID(file.getId());
-                    localfile.setGmtCreate(LocalDateTime.now());
-                    localfile.setGmtModified(LocalDateTime.now());
+                    localfile.setLdtCreate(LocalDateTime.now());
+                    localfile.setLdtModified(LocalDateTime.now());
                     localfileDAO.save(localfile);
                     localfileDTO = FileUtil.BulidLocalFileDTO(file, localfile);
                     return 3;// 文件已存在，添加标记
@@ -99,8 +99,8 @@ public class AddFileServiceImpl implements AddFileService {
         fileDO.setSize((int)file.length());
         fileDO.setUrl(url);
         fileDO.setType(FileUtil.getRealType(file));
-        fileDO.setGmtCreate(LocalDateTime.now());
-        fileDO.setGmtModified(LocalDateTime.now());
+        fileDO.setLdtCreate(LocalDateTime.now());
+        fileDO.setLdtModified(LocalDateTime.now());
         
         return fileDO;
     }

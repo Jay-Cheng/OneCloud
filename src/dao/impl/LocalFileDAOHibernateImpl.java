@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +59,12 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
     }
 
     @Override
-    public boolean save(LocalFileDO localFile) {
+    public boolean save(LocalFileDO newDO) {
+        
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
         
-        session.persist(localFile);
+        session.persist(newDO);
         
         t.commit();
         session.close();
@@ -74,11 +76,23 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
         // TODO Auto-generated method stub
         return false;
     }
-
-    @Override
-    public boolean update(LocalFileDO t) {
-        // TODO Auto-generated method stub
-        return false;
+    
+    public LocalDateTime rename(LocalFileDO newDO) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        
+        LocalFileDO oldDO = session.get(LocalFileDO.class, newDO.getId());
+        
+        LocalDateTime ldtModified = LocalDateTime.now();
+        oldDO.setLdtModified(ldtModified);
+        oldDO.setLocalName(newDO.getLocalName());
+        oldDO.setLocalType(newDO.getLocalType());
+        
+        
+        t.commit();
+        session.close();
+        return ldtModified;
     }
     
 }

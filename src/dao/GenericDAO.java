@@ -10,5 +10,4 @@ public interface GenericDAO<T> {
     List<T> list(Map<String, Object> params);
     boolean save(T t);
     boolean remove(T t);
-    boolean update(T t);
 }

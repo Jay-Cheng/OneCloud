@@ -44,7 +44,7 @@
   		$("#loginForm").submit(function(e){
   			$.ajax({
                 type: "POST",
-                url: "LoginServlet",
+                url: "RequestManageServlet?action=login",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(getUser()),
                 success: function(result) {

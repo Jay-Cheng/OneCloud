@@ -49,9 +49,9 @@ function toggleExistSubDir(dir) {
  * 生成主页面文件夹节点的同时会生成模态框文件夹节点
  */ 
 function createDirNode(folderID, folders, show) {
-	var paddingParam = parseInt(dir.css("padding-left"), 10) + 20 + "px";
 	var dir = $('div[data-folder-id="' + folderID + '"]');
 	var subDirs = dir.next();
+	var paddingParam = parseInt(dir.css("padding-left"), 10) + 20 + "px";
 	for (var i = 0; i < folders.length; i++) {
         var id = folders[i].id;
         var folderName = folders[i].localName;
@@ -86,7 +86,7 @@ function showFileUploadModal(files) {
 	var firstFilename = files[0].name;
 	var nums = files.length;
 	/* 显示要上传的文件信息和数量 */
-	$("#modal_file_thumb").attr("src", getFileIcon(firstFilename));
+	$("#modal_file_thumb").attr("src", getFileIcon(getSuffix(firstFilename)));
 	$("#modal_file_name").text(firstFilename);
 	if (nums == 1) {
 		$("#modal_addtional_info").hide();

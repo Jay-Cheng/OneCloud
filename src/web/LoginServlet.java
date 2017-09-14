@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 	    try {
             if (loginService.checkPassword(user.getAccount(), user.getPassword())) {
                 UserDTO dto = loginService.getUserDTO();
-                
+//                request.getSession().setAttribute("user", dto);
                 respJSON.put("state", 1);// 状态1表示登录成功
                 respJSON.put("user", JSONObject.toJSON(dto));
             } else {

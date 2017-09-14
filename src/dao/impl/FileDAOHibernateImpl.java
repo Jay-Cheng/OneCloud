@@ -74,10 +74,4 @@ public class FileDAOHibernateImpl implements FileDAO {
         return false;
     }
 
-    @Override
-    public boolean update(FileDO t) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
 }

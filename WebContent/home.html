@@ -128,7 +128,7 @@
   						音乐
   						</a></li>
   						<br />
-						<li role="presentation"><a data-toggle="pill" href="#safe">
+						<li role="presentation"><a data-toggle="pill" href="#safebox">
 						<span class="glyphicon glyphicon-lock nav-title-icon"></span>
 						保险箱
 						</a></li>
@@ -136,7 +136,7 @@
   						<span class="glyphicon glyphicon-share nav-title-icon"></span>
   						分享链接
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#trash">
+  						<li role="presentation"><a data-toggle="pill" href="#recycle">
   						<span class="glyphicon glyphicon-trash nav-title-icon"></span>
   						回收站
   						</a></li>
@@ -220,7 +220,7 @@
 
 					<div id="all" class="tab-pane">
 						<div class="disk-file-path-wrapper">
-							<div class="select-all">
+							<div class="select-all" id="select_all">
 								<input type="checkbox">
 							</div>
 							<ol class="breadcrumb disk-file-path" id="disk_file_path">
@@ -229,8 +229,8 @@
     							<li><a href="#">文件夹</a></li>
     							-->
 							</ol>
+							<button class="btn btn-default mkfolder" id="mkfolder">新建文件夹</button>
 						</div>
-
 						<!-- 备份 -->
 						<!--
 						<ul>
@@ -268,6 +268,11 @@
 									<div class="file-title">
 										<span class="file-name">文档.word</span>
 									</div>
+									<!--
+									<span class="fileedit">
+										<input type="text">
+									</span>
+									-->
 								</div>
 
 								<div class="file-info">
@@ -379,7 +384,7 @@
 
 
 
-					<div id="safe" class="tab-pane">
+					<div id="safebox" class="tab-pane">
 						<div class="panel panel-primary center-block input-safePassword">
   							<div class="panel-heading">请输入保险箱密码</div>
   							<div class="panel-body">
@@ -393,7 +398,7 @@
 						</div>
 					</div>
 					<div id="share" class="tab-pane">share</div>
-					<div id="trash" class="tab-pane">trash</div>
+					<div id="recycle" class="tab-pane">trash</div>
 				</div>
 			</div>
 		</div>
@@ -514,27 +519,32 @@
 
 
 
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/BootstrapMenu.min.js"></script>
-    <script src="js/right-click-menu.js"></script>
-    <script src="js/initialize.js"></script>
-    <script src="js/file-system.js"></script>
-    
-    <!-- js files that provide upload service -->
-    <script src="js/jquery.ui.widget.js"></script>
-    <script src="js/jquery.iframe-transport.js"></script>
-    <script src="js/jquery.fileupload.js"></script>
-    <script src="js/fileupload.main.js"></script>
+    <script src="js-lib/jquery-3.2.1.min.js"></script>
+    <script src="js-lib/bootstrap.min.js"></script>
+    <script src="js-lib/BootstrapMenu.min.js"></script>
+    <script src="js-lib/jquery.ui.widget.js"></script>
+    <script src="js-lib/jquery.iframe-transport.js"></script>
+    <script src="js-lib/jquery.fileupload.js"></script>
+	<script src="js-lib/browser-md5-file.js"></script>
 	
+
+	<script src="js/util.js"></script>
+    <script src="js/file-system.js"></script>
 	<script src="js/modal.dirbox.js"></script>
-	<script src="js/browser-md5-file.js"></script>
+    <script src="js/fileupload.main.js"></script>
+    <script src="js/right-click-menu.js"></script>
+	<script src="js/folder-manage.js"></script>
     <script>
+    	/* 禁用默认的右键菜单 */
+		document.oncontextmenu = function(){return false;}
     	$(function() {
     		$("#nav_all").click();
-    	});
-    	$("#btn_transfer").click(function() {
-    		$('[role="presentation"][class="active"]').removeClass("active");
+
+    		/* 加载登录用户的信息 */
+		    $("#user_photo").attr("src", sessionStorage.getItem("user_photoURL"));
+		    $("#user_nickname").text(sessionStorage.getItem("user_nickname"));
+		    var percentage = getUsedPercentage(sessionStorage.getItem("user_usedCapacity"));
+		    $("#user_capacity").css("width", percentage).text(percentage);
     	});
     </script>
   </body>

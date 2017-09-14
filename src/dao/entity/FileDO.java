@@ -9,18 +9,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "file")
+@DynamicUpdate(true)
 public class FileDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     
     @Column(name = "gmt_create", nullable = false)
-    private LocalDateTime gmtCreate;
+    private LocalDateTime ldtCreate;
     
     @Column(name = "gmt_modified", nullable = false)
-    private LocalDateTime gmtModified;
+    private LocalDateTime ldtModified;
     
     @Column(name = "md5", unique = true, nullable = false)
     private String md5;
@@ -45,20 +48,20 @@ public class FileDO {
         this.id = id;
     }
 
-    public LocalDateTime getGmtCreate() {
-        return gmtCreate;
+    public LocalDateTime getLdtCreate() {
+        return ldtCreate;
     }
 
-    public void setGmtCreate(LocalDateTime gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setLdtCreate(LocalDateTime ldtCreate) {
+        this.ldtCreate = ldtCreate;
     }
 
-    public LocalDateTime getGmtModified() {
-        return gmtModified;
+    public LocalDateTime getLdtModified() {
+        return ldtModified;
     }
 
-    public void setGmtModified(LocalDateTime gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setLdtModified(LocalDateTime ldtModified) {
+        this.ldtModified = ldtModified;
     }
 
     public String getMd5() {

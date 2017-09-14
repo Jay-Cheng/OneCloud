@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,11 +62,21 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
         // TODO Auto-generated method stub
         return false;
     }
-
-    @Override
-    public boolean update(LocalFolderDO t) {
-        // TODO Auto-generated method stub
-        return false;
-    }
     
+    public LocalDateTime rename(LocalFolderDO newDO) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+             
+        
+        LocalFolderDO oldDO = session.get(LocalFolderDO.class, newDO.getId());
+        
+        LocalDateTime ldtModified = LocalDateTime.now();
+        oldDO.setLdtModified(ldtModified);
+        oldDO.setLocalName(newDO.getLocalName());
+        
+        
+        t.commit();
+        session.close();
+        return ldtModified;
+    }
 }

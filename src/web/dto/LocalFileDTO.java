@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class LocalFileDTO {
     
     private Long id;
-    private LocalDateTime gmtModified;
+    private LocalDateTime ldtModified;
     private Long fileID;
     private String localName;
     private String localType;
@@ -21,12 +21,12 @@ public class LocalFileDTO {
         this.id = id;
     }
 
-    public LocalDateTime getGmtModified() {
-        return gmtModified;
+    public LocalDateTime getLdtModified() {
+        return ldtModified;
     }
 
-    public void setGmtModified(LocalDateTime gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setLdtModified(LocalDateTime ldtModified) {
+        this.ldtModified = ldtModified;
     }
 
     public Long getFileID() {
