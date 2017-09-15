@@ -30,6 +30,8 @@ public class RequestManageServlet extends HttpServlet {
             request.getRequestDispatcher("AddFolderServlet").forward(request, response);break;
         case "rename":
             request.getRequestDispatcher("RenameServlet").forward(request, response);break;
+        case "move":
+            request.getRequestDispatcher("MoveServlet").forward(request, response);break;
         default:
             /* 使用异步请求时不能在服务端重定向 */
             response.getWriter().write("error:action doesn't match");

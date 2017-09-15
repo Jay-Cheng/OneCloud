@@ -19,10 +19,10 @@ public class UserDO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     
-    @Column(name = "gmt_create", nullable = false)
+    @Column(name = "ldt_create", nullable = false)
     private LocalDateTime ldtCreate;
     
-    @Column(name = "gmt_modified", nullable = false)
+    @Column(name = "ldt_modified", nullable = false)
     private LocalDateTime ldtModified;
 
     @Column(name = "account", unique = true, nullable = false)

@@ -50,9 +50,10 @@ public class RenameServlet extends HttpServlet {
 	    
 	    respJSON.put("isSuccess", isSuccess);
 	    respJSON.put("ldt_modified", ldtModified);
-	    response.setContentType("application/json");
+	    response.setContentType("application/json;charset=utf-8");
 	    PrintWriter writer = response.getWriter();
 	    writer.write(respJSON.toJSONString());
+	    writer.close();
 	}
 
 }

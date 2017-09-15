@@ -1,68 +1,60 @@
-var menu = new BootstrapMenu(".disk-file-item, .picture", {
-	actionsGroups: [
-		["download", "moveTo", "rename"],
-		["moveToSafe"],
-		["remove"]
-	],
-	actions: {
-		share: {
-			name: "分享",
-			iconClass: "fa-share-alt",
-			classNames: "right-click-menu",// 自定义的样式
-			onClick: function() {
-				alert("分享");
-			}
-
-		},
-		download: {
-			name: "下载",
-			iconClass: "fa-cloud-download",
-			classNames: "right-click-menu",
-			onClick: function() {
-				alert("下载");
-			}
-		},
-		moveTo: {
-			name: "移动到",
-			classNames: "right-click-menu",
-			onClick: function() {
-				alert("移动到");
-			},
-            isShown: function() {
-                return true;
-            }
-		},
-		rename: {
-			name: "重命名",
-			classNames: "right-click-menu",
-			onClick: rename,
-            isShown: function() {
-                var isMultiple = getSelectedItems().length != 1;
-                if (isMultiple) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-		},
-		moveToSafe: {
-			name: "移至保险箱",
-			iconClass: "fa-shield",
-			classNames: "right-click-menu",
-			onClick: function() {
-				alert("移至保险箱");
-			}
-		},
-		remove: {
-			name: "删除",
-			iconClass: "fa-trash",
-			classNames: "right-click-menu",
-			onClick: function() {
-				alert("删除");
-			}
-		}
-	}
+var menu = new BootstrapMenu(".disk-item", {
+    actionsGroups: [
+        ["download", "moveTo", "rename"],
+        ["moveToSafe"],
+        ["remove"]
+    ],
+    actions: {
+        share: {
+            name: "分享",
+            iconClass: "fa-share-alt",
+            classNames: "right-click-menu",// 自定义的样式
+            onClick: function() {
+                alert("分享");
+            },
+        },
+        download: {
+            name: "下载",
+            iconClass: "fa-cloud-download",
+            classNames: "right-click-menu",
+            onClick: function() {
+                alert("下载");
+            },
+        },
+        moveTo: {
+            name: "移动到",
+            classNames: "right-click-menu",
+            onClick: function() {
+                alert("移动到");
+            },
+        },
+        rename: {
+            name: "重命名",
+            classNames: "right-click-menu",
+            onClick: rename,
+        },
+        moveToSafe: {
+            name: "移至保险箱",
+            iconClass: "fa-shield",
+            classNames: "right-click-menu",
+            onClick: function() {
+                alert("移至保险箱");
+            },
+        },
+        remove: {
+            name: "删除",
+            iconClass: "fa-trash",
+            classNames: "right-click-menu",
+            onClick: remove,
+        }
+    }
 });
+function multiple() {
+    var isMultiple = getSelectedItems().length != 1;
+    return isMultiple;   
+}
+
+
 /* 获取被选中的节点 */
 function getSelectedItems() {
     // TODO get selected items from other navs 
@@ -100,10 +92,11 @@ function confirmEditNameByKeyboard(event) {
 }
 /* 确认重命名，当输入框失去焦点后触发的事件处理函数 */
 function confirmEditName() {
-    var itemTag = $(this).parent().parent().parent();
-    var nameTag = $(this).parent().prev().find(".file-name");
+    var inputTag = $(this);
+    var itemTag = inputTag.parent().parent().parent();
+    var nameTag = inputTag.parent().prev().find(".file-name");
     var originalName = nameTag.text();
-    var newName = $(this).val();
+    var newName = inputTag.val();
 
 
     /* 需要交给服务器的数据 */
@@ -153,7 +146,7 @@ function confirmEditName() {
         });
     }
     /* 移除文件名编辑框 */
-    $(this).parent().remove();
+    inputTag.parent().remove();
 
     nameTag.parent().show();
 }
@@ -172,5 +165,47 @@ function checkDuplicateName(itemTag, newName) {
     return isDuplicate;
 }
 
+/************************************* 删除 *************************************/
+function remove() {
+    var selectedItem = getSelectedItems();
+    selectedItem.each(function() {
+        var itemTag = $(this);
+        /* 需要提交的数据 */
+        var id;
+        var type;
+        if (itemTag.attr("data-folder-id") != undefined) {
+            id = itemTag.attr("data-folder-id");
+            type = "folder";
+        } else {
+            id = itemTag.attr("data-file-id");
+            type = "file";
+        }
+        var moveData = {
+            id: id,
+            type: type,
+            moveTo: 3
+        };
 
-/*------------------------------------------------------------------------------------------------------------*/
+        $.ajax({
+            type: "POST",
+            url: "RequestManageServlet?action=move",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(moveData),
+            success: function(result){
+                if (result.isSuccess == true) {
+                    /* 隐藏模态框中的文件夹节点 */
+                    if (type == "folder") {
+                        $('.treeNode-info[data-folder-id="' + id + '"]' ).parent().hide();
+                    }
+
+                    itemTag.removeClass("disk-item");
+                    itemTag.addClass("recycle-item");
+                    itemTag.find(".file-time").text("剩余7天");
+                    itemTag.appendTo($("#recycle_folder"));
+                } else {
+                    alert("删除失败");
+                }
+            }
+        });
+    });
+}

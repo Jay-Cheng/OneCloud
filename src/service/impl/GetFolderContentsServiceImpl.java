@@ -27,7 +27,7 @@ public class GetFolderContentsServiceImpl implements GetFolderContentsService {
         LocalFolderDAO localFolderDAO = factory.getLocalFolderDAO("Hibernate");
         /* 设置查询参数 */
         Map<String, Object> params = new HashMap<>();
-        if (folderID == 0L) {
+        if (folderID == 1L || folderID == 2L || folderID == 3L) {
             params.put("userID", userID);
         }
         params.put("parent", folderID);
@@ -54,7 +54,7 @@ public class GetFolderContentsServiceImpl implements GetFolderContentsService {
         FileDAO fileDAO = fileDAOFactory.getFileDAO("Hibernate");
         /* 设置LocalFile的查询参数 */
         Map<String, Object> localFileParams = new HashMap<>();
-        if (folderID == 0L) {
+        if (folderID == 1L || folderID == 2L || folderID == 3L) {
             localFileParams.put("userID", userID);
         }
         localFileParams.put("parent", folderID);

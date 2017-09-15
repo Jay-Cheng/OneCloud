@@ -1,13 +1,21 @@
 $(function() {
     $("#all").on("click", "ul [data-folder-id]", enterFolder);
     $("#all").on("click", ".disk-file-path-wrapper .disk-file-path li", goBack);
+    $("#mkfolder").click(mkfolder);
+
+    /* 文件选择相关事件处理 */
+    $("body").click(resetSelectedState);
+
+    $("#select_all").click(selectAll);// 为全选绑定事件处理函数
     $("#all").on("click", "ul .disk-file-item .select", selectItem);
     $("#all").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
-    $("#select_all").click(selectAll);// 为全选绑定事件处理函数
-	$("body").click(resetSelectedState);
-    $("#mkfolder").click(mkfolder);
+
+    $("#recycle").on("click", "ul .disk-file-item .select", selectItem);
+    $("#recycle").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
+    $("#nav_recycle").on("click", getRecycleItems);
+
     //$("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
-    showFolderContents(0);// 约定初始文件夹ID=0
+    showFolderContents(1);// 约定初始文件夹ID=1
 });
 
 function showFolderContents(folderID) {
@@ -56,7 +64,7 @@ function createFolderNode(folderID, show) {
                 var folderID = folders[i].id;
                 var folderName = folders[i].localName;
                 var lastModifiedTime = getFormattedDateTime(folders[i].ldtModified);
-                var folderNode = $('<li class="disk-file-item"></li>');
+                var folderNode = $('<li class="disk-file-item disk-item"></li>');
                 folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
                 folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
                 /* 设置文件夹ID */
@@ -80,7 +88,7 @@ function createFolderNode(folderID, show) {
                 var fileSize = getReadableSize(files[i].size);
                 var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
                 var fileImg = getFileIcon(getSuffix(fileName));
-                var fileNode = $('<li class="disk-file-item"></li>');
+                var fileNode = $('<li class="disk-file-item disk-item"></li>');
                 fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
                 fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
                 fileNode.attr("data-file-id", fileID);
@@ -128,16 +136,21 @@ function enterFolder() {
 function selectItem(e) {
     /* 点击复选框的时候右键菜单不会自动隐藏 */
     $(".bootstrapMenu").hide();
+    var itemTag = $(this).parent().parent();
     if ($(this).children().prop("checked")) {
-        $(this).parent().parent().addClass("selected");
+        itemTag.addClass("selected");
+        if (itemTag.hasClass("disk-item")) {
+            /* 判断是否全选 */
+            if (itemTag.parent().children("li:not(.selected)").length == 0) {
+                $("#select_all input").prop("checked", true);
+            }
+        }
     } else {
-        $(this).parent().parent().removeClass("selected");
-        /* 只要有一个被移除了选中效果，就取消全选 */
-        $("#select_all input").prop("checked", false);
-    }
-    /* 判断是否全选 */
-    if ($(this).parent().parent().parent().children("li:not(.selected)").length == 0) {
-        $("#select_all input").prop("checked", true);
+        itemTag.removeClass("selected");
+        if (itemTag.hasClass("disk-item")) {
+            /* 只要有一个被移除了选中效果，就取消全选 */
+            $("#select_all input").prop("checked", false);
+        }
     }
 
     e.stopPropagation();
@@ -146,7 +159,7 @@ function selectItem(e) {
 function rightClickSelectItem() {
     if (!$(this).find(".select input").prop("checked")) {
         /* 取消所有原有的选中效果 */
-    	$("#all ul:visible .selected").find(".select input").click();
+    	$(this).parent().find(".selected .select input").click();
     	/* 选中当前的文件 */
         $(this).find(".select input").prop("checked", true);
         $(this).addClass("selected");
@@ -164,7 +177,7 @@ function selectAll(e) {
 /* 取消所有选中状态 */
 function resetSelectedState() {
     $("#select_all input").prop("checked", false);
-	$("#all ul:visible .selected").find(".select input").click();
+	$(".selected").find(".select input").click();
 }
 /*
  * 单击面包屑导航时绑定的事件处理函数
@@ -192,7 +205,7 @@ function getFolderNode(folderID){
 function mkfolder() {
     var currentFolder = $("ul[data-folder-id]:visible");
 
-    var folderTag = $('<li class="disk-file-item"></li>');
+    var folderTag = $('<li class="disk-file-item disk-item"></li>');
     folderTag.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title" style="display: none;"><span class="file-name"></span></div><span class="fileedit"><input type="text" /></span></div>');
     folderTag.append('<div class="file-info"><span class="file-size"></span><span class="file-time"></span></div>');
     folderTag.find(".fileedit").click(function(e){e.stopPropagation()});
@@ -259,4 +272,9 @@ function mkfolder() {
     		$(this).blur();
     	}
     }
+}
+
+/*******************************************获取回收站文件*******************************************/
+function getRecycleItems(){
+    
 }

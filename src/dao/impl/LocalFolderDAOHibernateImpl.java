@@ -66,4 +66,20 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
         session.close();
         return ldtModified;
     }
+
+    @Override
+    public LocalDateTime move(Long id, Long to) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        LocalFolderDO oldDO = session.get(LocalFolderDO.class, id);
+        
+        LocalDateTime ldtModified = LocalDateTime.now();
+        oldDO.setLdtModified(ldtModified);
+        oldDO.setParent(to);
+        
+        t.commit();
+        session.close();
+        return ldtModified;
+    }
 }

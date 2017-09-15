@@ -108,10 +108,10 @@
 
 
 
-        .mission-list-title{
+        .mission-list-title, .recycle-title {
             height: 60px;
         }
-        .mission-list-title span{
+        .mission-list-title span, .recycle-title span{
             color: #777;
         }
         #loading_mission_list li, #complete_mission_list li{
@@ -204,7 +204,7 @@
             font-size: 14px;
             color: #74787C;
         }
-        .dynamic-mission-list-title .btn-modify-all{
+        .btn-modify-all{
             position: absolute;
             z-index: 0;
             right: 50px;
@@ -216,7 +216,7 @@
 
 
 
-        .disk-file-path-wrapper, .mission-list-title{
+        .disk-file-path-wrapper, .mission-list-title, .recycle-title {
             border-bottom: 1px solid #E6E7EC;
             line-height: 60px;
             padding: 0px 50px 0px 30px;

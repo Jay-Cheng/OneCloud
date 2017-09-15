@@ -132,11 +132,11 @@
 						<span class="glyphicon glyphicon-lock nav-title-icon"></span>
 						保险箱
 						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#share">
+  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#share">
   						<span class="glyphicon glyphicon-share nav-title-icon"></span>
   						分享链接
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#recycle">
+  						<li role="presentation"><a data-toggle="pill" href="#recycle" id="nav_recycle">
   						<span class="glyphicon glyphicon-trash nav-title-icon"></span>
   						回收站
   						</a></li>
@@ -144,7 +144,7 @@
 				</div>
 			</div>
 			<div class="col-xs-10 layout-body-content">
-				<div class="tab-content">
+				<div class="tab-content" id="main_view">
 					<div id="transfer" class="tab-pane">
 						<div class="mission-list-title">
 							<span>任务列表</span>
@@ -224,7 +224,7 @@
 								<input type="checkbox">
 							</div>
 							<ol class="breadcrumb disk-file-path" id="disk_file_path">
-    							<li data-folder-id="0"><a href="javascript:void(0)" class="active">我的网盘</a></li>
+    							<li data-folder-id="1"><a href="javascript:void(0)" class="active">我的网盘</a></li>
 								<!--		
     							<li><a href="#">文件夹</a></li>
     							-->
@@ -398,7 +398,17 @@
 						</div>
 					</div>
 					<div id="share" class="tab-pane">share</div>
-					<div id="recycle" class="tab-pane">trash</div>
+					<div id="recycle" class="tab-pane">
+						<div class="recycle-title">
+							<span>文件在回收站保存7天</span>
+							<div class="btn-modify-all">
+								<button class="btn btn-default" id="clear_recycle">全部清空</button>
+							</div>
+						</div>
+						<ul id="recycle_folder">
+							
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -433,12 +443,12 @@
         				<div class="dirbox">
         					<div class="dirbox-header">
         						<label><span id="dirbox_header_action">上传</span>到：</label>
-        						<span id="dirbox_path" data-folder-id="0">我的网盘</span>
+        						<span id="dirbox_path" data-folder-id="1">我的网盘</span>
         					</div>
         					<div class="dirbox-body">
         						<ul>
         							<li>
-        								<div class="treeNode-info" style="padding-left: 5px;" data-folder-id="0">
+        								<div class="treeNode-info" style="padding-left: 5px;" data-folder-id="1">
         									<span class="glyphicon glyphicon-folder-open"></span>
         									<span class="treeNode-info-name">我的网盘</span>
         								</div>
@@ -532,7 +542,8 @@
     <script src="js/file-system.js"></script>
 	<script src="js/modal.dirbox.js"></script>
     <script src="js/fileupload.main.js"></script>
-    <script src="js/right-click-menu.js"></script>
+    <script src="js/contextmenu.main.js"></script>
+    <script src="js/contextmenu.recycle.js"></script>
     <script>
     	/* 禁用默认的右键菜单 */
 		document.oncontextmenu = function(){return false;}

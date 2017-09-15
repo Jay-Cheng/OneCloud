@@ -3,8 +3,8 @@ USE onecloud;
 
 CREATE TABLE user (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	gmt_create DATETIME NOT NULL,
-	gmt_modified DATETIME NOT NULL,
+	ldt_create DATETIME NOT NULL,
+	ldt_modified DATETIME NOT NULL,
 
 	account VARCHAR(20) NOT NULL UNIQUE,
 	password VARCHAR(20) NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE user (
 /* type保存文件的真实类型 */
 CREATE TABLE file (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	gmt_create DATETIME NOT NULL,
-	gmt_modified DATETIME NOT NULL,
+	ldt_create DATETIME NOT NULL,
+	ldt_modified DATETIME NOT NULL,
 
 	md5 CHAR(32) NOT NULL UNIQUE,
 	size INT UNSIGNED NOT NULL,
@@ -35,8 +35,8 @@ CREATE TABLE file (
  /* 为了让唯一约束生效，把没有后缀约定为"" */
 CREATE TABLE local_file (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	gmt_create DATETIME NOT NULL,
-	gmt_modified DATETIME NOT NULL,
+	ldt_create DATETIME NOT NULL,
+	ldt_modified DATETIME NOT NULL,
 
 	user_id BIGINT UNSIGNED NOT NULL,
 	file_id BIGINT UNSIGNED NOT NULL,
@@ -51,8 +51,8 @@ CREATE TABLE local_file (
 /* 文件夹的查重在客户端进行 */
 CREATE TABLE local_folder (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	gmt_create DATETIME NOT NULL,
-	gmt_modified DATETIME NOT NULL,
+	ldt_create DATETIME NOT NULL,
+	ldt_modified DATETIME NOT NULL,
 
 	user_id BIGINT UNSIGNED NOT NULL,
 	local_name VARCHAR(255) NOT NULL,
