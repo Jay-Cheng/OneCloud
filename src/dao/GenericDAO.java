@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 import java.util.Map;
 
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -22,6 +23,7 @@ public interface GenericDAO<T extends Object> {
             throw new DBQueryException();
         }
     }
+
     default void save(T obj) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction t = session.beginTransaction();
@@ -33,6 +35,6 @@ public interface GenericDAO<T extends Object> {
     }
     
     List<T> list(Map<String, Object> params);
-    boolean remove(T t);
+    boolean remove(long id);
     
 }

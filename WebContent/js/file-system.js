@@ -3,25 +3,24 @@ $(function() {
     $("#all").on("click", ".disk-file-path-wrapper .disk-file-path li", goBack);
     $("#mkfolder").click(mkfolder);
 
-    /* æ–‡ä»¶é€‰æ‹©ç›¸å…³äº‹ä»¶å¤„ç† */
+    /* ÎÄ¼şÑ¡ÔñÏà¹ØÊÂ¼ş´¦Àí */
     $("body").click(resetSelectedState);
 
-    $("#select_all").click(selectAll);// ä¸ºå…¨é€‰ç»‘å®šäº‹ä»¶å¤„ç†å‡½æ•°
+    $("#select_all").click(selectAll);// ÎªÈ«Ñ¡°ó¶¨ÊÂ¼ş´¦Àíº¯Êı
     $("#all").on("click", "ul .disk-file-item .select", selectItem);
     $("#all").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
 
     $("#recycle").on("click", "ul .disk-file-item .select", selectItem);
     $("#recycle").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
-    $("#nav_recycle").on("click", getRecycleItems);
-
-    //$("#disk_file_path li").click(goBack);// ä¸ºåˆå§‹é¢åŒ…å±‘èŠ‚ç‚¹ç»‘å®šäº‹ä»¶å¤„ç†å‡½æ•°
-    showFolderContents(1);// çº¦å®šåˆå§‹æ–‡ä»¶å¤¹ID=1
+    getRecycleItems();
+    //$("#disk_file_path li").click(goBack);// Îª³õÊ¼Ãæ°üĞ¼½Úµã°ó¶¨ÊÂ¼ş´¦Àíº¯Êı
+    showFolderContents(1);// Ô¼¶¨³õÊ¼ÎÄ¼ş¼ĞID=1
 });
 
 function showFolderContents(folderID) {
-    /* éšè—å½“å‰æ–‡ä»¶å¤¹å†…å®¹ */
+    /* Òş²Øµ±Ç°ÎÄ¼ş¼ĞÄÚÈİ */
     $("#all ul").hide();
-    /* å¦‚æœéœ€å±•ç¤ºçš„æ–‡ä»¶å¤¹ä¹‹å‰å·²ç»ç”Ÿæˆè¿‡ï¼Œåˆ™æ˜¾ç¤ºå¯¹åº”èŠ‚ç‚¹ï¼Œè¿”å› */
+    /* Èç¹ûĞèÕ¹Ê¾µÄÎÄ¼ş¼ĞÖ®Ç°ÒÑ¾­Éú³É¹ı£¬ÔòÏÔÊ¾¶ÔÓ¦½Úµã£¬·µ»Ø */
     var node = getFolderNode(folderID);
     if (node != null) {
         node.show();
@@ -31,35 +30,35 @@ function showFolderContents(folderID) {
     }
 }
 /*
- * æœ¬å‡½æ•°ä¼šåœ¨ä¸¤å¤„è¢«è°ƒç”¨(1)ä¸»ç•Œé¢éœ€è¦æ˜¾ç¤ºçš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ä¸å­˜åœ¨æ—¶(2)â€œé€‰æ‹©è·¯å¾„â€æ¨¡æ€æ¡†çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ä¸å­˜åœ¨æ—¶
- * ç”Ÿæˆä¸»ç•Œé¢æ–‡ä»¶å¤¹èŠ‚ç‚¹ï¼ˆå†…å«æ–‡ä»¶èŠ‚ç‚¹ï¼‰çš„åŒæ—¶ä¼šç”Ÿæˆâ€œé€‰æ‹©è·¯å¾„â€æ¨¡æ€æ¡†çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ï¼ˆä¸å«æ–‡ä»¶èŠ‚ç‚¹ï¼‰
- * å¦‚æœshow=trueåˆ™ä¼šç«‹åˆ»åœ¨ä¸»ç•Œé¢æ˜¾ç¤ºç”Ÿæˆçš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ï¼Œå¦åˆ™åªç”Ÿæˆä¸æ˜¾ç¤º
+ * ±¾º¯Êı»áÔÚÁ½´¦±»µ÷ÓÃ(1)Ö÷½çÃæĞèÒªÏÔÊ¾µÄÎÄ¼ş¼Ğ½Úµã²»´æÔÚÊ±(2)¡°Ñ¡ÔñÂ·¾¶¡±Ä£Ì¬¿òµÄÎÄ¼ş¼Ğ½Úµã²»´æÔÚÊ±
+ * Éú³ÉÖ÷½çÃæÎÄ¼ş¼Ğ½Úµã£¨ÄÚº¬ÎÄ¼ş½Úµã£©µÄÍ¬Ê±»áÉú³É¡°Ñ¡ÔñÂ·¾¶¡±Ä£Ì¬¿òµÄÎÄ¼ş¼Ğ½Úµã£¨²»º¬ÎÄ¼ş½Úµã£©
+ * Èç¹ûshow=trueÔò»áÁ¢¿ÌÔÚÖ÷½çÃæÏÔÊ¾Éú³ÉµÄÎÄ¼ş¼Ğ½Úµã£¬·ñÔòÖ»Éú³É²»ÏÔÊ¾
  * ---------------------------------------------------------------------------------------------------
- * æ³¨æ„å¦‚æœåœ¨ajax successäº‹ä»¶å¤„ç†å‡½æ•°ä¸­è¿”å›ä¸€ä¸ªå€¼ä¾›å…¶å®ƒå‡½æ•°è°ƒç”¨ï¼Œä¼šå‡ºç°è·å¾—undefinedçš„æƒ…å†µï¼ˆå› ä¸ºè¯·æ±‚æ˜¯å¼‚æ­¥çš„ï¼‰
- * è€ƒè™‘åŒæ­¥è¯·æ±‚å³async=falseï¼Œä½†æ˜¯(1)deprecated(2)é˜»å¡
+ * ×¢ÒâÈç¹ûÔÚajax successÊÂ¼ş´¦Àíº¯ÊıÖĞ·µ»ØÒ»¸öÖµ¹©ÆäËüº¯Êıµ÷ÓÃ£¬»á³öÏÖ»ñµÃundefinedµÄÇé¿ö£¨ÒòÎªÇëÇóÊÇÒì²½µÄ£©
+ * ¿¼ÂÇÍ¬²½ÇëÇó¼´async=false£¬µ«ÊÇ(1)deprecated(2)×èÈû
  * ---------------------------------------------------------------------------------------------------
- * åŸå…ˆæ€è·¯ï¼šç”ŸæˆèŠ‚ç‚¹åå§‹ç»ˆhideï¼Œå°†èŠ‚ç‚¹è¿”å›åˆ°è°ƒç”¨çš„ä¸Šä¸€çº§ï¼Œç”±ä¸Šä¸€çº§å†³å®šæ˜¯å¦è¦æ˜¾ç¤ºè¯¥èŠ‚ç‚¹
- * ä½†ç”±äºè¯·æ±‚å¼‚æ­¥ï¼Œä¼šå¯¼è‡´ä¸Šä¸€çº§è·å¾—"undefined"çš„æƒ…å†µ
+ * Ô­ÏÈË¼Â·£ºÉú³É½ÚµãºóÊ¼ÖÕhide£¬½«½Úµã·µ»Øµ½µ÷ÓÃµÄÉÏÒ»¼¶£¬ÓÉÉÏÒ»¼¶¾ö¶¨ÊÇ·ñÒªÏÔÊ¾¸Ã½Úµã
+ * µ«ÓÉÓÚÇëÇóÒì²½£¬»áµ¼ÖÂÉÏÒ»¼¶»ñµÃ"undefined"µÄÇé¿ö
  */
 function createFolderNode(folderID, show) {
-    /* ç”Ÿæˆä¸€ä¸ªæ–‡ä»¶å¤¹èŠ‚ç‚¹<ul>ï¼Œè®¾ç½®data-folder-idå±æ€§ï¼Œè¯¥å±æ€§æ˜¯è¯¥æ–‡ä»¶å¤¹åœ¨æ•°æ®åº“å­˜å‚¨çš„ID */
+    /* Éú³ÉÒ»¸öÎÄ¼ş¼Ğ½Úµã<ul>£¬ÉèÖÃdata-folder-idÊôĞÔ£¬¸ÃÊôĞÔÊÇ¸ÃÎÄ¼ş¼ĞÔÚÊı¾İ¿â´æ´¢µÄID */
     var node = $("<ul></ul>");
     node.attr("data-folder-id", folderID);
-    /* å‘æœåŠ¡å™¨å‘é€å¼‚æ­¥è¯·æ±‚ï¼Œè·å–å¯¹åº”folderIDçš„å†…å®¹ */
+    /* Ïò·şÎñÆ÷·¢ËÍÒì²½ÇëÇó£¬»ñÈ¡¶ÔÓ¦folderIDµÄÄÚÈİ */
     $.ajax({
         type: "GET",
         url: "RequestManageServlet?action=enterFolder&userID=" + sessionStorage.getItem("user_id") + "&folderID=" + folderID,
         /* 
-         * åœ¨successçš„å›è°ƒå‡½æ•°ä¸­è®¿é—®ä¸åˆ°å¤–éƒ¨çš„folderIDï¼Œæ‰€ä»¥æ·»åŠ ä¸‹é¢çš„å‚æ•° 
-         * ä¿®æ­£ï¼šè®¿é—®ä¸åˆ°å‡½æ•°çš„å‚æ•°ï¼Œä½†å¯ä»¥è®¿é—®å‡½æ•°å†…éƒ¨çš„å˜é‡ï¼
+         * ÔÚsuccessµÄ»Øµ÷º¯ÊıÖĞ·ÃÎÊ²»µ½Íâ²¿µÄfolderID£¬ËùÒÔÌí¼ÓÏÂÃæµÄ²ÎÊı 
+         * ĞŞÕı£º·ÃÎÊ²»µ½º¯ÊıµÄ²ÎÊı£¬µ«¿ÉÒÔ·ÃÎÊº¯ÊıÄÚ²¿µÄ±äÁ¿£¡
          */  
         folderID: folderID,
         success: function(result) {
             var folders = result.folders;
             var files = result.files;
-            /* ç”Ÿæˆâ€œé€‰æ‹©è·¯å¾„â€æ¨¡æ€æ¡†çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ */
-            createDirNode(this.folderID, folders, !show);/* å¿…é¡»åœ¨å‚æ•°å‰é¢åŠ ä¸Šthis. */
-            /* ç”Ÿæˆå½“å‰æ–‡ä»¶å¤¹ä¸‹æ‰€æœ‰æ–‡ä»¶å¤¹èŠ‚ç‚¹ */
+            /* Éú³É¡°Ñ¡ÔñÂ·¾¶¡±Ä£Ì¬¿òµÄÎÄ¼ş¼Ğ½Úµã */
+            createDirNode(this.folderID, folders, !show);/* ±ØĞëÔÚ²ÎÊıÇ°Ãæ¼ÓÉÏthis. */
+            /* Éú³Éµ±Ç°ÎÄ¼ş¼ĞÏÂËùÓĞÎÄ¼ş¼Ğ½Úµã */
             for (var i = 0; i < folders.length; i++) {
                 var folderID = folders[i].id;
                 var folderName = folders[i].localName;
@@ -67,17 +66,17 @@ function createFolderNode(folderID, show) {
                 var folderNode = $('<li class="disk-file-item disk-item"></li>');
                 folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
                 folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
-                /* è®¾ç½®æ–‡ä»¶å¤¹ID */
+                /* ÉèÖÃÎÄ¼ş¼ĞID */
                 folderNode.attr("data-folder-id", folderID);
-                /* ç»‘å®šäº‹ä»¶å¤„ç†å‡½æ•° */
+                /* °ó¶¨ÊÂ¼ş´¦Àíº¯Êı */
                 // folderNode.on("click", enterFolder);
                 // folderNode.on("contextmenu", rightClickSelectItem);
                 // folderNode.find(".select").on("click", selectItem);
-                /* è¿½åŠ è¯¥èŠ‚ç‚¹åˆ°å½“å‰æ–‡ä»¶å¤¹ */
+                /* ×·¼Ó¸Ã½Úµãµ½µ±Ç°ÎÄ¼ş¼Ğ */
                 folderNode.appendTo(node);
             }
             // node.on("click", "[data-folder-id]", enterFolder);
-            /* ç”Ÿæˆå½“å‰æ–‡ä»¶å¤¹ä¸‹æ‰€æœ‰æ–‡ä»¶èŠ‚ç‚¹ */
+            /* Éú³Éµ±Ç°ÎÄ¼ş¼ĞÏÂËùÓĞÎÄ¼ş½Úµã */
             for (var i = 0; i < files.length; i++) {
                 var fileType = files[i].localType;
                 if (fileType != "") {
@@ -92,10 +91,10 @@ function createFolderNode(folderID, show) {
                 fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
                 fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
                 fileNode.attr("data-file-id", fileID);
-                /* ç»‘å®šäº‹ä»¶å¤„ç†å‡½æ•° */
+                /* °ó¶¨ÊÂ¼ş´¦Àíº¯Êı */
                 // fileNode.find(".select").on("click", selectItem);
                 // fileNode.on("contextmenu", rightClickSelectItem);
-                /* è¿½åŠ è¯¥èŠ‚ç‚¹åˆ°å½“å‰æ–‡ä»¶å¤¹ */
+                /* ×·¼Ó¸Ã½Úµãµ½µ±Ç°ÎÄ¼ş¼Ğ */
                 fileNode.appendTo(node);                
             }
             if (!show) {
@@ -106,41 +105,41 @@ function createFolderNode(folderID, show) {
     });
 }
 /* 
- * å•å‡»æ–‡ä»¶å¤¹åï¼Œæ›´æ–°é¢åŒ…å±‘å¯¼èˆªå¹¶åˆ—å‡ºè¯¥æ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
- * è¯¥å‡½æ•°ç»‘å®šåˆ°æ–‡ä»¶å¤¹<li>èŠ‚ç‚¹çš„clickäº‹ä»¶ä¸Š
+ * µ¥»÷ÎÄ¼ş¼Ğºó£¬¸üĞÂÃæ°üĞ¼µ¼º½²¢ÁĞ³ö¸ÃÎÄ¼ş¼ĞÏÂµÄËùÓĞÎÄ¼ş
+ * ¸Ãº¯Êı°ó¶¨µ½ÎÄ¼ş¼Ğ<li>½ÚµãµÄclickÊÂ¼şÉÏ
  */
 function enterFolder() {
-    /* åˆ¤æ–­è¯¥æ–‡ä»¶æ˜¯å¦æ˜¯æ–‡ä»¶å¤¹ */
+    /* ÅĞ¶Ï¸ÃÎÄ¼şÊÇ·ñÊÇÎÄ¼ş¼Ğ */
     if ($(this).attr("data-folder-id") != undefined) {
-        /* ç”Ÿæˆä¸€ä¸ªè¯¥æ–‡ä»¶å¤¹çš„é¢åŒ…å±‘å¯¼èˆªèŠ‚ç‚¹ */
+        /* Éú³ÉÒ»¸ö¸ÃÎÄ¼ş¼ĞµÄÃæ°üĞ¼µ¼º½½Úµã */
         var breadNode = $('<li></li>');
-        /* è®¾ç½®é¢åŒ…å±‘èŠ‚ç‚¹çš„åå­— */
+        /* ÉèÖÃÃæ°üĞ¼½ÚµãµÄÃû×Ö */
         var folderName = $(this).find(".file-name").text();
         breadNode.append('<a href="javascript:void(0)">' + folderName + '</a>');
-        /* è®¾ç½®é¢åŒ…å±‘èŠ‚ç‚¹å¯¹åº”çš„æ–‡ä»¶å¤¹ID */
+        /* ÉèÖÃÃæ°üĞ¼½Úµã¶ÔÓ¦µÄÎÄ¼ş¼ĞID */
         breadNode.attr("data-folder-id", $(this).attr("data-folder-id"));
 
         //breadNode.on("click", goBack);
-        /* ç§»é™¤ä¹‹å‰é¢åŒ…å±‘èŠ‚ç‚¹çš„activeæ•ˆæœï¼Œå¹¶æŠŠå½“å‰é¢åŒ…å±‘èŠ‚ç‚¹è®¾ç½®ä¸ºactive */
+        /* ÒÆ³ıÖ®Ç°Ãæ°üĞ¼½ÚµãµÄactiveĞ§¹û£¬²¢°Ñµ±Ç°Ãæ°üĞ¼½ÚµãÉèÖÃÎªactive */
         $("#disk_file_path li").children().removeClass("active");
         breadNode.children().addClass("active");
-        /* è¿½åŠ è¯¥é¢åŒ…å±‘åˆ°ç³»ç»Ÿè·¯å¾„ */
+        /* ×·¼Ó¸ÃÃæ°üĞ¼µ½ÏµÍ³Â·¾¶ */
         breadNode.appendTo($("#disk_file_path"));
-        /* é‡ç½®å½“å‰æ–‡ä»¶å¤¹æ‰€æœ‰æ–‡ä»¶çš„é€‰ä¸­çŠ¶æ€ */
+        /* ÖØÖÃµ±Ç°ÎÄ¼ş¼ĞËùÓĞÎÄ¼şµÄÑ¡ÖĞ×´Ì¬ */
         //$("#all ul:visible .selected").find(".select input").click();
-        /* åˆ—å‡ºè¯¥æ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰æ–‡ä»¶ */ 
+        /* ÁĞ³ö¸ÃÎÄ¼ş¼ĞÏÂµÄËùÓĞÎÄ¼ş */ 
         showFolderContents($(this).attr("data-folder-id"));
     }    
 }
-/* ç‚¹å‡»æ–‡ä»¶å¤´éƒ¨å¤é€‰æ¡†æ—¶çš„äº‹ä»¶å¤„ç†å‡½æ•° */
+/* µã»÷ÎÄ¼şÍ·²¿¸´Ñ¡¿òÊ±µÄÊÂ¼ş´¦Àíº¯Êı */
 function selectItem(e) {
-    /* ç‚¹å‡»å¤é€‰æ¡†çš„æ—¶å€™å³é”®èœå•ä¸ä¼šè‡ªåŠ¨éšè— */
+    /* µã»÷¸´Ñ¡¿òµÄÊ±ºòÓÒ¼ü²Ëµ¥²»»á×Ô¶¯Òş²Ø */
     $(".bootstrapMenu").hide();
     var itemTag = $(this).parent().parent();
     if ($(this).children().prop("checked")) {
         itemTag.addClass("selected");
         if (itemTag.hasClass("disk-item")) {
-            /* åˆ¤æ–­æ˜¯å¦å…¨é€‰ */
+            /* ÅĞ¶ÏÊÇ·ñÈ«Ñ¡ */
             if (itemTag.parent().children("li:not(.selected)").length == 0) {
                 $("#select_all input").prop("checked", true);
             }
@@ -148,24 +147,24 @@ function selectItem(e) {
     } else {
         itemTag.removeClass("selected");
         if (itemTag.hasClass("disk-item")) {
-            /* åªè¦æœ‰ä¸€ä¸ªè¢«ç§»é™¤äº†é€‰ä¸­æ•ˆæœï¼Œå°±å–æ¶ˆå…¨é€‰ */
+            /* Ö»ÒªÓĞÒ»¸ö±»ÒÆ³ıÁËÑ¡ÖĞĞ§¹û£¬¾ÍÈ¡ÏûÈ«Ñ¡ */
             $("#select_all input").prop("checked", false);
         }
     }
 
     e.stopPropagation();
 }
-/* åœ¨æ–‡ä»¶æˆ–æ–‡ä»¶å¤¹ä¸Šå³å‡»æ—¶çš„äº‹ä»¶å¤„ç†å‡½æ•° */
+/* ÔÚÎÄ¼ş»òÎÄ¼ş¼ĞÉÏÓÒ»÷Ê±µÄÊÂ¼ş´¦Àíº¯Êı */
 function rightClickSelectItem() {
     if (!$(this).find(".select input").prop("checked")) {
-        /* å–æ¶ˆæ‰€æœ‰åŸæœ‰çš„é€‰ä¸­æ•ˆæœ */
+        /* È¡ÏûËùÓĞÔ­ÓĞµÄÑ¡ÖĞĞ§¹û */
     	$(this).parent().find(".selected .select input").click();
-    	/* é€‰ä¸­å½“å‰çš„æ–‡ä»¶ */
+    	/* Ñ¡ÖĞµ±Ç°µÄÎÄ¼ş */
         $(this).find(".select input").prop("checked", true);
         $(this).addClass("selected");
     }
 }
-/* å•å‡»å…¨é€‰æŒ‰é’®çš„äº‹ä»¶å¤„ç†å‡½æ•° */
+/* µ¥»÷È«Ñ¡°´Å¥µÄÊÂ¼ş´¦Àíº¯Êı */
 function selectAll(e) {
     if ($(this).children().prop("checked")) {
         $("#all ul:visible li:not(.selected)").find(".select input").click();
@@ -174,26 +173,26 @@ function selectAll(e) {
     }
     e.stopPropagation();
 }
-/* å–æ¶ˆæ‰€æœ‰é€‰ä¸­çŠ¶æ€ */
+/* È¡ÏûËùÓĞÑ¡ÖĞ×´Ì¬ */
 function resetSelectedState() {
     $("#select_all input").prop("checked", false);
 	$(".selected").find(".select input").click();
 }
 /*
- * å•å‡»é¢åŒ…å±‘å¯¼èˆªæ—¶ç»‘å®šçš„äº‹ä»¶å¤„ç†å‡½æ•°
+ * µ¥»÷Ãæ°üĞ¼µ¼º½Ê±°ó¶¨µÄÊÂ¼ş´¦Àíº¯Êı
  */
 function goBack() {
-    $(this).nextAll().remove();// æŠŠæœ¬èŠ‚ç‚¹ä¹‹åçš„siblingå…¨éƒ¨ç§»é™¤
-    $(this).children().addClass("active");// æŠŠå½“å‰å•å‡»çš„é¢åŒ…å±‘èŠ‚ç‚¹è®¾ç½®ä¸ºactive
-    showFolderContents($(this).attr("data-folder-id"));// æ˜¾ç¤ºè¯¥é¢åŒ…å±‘èŠ‚ç‚¹å¯¹åº”çš„æ–‡ä»¶å¤¹
+    $(this).nextAll().remove();// °Ñ±¾½ÚµãÖ®ºóµÄsiblingÈ«²¿ÒÆ³ı
+    $(this).children().addClass("active");// °Ñµ±Ç°µ¥»÷µÄÃæ°üĞ¼½ÚµãÉèÖÃÎªactive
+    showFolderContents($(this).attr("data-folder-id"));// ÏÔÊ¾¸ÃÃæ°üĞ¼½Úµã¶ÔÓ¦µÄÎÄ¼ş¼Ğ
 }
 /*
- * åˆ¤æ–­folderIDå¯¹åº”çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹æ˜¯å¦å­˜åœ¨
- * æ˜¯åˆ™è¿”å›è¯¥èŠ‚ç‚¹
- * å¦åˆ™è¿”å›null
+ * ÅĞ¶ÏfolderID¶ÔÓ¦µÄÎÄ¼ş¼Ğ½ÚµãÊÇ·ñ´æÔÚ
+ * ÊÇÔò·µ»Ø¸Ã½Úµã
+ * ·ñÔò·µ»Ønull
  */
 function getFolderNode(folderID){
-    var node = $('ul[data-folder-id="' + folderID + '"]');// ï¼ï¼æ ‡ç­¾ + å±æ€§é€‰æ‹©å™¨ ï¼ï¼
+    var node = $('ul[data-folder-id="' + folderID + '"]');// £¡£¡±êÇ© + ÊôĞÔÑ¡ÔñÆ÷ £¡£¡
     if (node.length != 0) {
         return node;
     } else {
@@ -201,7 +200,7 @@ function getFolderNode(folderID){
     }
 }
 
-/*******************************************æ–°å»ºæ–‡ä»¶å¤¹*******************************************/
+/*******************************************ĞÂ½¨ÎÄ¼ş¼Ğ*******************************************/
 function mkfolder() {
     var currentFolder = $("ul[data-folder-id]:visible");
 
@@ -213,7 +212,7 @@ function mkfolder() {
     folderTag.find(".fileedit input").keydown(confirmByKeyborad);
     
 
-    /* éœ€è¦è·å–çš„æ•°æ® */
+    /* ĞèÒª»ñÈ¡µÄÊı¾İ */
     var id;
 
 
@@ -225,12 +224,13 @@ function mkfolder() {
 
 
     function confirm() {
-        var itemTag = $(this).parent().parent().parent();
+        var inputTag = $(this);
+        var itemTag = inputTag.parent().parent().parent();
         var nameTag = itemTag.find(".file-name");
         var timeTag = itemTag.find(".file-time");
 
-        /* éœ€è¦æäº¤çš„æ•°æ® */
-        var localName = $(this).val();
+        /* ĞèÒªÌá½»µÄÊı¾İ */
+        var localName = inputTag.val();
         var parent = itemTag.parent().attr("data-folder-id");
         var newFolder = {
             localName: localName,
@@ -238,11 +238,11 @@ function mkfolder() {
         }
 
         if (localName.length == 0) {
-            // TO DO åˆ¤æ–­æ˜¯å¦å…¨ä¸ºç©ºæ ¼
-            alert("åå­—ä¸èƒ½ä¸ºç©º");
+            // TO DO ÅĞ¶ÏÊÇ·ñÈ«Îª¿Õ¸ñ
+            alert("Ãû×Ö²»ÄÜÎª¿Õ");
             itemTag.remove();
         } else if (checkDuplicateName(itemTag, localName)) {
-            alert("æ–‡ä»¶åäº§ç”Ÿå†²çª");
+            alert("ÎÄ¼şÃû²úÉú³åÍ»");
             itemTag.remove();
         } else {
             $.ajax({
@@ -252,19 +252,26 @@ function mkfolder() {
                 data: JSON.stringify(newFolder),
                 success: function(result) {
                     if (result.isSuccess == true) {
+                        /* Ä£Ì¬¿òÍ¬²½ */
+                        var folder = [{
+                            id: result.id,
+                            localName: newFolder.localName
+                        }];
+                        createDirNode(parent, folder, false);
+                        /* ĞÂ½¨ÎÄ¼ş¼Ğ½Úµã */
                         itemTag.attr("data-folder-id", result.id);
                         timeTag.text(getFormattedDateTime(result.ldtModified));
                         nameTag.text(newFolder.localName);
                     } else {    
-                        alert("æ–°å»ºæ–‡ä»¶å¤¹å¤±è´¥");
+                        alert("ĞÂ½¨ÎÄ¼ş¼ĞÊ§°Ü");
                     }
-                }
-            })
-        }
-        /* ç§»é™¤æ–‡ä»¶åç¼–è¾‘æ¡† */
-        $(this).parent().remove();
+                    /* ÒÆ³ıÎÄ¼şÃû±à¼­¿ò */
+                    inputTag.parent().remove();
 
-        nameTag.parent().show();
+                    nameTag.parent().show();
+                }
+            });
+        }
     }
     
     function confirmByKeyborad(event) {
@@ -274,7 +281,46 @@ function mkfolder() {
     }
 }
 
-/*******************************************è·å–å›æ”¶ç«™æ–‡ä»¶*******************************************/
+/*******************************************»ñÈ¡»ØÊÕÕ¾ÎÄ¼ş*******************************************/
 function getRecycleItems(){
-    
+    $.ajax({
+        type: "GET",
+        url: "RequestManageServlet?action=enterFolder&userID=" + sessionStorage.getItem("user_id") + "&folderID=" + 3,
+        success: function(result) {
+            var node = $("#recycle_folder");
+
+            var folders = result.folders;
+            var files = result.files;
+
+            for (var i = 0; i < folders.length; i++) {
+                var folderID = folders[i].id;
+                var folderName = folders[i].localName;
+                var lastModifiedTime = getFormattedDateTime(folders[i].ldtModified);
+                var folderNode = $('<li class="disk-file-item recycle-item"></li>');
+                folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
+                folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + "Ê£Óà7Ìì" + '</span></div>');
+                folderNode.attr("data-folder-id", folderID);
+                folderNode.appendTo(node);
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                var fileType = files[i].localType;
+                if (fileType != "") {
+                    fileType = "." + fileType;
+                }
+                var fileID = files[i].id;
+                var fileName = files[i].localName + fileType;
+                var fileSize = getReadableSize(files[i].size);
+                var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
+                var fileImg = getFileIcon(getSuffix(fileName));
+                var fileNode = $('<li class="disk-file-item recycle-item"></li>');
+                fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
+                fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + "Ê£Óà7Ìì" + '</span></div>');
+                fileNode.attr("data-file-id", fileID);
+                
+                fileNode.appendTo(node);                
+            }
+            node.appendTo($("#recycle"));
+        }
+    });
 }

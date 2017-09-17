@@ -208,11 +208,11 @@ function finishUpload(data) {
 	var fileImg = getFileIcon(getSuffix(fileName));
 	var fileSize = getReadableSize(data.localFile.size);
 	var lastModifiedTime = getFormattedDateTime(data.localFile.ldtModified);
-	var fileID = data.localFile.fileID;
-    var fileNode = $('<li class="disk-file-item"></li>');
+	var id = data.localFile.id;
+    var fileNode = $('<li class="disk-file-item disk-item"></li>');
     fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
     fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
-    fileNode.attr("data-file-id", fileID);
+    fileNode.attr("data-file-id", id);
 
     var parent = data.fileinfo.parent;
     var parentNode = $('ul[data-folder-id="' + parent + '"]');

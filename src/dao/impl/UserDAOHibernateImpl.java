@@ -43,8 +43,7 @@ public class UserDAOHibernateImpl implements UserDAO {
     }
 
     @Override
-    public boolean remove(UserDO t) {
-        // TODO Auto-generated method stub
+    public boolean remove(long id) {
         return false;
     }
 

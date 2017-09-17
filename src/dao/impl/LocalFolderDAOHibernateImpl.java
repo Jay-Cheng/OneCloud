@@ -2,9 +2,11 @@ package dao.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,8 +16,10 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import dao.LocalFolderDAO;
+import dao.entity.LocalFileDO;
 import dao.entity.LocalFolderDO;
 import manager.util.HibernateUtil;
 
@@ -43,11 +47,49 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
         
         return result;
     }
-
+    /**
+     * 删除文件夹下的所有子文件夹及子文件记录
+     * @param 需要删除文件夹的id
+     * @return true if remove successfully, false otherwise;
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public boolean remove(LocalFolderDO t) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean remove(long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        Queue<Long> queue = new LinkedList<>();
+        queue.add(id);
+        try {
+            while (!queue.isEmpty()) {
+                Long parent = queue.poll();
+                Query fileQuery = session.createQuery("from LocalFileDO file where file.parent=?");
+                fileQuery.setParameter(0, parent);
+                List<LocalFileDO> fileList = fileQuery.list();
+                for (LocalFileDO file :fileList) {
+                    session.delete(file);
+                }
+                
+                Query folderQuery = session.createQuery("select folder.id from LocalFolderDO folder where folder.parent=?");
+                folderQuery.setParameter(0, parent);
+                List<Long> folderList = folderQuery.list();
+                
+                for (Long subFolderID : folderList) {
+                    queue.add(subFolderID);
+                }
+                
+                session.delete(session.load(LocalFolderDO.class, parent));
+            }
+            
+            t.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            t.rollback();
+            return false;
+        } finally {
+            session.close();
+        }
     }
     
     public LocalDateTime rename(LocalFolderDO newDO) {

@@ -45,9 +45,22 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
     }
 
     @Override
-    public boolean remove(LocalFileDO t) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean remove(long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+        
+        try {
+            LocalFileDO file = session.load(LocalFileDO.class, id);
+            session.delete(file);
+            t.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            t.rollback();
+            return false;
+        } finally {
+            session.close();
+        }
     }
     
     public LocalDateTime rename(LocalFileDO newDO) {

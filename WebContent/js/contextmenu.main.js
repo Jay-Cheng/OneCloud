@@ -6,43 +6,43 @@ var menu = new BootstrapMenu(".disk-item", {
     ],
     actions: {
         share: {
-            name: "åˆ†äº«",
+            name: "·ÖÏí",
             iconClass: "fa-share-alt",
-            classNames: "right-click-menu",// è‡ªå®šä¹‰çš„æ ·å¼
+            classNames: "right-click-menu",// ×Ô¶¨ÒåµÄÑùÊ½
             onClick: function() {
-                alert("åˆ†äº«");
+                alert("·ÖÏí");
             },
         },
         download: {
-            name: "ä¸‹è½½",
+            name: "ÏÂÔØ",
             iconClass: "fa-cloud-download",
             classNames: "right-click-menu",
             onClick: function() {
-                alert("ä¸‹è½½");
+                alert("ÏÂÔØ");
             },
         },
         moveTo: {
-            name: "ç§»åŠ¨åˆ°",
+            name: "ÒÆ¶¯µ½",
             classNames: "right-click-menu",
             onClick: function() {
-                alert("ç§»åŠ¨åˆ°");
+                alert("ÒÆ¶¯µ½");
             },
         },
         rename: {
-            name: "é‡å‘½å",
+            name: "ÖØÃüÃû",
             classNames: "right-click-menu",
             onClick: rename,
         },
         moveToSafe: {
-            name: "ç§»è‡³ä¿é™©ç®±",
+            name: "ÒÆÖÁ±£ÏÕÏä",
             iconClass: "fa-shield",
             classNames: "right-click-menu",
             onClick: function() {
-                alert("ç§»è‡³ä¿é™©ç®±");
+                alert("ÒÆÖÁ±£ÏÕÏä");
             },
         },
         remove: {
-            name: "åˆ é™¤",
+            name: "É¾³ı",
             iconClass: "fa-trash",
             classNames: "right-click-menu",
             onClick: remove,
@@ -55,42 +55,41 @@ function multiple() {
 }
 
 
-/* è·å–è¢«é€‰ä¸­çš„èŠ‚ç‚¹ */
+/* »ñÈ¡±»Ñ¡ÖĞµÄ½Úµã */
 function getSelectedItems() {
-    // TODO get selected items from other navs 
-    var selectedItem = $("#all ul:visible .selected");
+    var selectedItem = $(".selected");
     return selectedItem;
 }
 
 
-/*------------------------------------------------- é‡å‘½ååŠŸèƒ½ -------------------------------------------------*/
+/*------------------------------------------------- ÖØÃüÃû¹¦ÄÜ -------------------------------------------------*/
 
 
 function rename() {
     var selectedItem = getSelectedItems();
-    if (selectedItem.find(".fileedit").length == 0) {// é˜²æ­¢æ’å…¥å¤šä¸ªæ–‡ä»¶åç¼–è¾‘æ¡†
+    if (selectedItem.find(".fileedit").length == 0) {// ·ÀÖ¹²åÈë¶à¸öÎÄ¼şÃû±à¼­¿ò
         var originalNameTag = selectedItem.find(".file-name");
         originalNameTag.parent().hide();// hide .file-title
-        /* æ’å…¥ä¸€ä¸ªæ–‡ä»¶åç¼–è¾‘æ¡† */
+        /* ²åÈëÒ»¸öÎÄ¼şÃû±à¼­¿ò */
         var fileedit = $('<span class="fileedit"><input type="text" /></span>');
         fileedit.find("input").val(originalNameTag.text());
-        fileedit.find("input").blur(confirmEditName);// è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹æ—¶å³ç¡®è®¤
-        fileedit.find("input").keydown(confirmEditNameByKeyboard);// æŒ‰ä¸‹å›è½¦é”®å³ç¡®è®¤
-        fileedit.click(function(e){e.stopPropagation()});// é˜»æ­¢å†’æ³¡ï¼Œä¸è§¦å‘ä¸Šä¸€çº§çš„å•å‡»äº‹ä»¶
+        fileedit.find("input").blur(confirmEditName);// ÊäÈë¿òÊ§È¥½¹µãÊ±¼´È·ÈÏ
+        fileedit.find("input").keydown(confirmEditNameByKeyboard);// °´ÏÂ»Ø³µ¼ü¼´È·ÈÏ
+        fileedit.click(function(e){e.stopPropagation()});// ×èÖ¹Ã°Åİ£¬²»´¥·¢ÉÏÒ»¼¶µÄµ¥»÷ÊÂ¼ş
 
         fileedit.appendTo(selectedItem.find(".file-head"));
         fileedit.find("input").focus();
-    } else {// å¦‚æœæ–‡ä»¶åç¼–è¾‘æ¡†å·²å­˜åœ¨ï¼Œfocus
+    } else {// Èç¹ûÎÄ¼şÃû±à¼­¿òÒÑ´æÔÚ£¬focus
         selectedItem.find(".fileedit input").focus();
     }
 }
-/* æŒ‰ä¸‹å›è½¦é”®åï¼Œä½¿è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹ */
+/* °´ÏÂ»Ø³µ¼üºó£¬Ê¹ÊäÈë¿òÊ§È¥½¹µã */
 function confirmEditNameByKeyboard(event) {
     if (event.keyCode == 13) {
         $(this).blur();
     }
 }
-/* ç¡®è®¤é‡å‘½åï¼Œå½“è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹åè§¦å‘çš„äº‹ä»¶å¤„ç†å‡½æ•° */
+/* È·ÈÏÖØÃüÃû£¬µ±ÊäÈë¿òÊ§È¥½¹µãºó´¥·¢µÄÊÂ¼ş´¦Àíº¯Êı */
 function confirmEditName() {
     var inputTag = $(this);
     var itemTag = inputTag.parent().parent().parent();
@@ -99,7 +98,7 @@ function confirmEditName() {
     var newName = inputTag.val();
 
 
-    /* éœ€è¦äº¤ç»™æœåŠ¡å™¨çš„æ•°æ® */
+    /* ĞèÒª½»¸ø·şÎñÆ÷µÄÊı¾İ */
     var id;
     var localName;
     var localType = null;
@@ -118,13 +117,13 @@ function confirmEditName() {
     };
 
 
-    if (newName.length == 0) {
-        // TO DO åˆ¤æ–­æ˜¯å¦å…¨ä¸ºç©ºæ ¼
-        alert("åå­—ä¸èƒ½ä¸ºç©º");
+    if (newName.length ==0) {
+        // TO DO ÅĞ¶ÏÊÇ·ñÈ«Îª¿Õ¸ñ
+        alert("Ãû×Ö²»ÄÜÎª¿Õ");
     } else if (originalName == newName) {
         // Do nothing
     } else if (checkDuplicateName(itemTag, newName)) {
-        alert("æ–‡ä»¶åäº§ç”Ÿå†²çª");
+        alert("ÎÄ¼şÃû²úÉú³åÍ»");
     } else if (originalName != newName) {
         $.ajax({
             type: "POST",
@@ -140,19 +139,19 @@ function confirmEditName() {
                         itemTag.find(".thumb img").attr("src", src);
                     }
                 } else {
-                    alert("é‡å‘½åå¤±è´¥ï¼");
+                    alert("ÖØÃüÃûÊ§°Ü£¡");
                 }
             }
         });
     }
-    /* ç§»é™¤æ–‡ä»¶åç¼–è¾‘æ¡† */
+    /* ÒÆ³ıÎÄ¼şÃû±à¼­¿ò */
     inputTag.parent().remove();
 
     nameTag.parent().show();
 }
 /*
- * æ£€æŸ¥ä¿®æ”¹åçš„æ–‡ä»¶åæ˜¯å¦ä¸å½“å‰æ–‡ä»¶å¤¹ä¸‹çš„å…¶å®ƒæ–‡ä»¶åäº§ç”Ÿå†²çª
- * return true if äº§ç”Ÿå†²çªï¼›eles return falseï¼›
+ * ¼ì²éĞŞ¸ÄºóµÄÎÄ¼şÃûÊÇ·ñÓëµ±Ç°ÎÄ¼ş¼ĞÏÂµÄÆäËüÎÄ¼şÃû²úÉú³åÍ»
+ * return true if ²úÉú³åÍ»£»eles return false£»
  */
 function checkDuplicateName(itemTag, newName) {
     var siblingTags = itemTag.siblings();
@@ -165,12 +164,12 @@ function checkDuplicateName(itemTag, newName) {
     return isDuplicate;
 }
 
-/************************************* åˆ é™¤ *************************************/
+/************************************* É¾³ı *************************************/
 function remove() {
     var selectedItem = getSelectedItems();
     selectedItem.each(function() {
         var itemTag = $(this);
-        /* éœ€è¦æäº¤çš„æ•°æ® */
+        /* ĞèÒªÌá½»µÄÊı¾İ */
         var id;
         var type;
         if (itemTag.attr("data-folder-id") != undefined) {
@@ -193,17 +192,17 @@ function remove() {
             data: JSON.stringify(moveData),
             success: function(result){
                 if (result.isSuccess == true) {
-                    /* éšè—æ¨¡æ€æ¡†ä¸­çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ */
+                    /* Òş²ØÄ£Ì¬¿òÖĞµÄÎÄ¼ş¼Ğ½Úµã */
                     if (type == "folder") {
                         $('.treeNode-info[data-folder-id="' + id + '"]' ).parent().hide();
                     }
 
                     itemTag.removeClass("disk-item");
                     itemTag.addClass("recycle-item");
-                    itemTag.find(".file-time").text("å‰©ä½™7å¤©");
+                    itemTag.find(".file-time").text("Ê£Óà7Ìì");
                     itemTag.appendTo($("#recycle_folder"));
                 } else {
-                    alert("åˆ é™¤å¤±è´¥");
+                    alert("É¾³ıÊ§°Ü");
                 }
             }
         });

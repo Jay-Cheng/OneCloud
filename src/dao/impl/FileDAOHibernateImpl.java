@@ -44,8 +44,7 @@ public class FileDAOHibernateImpl implements FileDAO {
     }
 
     @Override
-    public boolean remove(FileDO t) {
-        // TODO Auto-generated method stub
+    public boolean remove(long id) {
         return false;
     }
 
