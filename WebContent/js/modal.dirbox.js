@@ -45,7 +45,7 @@ function toggleExistSubDir(dir) {
 	$("#dirbox_path").text(path);
 }
 /*
- * 供file-system.js中的createFolderNode()函数调用
+ * 供file-system.js中的createFolderNode()函数和创建文件夹时调用
  * 生成主页面文件夹节点的同时会生成模态框文件夹节点
  */ 
 function createDirNode(folderID, folders, show) {
@@ -83,6 +83,9 @@ function removeAddedMission() {
  * 显示文件上传模态框
  */
 function showFileUploadModal(files) {
+	$("#dirbox_header_action").text("上传");
+	$("#modal_btn_submit").text("开始上传");
+
 	var firstFilename = files[0].name;
 	var nums = files.length;
 	/* 显示要上传的文件信息和数量 */
@@ -94,12 +97,12 @@ function showFileUploadModal(files) {
 		$("#modal_addtional_info span").text(nums);
 		$("#modal_addtional_info").show();
 	}
-
-	$("#file_upload_modal").modal("show");
+	
+	$("#path_modal").modal("show");
 	$("#modal_btn_cancel").click(removeAddedMission);
 	$("#modal_btn_close").click(removeAddedMission);
 	$("#modal_btn_submit").click(function() {
-		$("#file_upload_modal").modal("hide");
+		$("#path_modal").modal("hide");
 		/* 上传按钮单击后移除所有绑定的事件 */
 		$("#modal_btn_submit").off("click");
 	});

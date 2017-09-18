@@ -215,10 +215,124 @@ function getRemainDays(date) {
 }
 
 function moveTo() {
-    var selectedItems = getSelectedItems();
-    alert(selectedItems.eq(0).find(".file-name").text());
+    $("#dirbox_header_action").text("移动");
+    $("#modal_btn_submit").text("移动");
 
-    selectedItems.each(function() {
-        
-    });
+
+    var selectedItems = getSelectedItems();
+
+    var firstFilename = selectedItems.eq(0).find(".file-name").text();
+    var nums = selectedItems.length;
+    var src;
+    if (selectedItems.eq(0).attr("data-folder-id") != undefined) {
+        src = "img/icon/folder.png";
+    } else {
+        src = getFileIcon(getSuffix(firstFilename));
+    }
+    /* 显示要移动的文件信息和数量 */
+    $("#modal_file_thumb").attr("src", src);
+    $("#modal_file_name").text(firstFilename);
+    if (nums == 1) {
+        $("#modal_addtional_info").hide();
+    } else {
+        $("#modal_addtional_info span").text(nums);
+        $("#modal_addtional_info").show();
+    }
+
+    $("#path_modal").modal("show");
+
+    $("#modal_btn_cancel").click(removeAddedMission);
+    $("#modal_btn_close").click(removeAddedMission);
+    $("#modal_btn_submit").click(moveStart);
+
+
+    function moveStart() {
+        var newParent = $("#dirbox_path").attr("data-folder-id");
+
+        /* 检查路径是否合法 */
+        var isLegal = true;
+        selectedItems.each(function() {
+            if ($(this).attr("data-folder-id") != undefined) {
+                var id = $(this).attr("data-folder-id");
+                if (id == newParent) {// 检查是否移动到自身
+                    isLegal = false;
+                    return false;// 结束循环
+                }
+                var sub = $('.treeNode-info[data-folder-id="' + id + '"]').next().find(".treeNode-info");
+                sub.each(function(){// 检查是否移动到自身的子文件夹
+                    if ($(this).attr("data-folder-id") == newParent) {
+                        isLegal = false;
+                        return false;// 结束循环
+                    }
+                });
+            }
+        });
+        if (!isLegal) {
+            alert("不能移动文件夹到自身及其子文件夹下");
+            return;
+        }
+
+        /* 检查文件是否已经在该路径下 */
+        // TODO
+
+
+        $("#path_modal").modal("hide");
+        /* 开始移动 */
+        selectedItems.each(function() {
+            var itemTag = $(this);
+            /* 需要提交的数据 */
+            var id;
+            var type;
+            if (itemTag.attr("data-folder-id") != undefined) {
+                id = itemTag.attr("data-folder-id");
+                type = "folder";
+            } else {
+                id = itemTag.attr("data-file-id");
+                type = "file";
+            }
+            var moveData = {
+                id: id,
+                type: type,
+                moveTo: newParent
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "RequestManageServlet?action=move",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(moveData),
+                success: function(result) {
+                    if (result.isSuccess == true) {
+                        /* 移动模态框中的文件夹节点 */
+                        if (type == "folder") {
+                            var newParentDir = $('.treeNode-info[data-folder-id="' + newParent + '"]' );
+                            /* 注意设置padding */
+                            var paddingParam = parseInt(newParentDir.css("padding-left"), 10) + 20 + "px";
+                            var moveDir = $('.treeNode-info[data-folder-id="' + id + '"]');
+                            var paddingBefore = parseInt(moveDir.css("padding-left"));
+                            moveDir.css("padding-left", paddingParam);
+                            var paddingAfter = parseInt(moveDir.css("padding-left"));
+                            var paddingAdjustment = paddingAfter - paddingBefore; 
+                            var moveSubDirs = moveDir.next().find(".treeNode-info");
+                            moveSubDirs.each(function(){
+                                var paddingParam = parseInt($(this).css("padding-left"), 10) + paddingAdjustment + "px";
+                                $(this).css("padding-left", paddingParam);
+                            })
+
+                            moveDir.parent().appendTo(newParentDir.next());
+                        }
+
+                        itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
+                        itemTag.appendTo($('ul[data-folder-id="' + newParent + '"]'));
+                    } else {
+                        alert("移动失败");
+                    }
+                }
+            });
+        });
+
+        $("#modal_btn_submit").off("click");
+
+    }
+
 }

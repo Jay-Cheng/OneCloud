@@ -4,7 +4,7 @@ $(function() {
     $("#mkfolder").click(mkfolder);
 
     /* 文件选择相关事件处理 */
-    $("body").click(resetSelectedState);
+    $("body:not(#path_modal)").click(resetSelectedState);
 
     $("#select_all").click(selectAll);// 为全选绑定事件处理函数
     $("#all").on("click", "ul .disk-file-item .select", selectItem);
