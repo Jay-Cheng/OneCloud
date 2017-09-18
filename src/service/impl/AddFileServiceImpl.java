@@ -7,10 +7,12 @@ import java.util.Map;
 
 import dao.FileDAO;
 import dao.LocalFileDAO;
+import dao.UserDAO;
 import dao.entity.FileDO;
 import dao.entity.LocalFileDO;
 import dao.factory.FileDAOFactory;
 import dao.factory.LocalFileDAOFactory;
+import dao.factory.UserDAOFactory;
 import manager.exception.DBQueryException;
 import manager.util.FileUtil;
 import service.AddFileService;
@@ -20,12 +22,14 @@ public class AddFileServiceImpl implements AddFileService {
     
     private FileDAO fileDAO;
     private LocalFileDAO localfileDAO;
+    private UserDAO userDAO;
     
     private LocalFileDTO localfileDTO = null; 
     
     public AddFileServiceImpl() {
         fileDAO = new FileDAOFactory().getFileDAO("Hibernate");
         localfileDAO = new LocalFileDAOFactory().getLocalFileDAO("Hibernate");
+        userDAO = new UserDAOFactory().getUserDAO("Hibernate");
     }
     
     /**
@@ -33,15 +37,18 @@ public class AddFileServiceImpl implements AddFileService {
      * @param uploaded 用户是否进行过实际的文件传输（访问了UploadServlet）
      * @param md5 用户需要上传文件的md5值
      * @param localfile 用户持有该文件的标记
+     * @param userID 用户ID
+     * @param size 文件的大小
      */
     @Override
-    public int add(boolean uploaded, String md5, LocalFileDO localfile) throws DBQueryException {
+    public int add(boolean uploaded, String md5, LocalFileDO localfile, long userID, int size) throws DBQueryException {
         /*
          * 如果用户进行过实际的文件传输（说明服务器不存在用户上传的文件）
          * 插入新的FileDO
          * 并添加该用户对该文件的持有标记（插入对应的LocalFileDO）
          */
         if (uploaded) {
+            userDAO.updateCap(userID, size);
             FileDO file = BuildFileDOByMD5(md5);
             fileDAO.save(file);
             localfile.setFileID(file.getId());
@@ -70,6 +77,7 @@ public class AddFileServiceImpl implements AddFileService {
                 if (duplicate != null) {
                     return 5;// 文件和标记都存在
                 } else {
+                    userDAO.updateCap(userID, size);
                     localfile.setFileID(file.getId());
                     localfile.setLdtCreate(LocalDateTime.now());
                     localfile.setLdtModified(LocalDateTime.now());
@@ -104,5 +112,4 @@ public class AddFileServiceImpl implements AddFileService {
         
         return fileDO;
     }
-
 }

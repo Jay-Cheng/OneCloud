@@ -19,8 +19,10 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import dao.LocalFolderDAO;
+import dao.entity.FileDO;
 import dao.entity.LocalFileDO;
 import dao.entity.LocalFolderDO;
+import dao.entity.UserDO;
 import manager.util.HibernateUtil;
 
 public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
@@ -60,14 +62,19 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
         
         Queue<Long> queue = new LinkedList<>();
         queue.add(id);
+        long cap = 0L;
         try {
+            LocalFolderDO localFolder = session.load(LocalFolderDO.class, id);
+            UserDO user = session.load(UserDO.class, localFolder.getUserID());
             while (!queue.isEmpty()) {
                 Long parent = queue.poll();
                 Query fileQuery = session.createQuery("from LocalFileDO file where file.parent=?");
                 fileQuery.setParameter(0, parent);
-                List<LocalFileDO> fileList = fileQuery.list();
-                for (LocalFileDO file :fileList) {
-                    session.delete(file);
+                List<LocalFileDO> localFileList = fileQuery.list();
+                for (LocalFileDO localFile :localFileList) {
+                    FileDO file = session.load(FileDO.class, localFile.getFileID());
+                    cap += file.getSize();
+                    session.delete(localFile);
                 }
                 
                 Query folderQuery = session.createQuery("select folder.id from LocalFolderDO folder where folder.parent=?");
@@ -80,7 +87,9 @@ public class LocalFolderDAOHibernateImpl implements LocalFolderDAO {
                 
                 session.delete(session.load(LocalFolderDO.class, parent));
             }
-            
+            user.setUsedCapacity(user.getUsedCapacity() - cap);
+            user.setLdtModified(LocalDateTime.now());
+            session.update(user);
             t.commit();
             return true;
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,5 +47,22 @@ public class UserDAOHibernateImpl implements UserDAO {
     public boolean remove(long id) {
         return false;
     }
-
+    
+    /**
+     * 更新用户的容量
+     * @param id 用户id
+     * @param size 文件的大小，删除的话size为负
+     */
+    public void updateCap(long id, int size) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction(); 
+        
+        UserDO user = session.load(UserDO.class, id);
+        user.setUsedCapacity(user.getUsedCapacity() + size);
+        user.setLdtModified(LocalDateTime.now());
+        session.update(user);
+        
+        t.commit();
+        session.close();
+    }
 }

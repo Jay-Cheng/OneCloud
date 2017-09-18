@@ -16,7 +16,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import dao.LocalFileDAO;
+import dao.entity.FileDO;
 import dao.entity.LocalFileDO;
+import dao.entity.UserDO;
 import manager.util.HibernateUtil;
 
 public class LocalFileDAOHibernateImpl implements LocalFileDAO {
@@ -50,8 +52,12 @@ public class LocalFileDAOHibernateImpl implements LocalFileDAO {
         Transaction t = session.beginTransaction();
         
         try {
-            LocalFileDO file = session.load(LocalFileDO.class, id);
-            session.delete(file);
+            LocalFileDO localFile = session.load(LocalFileDO.class, id);
+            FileDO file = session.load(FileDO.class, localFile.getFileID());
+            UserDO user = session.load(UserDO.class, localFile.getUserID());
+            user.setUsedCapacity(user.getUsedCapacity() - file.getSize());
+            session.update(user);
+            session.delete(localFile);
             t.commit();
             return true;
         } catch (Exception e) {

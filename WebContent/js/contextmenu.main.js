@@ -6,43 +6,41 @@ var menu = new BootstrapMenu(".disk-item", {
     ],
     actions: {
         share: {
-            name: "·ÖÏí",
+            name: "åˆ†äº«",
             iconClass: "fa-share-alt",
-            classNames: "right-click-menu",// ×Ô¶¨ÒåµÄÑùÊ½
+            classNames: "right-click-menu",// è‡ªå®šä¹‰çš„æ ·å¼
             onClick: function() {
-                alert("·ÖÏí");
+                alert("åˆ†äº«");
             },
         },
         download: {
-            name: "ÏÂÔØ",
+            name: "ä¸‹è½½",
             iconClass: "fa-cloud-download",
             classNames: "right-click-menu",
             onClick: function() {
-                alert("ÏÂÔØ");
+                alert("ä¸‹è½½");
             },
         },
         moveTo: {
-            name: "ÒÆ¶¯µ½",
+            name: "ç§»åŠ¨åˆ°",
             classNames: "right-click-menu",
-            onClick: function() {
-                alert("ÒÆ¶¯µ½");
-            },
+            onClick: moveTo,
         },
         rename: {
-            name: "ÖØÃüÃû",
+            name: "é‡å‘½å",
             classNames: "right-click-menu",
             onClick: rename,
         },
         moveToSafe: {
-            name: "ÒÆÖÁ±£ÏÕÏä",
+            name: "ç§»è‡³ä¿é™©ç®±",
             iconClass: "fa-shield",
             classNames: "right-click-menu",
             onClick: function() {
-                alert("ÒÆÖÁ±£ÏÕÏä");
+                alert("ç§»è‡³ä¿é™©ç®±");
             },
         },
         remove: {
-            name: "É¾³ı",
+            name: "åˆ é™¤",
             iconClass: "fa-trash",
             classNames: "right-click-menu",
             onClick: remove,
@@ -55,41 +53,41 @@ function multiple() {
 }
 
 
-/* »ñÈ¡±»Ñ¡ÖĞµÄ½Úµã */
+/* è·å–è¢«é€‰ä¸­çš„èŠ‚ç‚¹ */
 function getSelectedItems() {
     var selectedItem = $(".selected");
     return selectedItem;
 }
 
 
-/*------------------------------------------------- ÖØÃüÃû¹¦ÄÜ -------------------------------------------------*/
+/*------------------------------------------------- é‡å‘½ååŠŸèƒ½ -------------------------------------------------*/
 
 
 function rename() {
     var selectedItem = getSelectedItems();
-    if (selectedItem.find(".fileedit").length == 0) {// ·ÀÖ¹²åÈë¶à¸öÎÄ¼şÃû±à¼­¿ò
+    if (selectedItem.find(".fileedit").length == 0) {// é˜²æ­¢æ’å…¥å¤šä¸ªæ–‡ä»¶åç¼–è¾‘æ¡†
         var originalNameTag = selectedItem.find(".file-name");
         originalNameTag.parent().hide();// hide .file-title
-        /* ²åÈëÒ»¸öÎÄ¼şÃû±à¼­¿ò */
+        /* æ’å…¥ä¸€ä¸ªæ–‡ä»¶åç¼–è¾‘æ¡† */
         var fileedit = $('<span class="fileedit"><input type="text" /></span>');
         fileedit.find("input").val(originalNameTag.text());
-        fileedit.find("input").blur(confirmEditName);// ÊäÈë¿òÊ§È¥½¹µãÊ±¼´È·ÈÏ
-        fileedit.find("input").keydown(confirmEditNameByKeyboard);// °´ÏÂ»Ø³µ¼ü¼´È·ÈÏ
-        fileedit.click(function(e){e.stopPropagation()});// ×èÖ¹Ã°Åİ£¬²»´¥·¢ÉÏÒ»¼¶µÄµ¥»÷ÊÂ¼ş
+        fileedit.find("input").blur(confirmEditName);// è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹æ—¶å³ç¡®è®¤
+        fileedit.find("input").keydown(confirmEditNameByKeyboard);// æŒ‰ä¸‹å›è½¦é”®å³ç¡®è®¤
+        fileedit.click(function(e){e.stopPropagation()});// é˜»æ­¢å†’æ³¡ï¼Œä¸è§¦å‘ä¸Šä¸€çº§çš„å•å‡»äº‹ä»¶
 
         fileedit.appendTo(selectedItem.find(".file-head"));
         fileedit.find("input").focus();
-    } else {// Èç¹ûÎÄ¼şÃû±à¼­¿òÒÑ´æÔÚ£¬focus
+    } else {// å¦‚æœæ–‡ä»¶åç¼–è¾‘æ¡†å·²å­˜åœ¨ï¼Œfocus
         selectedItem.find(".fileedit input").focus();
     }
 }
-/* °´ÏÂ»Ø³µ¼üºó£¬Ê¹ÊäÈë¿òÊ§È¥½¹µã */
+/* æŒ‰ä¸‹å›è½¦é”®åï¼Œä½¿è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹ */
 function confirmEditNameByKeyboard(event) {
     if (event.keyCode == 13) {
         $(this).blur();
     }
 }
-/* È·ÈÏÖØÃüÃû£¬µ±ÊäÈë¿òÊ§È¥½¹µãºó´¥·¢µÄÊÂ¼ş´¦Àíº¯Êı */
+/* ç¡®è®¤é‡å‘½åï¼Œå½“è¾“å…¥æ¡†å¤±å»ç„¦ç‚¹åè§¦å‘çš„äº‹ä»¶å¤„ç†å‡½æ•° */
 function confirmEditName() {
     var inputTag = $(this);
     var itemTag = inputTag.parent().parent().parent();
@@ -98,7 +96,7 @@ function confirmEditName() {
     var newName = inputTag.val();
 
 
-    /* ĞèÒª½»¸ø·şÎñÆ÷µÄÊı¾İ */
+    /* éœ€è¦äº¤ç»™æœåŠ¡å™¨çš„æ•°æ® */
     var id;
     var localName;
     var localType = null;
@@ -118,12 +116,12 @@ function confirmEditName() {
 
 
     if (newName.length ==0) {
-        // TO DO ÅĞ¶ÏÊÇ·ñÈ«Îª¿Õ¸ñ
-        alert("Ãû×Ö²»ÄÜÎª¿Õ");
+        // TO DO åˆ¤æ–­æ˜¯å¦å…¨ä¸ºç©ºæ ¼
+        alert("åå­—ä¸èƒ½ä¸ºç©º");
     } else if (originalName == newName) {
         // Do nothing
     } else if (checkDuplicateName(itemTag, newName)) {
-        alert("ÎÄ¼şÃû²úÉú³åÍ»");
+        alert("æ–‡ä»¶åäº§ç”Ÿå†²çª");
     } else if (originalName != newName) {
         $.ajax({
             type: "POST",
@@ -139,19 +137,19 @@ function confirmEditName() {
                         itemTag.find(".thumb img").attr("src", src);
                     }
                 } else {
-                    alert("ÖØÃüÃûÊ§°Ü£¡");
+                    alert("é‡å‘½åå¤±è´¥ï¼");
                 }
             }
         });
     }
-    /* ÒÆ³ıÎÄ¼şÃû±à¼­¿ò */
+    /* ç§»é™¤æ–‡ä»¶åç¼–è¾‘æ¡† */
     inputTag.parent().remove();
 
     nameTag.parent().show();
 }
 /*
- * ¼ì²éĞŞ¸ÄºóµÄÎÄ¼şÃûÊÇ·ñÓëµ±Ç°ÎÄ¼ş¼ĞÏÂµÄÆäËüÎÄ¼şÃû²úÉú³åÍ»
- * return true if ²úÉú³åÍ»£»eles return false£»
+ * æ£€æŸ¥ä¿®æ”¹åçš„æ–‡ä»¶åæ˜¯å¦ä¸å½“å‰æ–‡ä»¶å¤¹ä¸‹çš„å…¶å®ƒæ–‡ä»¶åäº§ç”Ÿå†²çª
+ * return true if äº§ç”Ÿå†²çªï¼›eles return falseï¼›
  */
 function checkDuplicateName(itemTag, newName) {
     var siblingTags = itemTag.siblings();
@@ -164,12 +162,12 @@ function checkDuplicateName(itemTag, newName) {
     return isDuplicate;
 }
 
-/************************************* É¾³ı *************************************/
+/************************************* åˆ é™¤ *************************************/
 function remove() {
     var selectedItem = getSelectedItems();
     selectedItem.each(function() {
         var itemTag = $(this);
-        /* ĞèÒªÌá½»µÄÊı¾İ */
+        /* éœ€è¦æäº¤çš„æ•°æ® */
         var id;
         var type;
         if (itemTag.attr("data-folder-id") != undefined) {
@@ -192,19 +190,35 @@ function remove() {
             data: JSON.stringify(moveData),
             success: function(result){
                 if (result.isSuccess == true) {
-                    /* Òş²ØÄ£Ì¬¿òÖĞµÄÎÄ¼ş¼Ğ½Úµã */
+                    /* éšè—æ¨¡æ€æ¡†ä¸­çš„æ–‡ä»¶å¤¹èŠ‚ç‚¹ */
                     if (type == "folder") {
                         $('.treeNode-info[data-folder-id="' + id + '"]' ).parent().hide();
+                        /* é‡ç½®é€‰æ‹©è·¯å¾„ */
+                        $("#dirbox_path").attr("data-folder-id", 1).text("æˆ‘çš„ç½‘ç›˜");
                     }
 
                     itemTag.removeClass("disk-item");
                     itemTag.addClass("recycle-item");
-                    itemTag.find(".file-time").text("Ê£Óà7Ìì");
+                    itemTag.find(".file-time").text(getRemainDays(result.ldtModified));
                     itemTag.appendTo($("#recycle_folder"));
                 } else {
-                    alert("É¾³ıÊ§°Ü");
+                    alert("åˆ é™¤å¤±è´¥");
                 }
             }
         });
+    });
+}
+function getRemainDays(date) {
+    var gapDays = getGapDays(date);
+    var str = "å‰©ä½™" + (7 - gapDays) + "å¤©";
+    return str;
+}
+
+function moveTo() {
+    var selectedItems = getSelectedItems();
+    alert(selectedItems.eq(0).find(".file-name").text());
+
+    selectedItems.each(function() {
+        
     });
 }

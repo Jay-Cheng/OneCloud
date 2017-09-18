@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 
+import manager.exception.DBQueryException;
 import manager.util.JSONUtil;
 import service.ShredService;
 import service.factory.ShredServiceFactory;
@@ -32,7 +33,13 @@ public class ShredServlet extends HttpServlet {
         
         ShredService service = new ShredServiceFactory().getService(type);
         boolean isSuccess = service.shred(id);
-        
+        if (isSuccess) {
+            try {
+                respJSON.put("cap", service.getCapAfterShred((long)request.getSession().getAttribute("userID")));
+            } catch (DBQueryException e) {
+                e.printStackTrace();
+            }
+        }
         respJSON.put("isSuccess", isSuccess);
         response.setContentType("application/json;charset=utf-8");
         PrintWriter writer = response.getWriter();

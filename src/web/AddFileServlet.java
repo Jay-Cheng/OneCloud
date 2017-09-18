@@ -35,6 +35,8 @@ public class AddFileServlet extends HttpServlet {
         
         if (reqJSON.getString("addFile") != null && !reqJSON.getString("addFile").isEmpty()) {
             String md5 = reqJSON.getString("addFile");
+            int size = reqJSON.getIntValue("size");
+            long uid = (long) request.getSession().getAttribute("userID");
             /* 文件是否刚刚上传 */
             boolean uploaded = reqJSON.getBooleanValue("uploaded");
             LocalFileDO localfile = reqJSON.toJavaObject(LocalFileDO.class);
@@ -48,7 +50,7 @@ public class AddFileServlet extends HttpServlet {
                  * 4：数据库查询出错
                  * 5：文件和标记都已经存在（数据库数据保持不变）
                  */
-                int stateCode = service.add(uploaded, md5, localfile);
+                int stateCode = service.add(uploaded, md5, localfile, uid, size);
                 respJSON.put("state", stateCode);
                 System.out.println("addFile-stateCode: " + stateCode);
                 if (stateCode == 1 || stateCode == 3) {
