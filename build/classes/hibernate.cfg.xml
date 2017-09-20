@@ -17,6 +17,9 @@
         <!-- 使用currentSession + 本地事务 -->
         <property name="current_session_context_class">thread</property>
         
+        <!-- 设置数据库隔离级别 -->
+        <!-- <property name="hibernate.connection.isolation">8</property> -->
+        
         <mapping class="dao.entity.UserDO" />
         <mapping class="dao.entity.FileDO" />
         <mapping class="dao.entity.LocalFileDO" />

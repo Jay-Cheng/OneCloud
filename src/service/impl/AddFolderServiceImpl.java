@@ -2,27 +2,45 @@ package service.impl;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.Session;
+
+import com.alibaba.fastjson.JSONObject;
+
 import dao.LocalFolderDAO;
 import dao.entity.LocalFolderDO;
 import dao.factory.LocalFolderDAOFactory;
+import manager.util.HibernateUtil;
 import service.AddFolderService;
 
 public class AddFolderServiceImpl implements AddFolderService {
-
+    
+    private LocalFolderDAO dao = LocalFolderDAOFactory.getInstance("hibernate");
+    
     @Override
-    public void serve(LocalFolderDO folder) {
-        LocalFolderDAO dao = new LocalFolderDAOFactory().getLocalFolderDAO("Hibernate");
+    public JSONObject serve(LocalFolderDO folder) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
         
-        LocalDateTime now = LocalDateTime.now();
-        folder.setLdtCreate(now);
-        folder.setLdtModified(now);
+        JSONObject result = new JSONObject();
         
+        folder.setLdtCreate(LocalDateTime.now());
+        folder.setLdtModified(folder.getLdtCreate());
         try {
-            dao.save(folder);
+            dao.create(folder);
         } catch (Exception e) {
-            folder = null;
-            e.printStackTrace();
+            session.getTransaction().rollback();
+            result.put("status", 2);
+            result.put("msg", "fail");
+            return result;
         }
+        
+        result.put("status", 1);
+        result.put("msg", "success");
+        result.put("folderID", folder.getId());
+        result.put("ldtModified", folder.getLdtModified());
+        
+        session.getTransaction().commit();
+        return result;
     }
 
 }

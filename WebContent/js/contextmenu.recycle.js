@@ -48,7 +48,7 @@ function shred() {
 		    contentType: "application/json;charset=utf-8",
 		    data: JSON.stringify(shredData),
 		    success: function(result){
-		    	if (result.isSuccess == true) {
+		    	if (result.status == 1) {
 		    		if (type == "folder") {
 		    			$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().remove();
 		    		}
@@ -93,7 +93,7 @@ function restore() {
 		    contentType: "application/json;charset=utf-8",
 		    data: JSON.stringify(restoreData),
 		    success: function(result){
-		    	if (result.isSuccess == true) {
+		    	if (result.status == 1) {
 		    		if (type == "folder") {
 		    			$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().show();
 		    		}

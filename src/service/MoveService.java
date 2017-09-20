@@ -1,7 +1,7 @@
 package service;
 
-import java.time.LocalDateTime;
+import com.alibaba.fastjson.JSONObject;
 
 public interface MoveService {
-    LocalDateTime serve(Long id, Long to, String type);
+    JSONObject serve(Long id, Long moveTo);
 }

@@ -1,6 +1,7 @@
 package web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,13 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 
-import dao.entity.UserDO;
-import manager.exception.DBQueryException;
-import manager.exception.UserNotFoundException;
 import manager.util.JSONUtil;
 import service.LoginService;
+import service.dto.UserDTO;
 import service.impl.LoginServiceImpl;
-import web.dto.UserDTO;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
@@ -28,30 +26,22 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String reqJSON = JSONUtil.getJSONString(request.getReader());
-	    /* 只有account和password域有效 */
-	    UserDO user = JSONObject.parseObject(reqJSON.toString(), UserDO.class);
+	    JSONObject reqJSON = JSONUtil.getJSONObject(request.getReader());
+	    
+	    String account = reqJSON.getString("account");
+	    String password = reqJSON.getString("password");
 	    
 	    LoginService loginService = new LoginServiceImpl();
-	    JSONObject respJSON = new JSONObject();
+	    JSONObject respJSON = loginService.serve(account, password);
 	    
-	    try {
-            if (loginService.checkPassword(user.getAccount(), user.getPassword())) {
-                UserDTO dto = loginService.getUserDTO();
-                request.getSession().setAttribute("userID", dto.getId());
-                respJSON.put("state", 1);// 状态1表示登录成功
-                respJSON.put("user", JSONObject.toJSON(dto));
-            } else {
-                respJSON.put("state", 2);// 状态2表示密码错误
-            }
-        } catch (UserNotFoundException e) {
-            respJSON.put("state", 3);// 状态3表示账户不存在
-        } catch (DBQueryException e) {
-            respJSON.put("state", 4);// 状态4表示数据库查询出现问题
-        }
+	    /* 设置本次会话的UserID */
+	    UserDTO dto = (UserDTO) respJSON.get("data");
+	    request.getSession().setAttribute("userID", dto.getId());
 	    
-        response.setContentType("application/json");
-        response.getWriter().write(respJSON.toJSONString());
+        response.setContentType("application/json;charset=utf-8"); 
+        PrintWriter writer = response.getWriter();
+        writer.write(respJSON.toJSONString());
+        writer.close();
 	}
 
 }

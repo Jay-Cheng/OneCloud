@@ -23,7 +23,7 @@ public class RequestManageServlet extends HttpServlet {
         case "login":
             request.getRequestDispatcher("LoginServlet").forward(request, response);break;
         case "enterFolder":
-            request.getRequestDispatcher("GetFolderContentsServlet").forward(request, response);break;
+            request.getRequestDispatcher("EnterFolderServlet").forward(request, response);break;
         case "addFile":
             request.getRequestDispatcher("AddFileServlet").forward(request, response);break;
         case "addFolder":

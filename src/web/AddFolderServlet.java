@@ -26,24 +26,13 @@ public class AddFolderServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    JSONObject reqJSON = JSONUtil.getJSONObject(request.getReader());
-	    JSONObject respJSON = new JSONObject();
 	    
-	    boolean isSuccess = false;
 	    LocalFolderDO folder = reqJSON.toJavaObject(LocalFolderDO.class);
 	    folder.setUserID((Long)request.getSession().getAttribute("userID"));
 	    
 	    AddFolderService addFolderService = new AddFolderServiceImpl();
-	    addFolderService.serve(folder);
+	    JSONObject respJSON = addFolderService.serve(folder);
 	    
-	    if (folder != null) {
-	        isSuccess = true;
-	    }
-	    
-	    respJSON.put("isSuccess", isSuccess);
-	    if (isSuccess) {
-	        respJSON.put("id", folder.getId());
-	        respJSON.put("ldtModified", folder.getLdtModified());
-	    }
 	    
 	    response.setContentType("application/json;charset=utf-8"); 
 	    PrintWriter writer = response.getWriter();

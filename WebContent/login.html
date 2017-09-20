@@ -22,13 +22,13 @@
   	<div class="row" style="margin-top:8%;">
   		<div class="col-md-4 col-md-offset-4">
   			<h1 style="text-align: center;">一个<img src="img/favicon/cloud.png" alt="cloud">网盘</h1>
-  			<form action="" id="loginForm">
+  			<form action="POST" id="loginForm">
   				<div class="form-group">
     				<input type="text" class="form-control" id="account" placeholder="用户名">
     				<br />
    					<input type="password" class="form-control" id="password" placeholder="密码">
   				</div>
-  				<button class="btn btn-primary col-md-12">登录</button>
+  				<button class="btn btn-primary col-md-12" id="btn_login">登录</button>
           <p class="error"></p>
 			</form>
   		</div>
@@ -41,17 +41,17 @@
   <script src="js-lib/bootstrap.min.js"></script>
   <script>
   	$(document).ready(function(){
-  		$("#loginForm").submit(function(e){
+  		$("#btn_login").click(function(){
   			$.ajax({
                 type: "POST",
                 url: "RequestManageServlet?action=login",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(getUser()),
                 success: function(result) {
-                  switch (result.state) {
+                  switch (result.status) {
                     case 1:
                       $(".error").text("登录成功");
-                      var user = result.user;
+                      var user = result.data;
                       sessionStorage.setItem("user_id", user.id);
                       sessionStorage.setItem("user_account", user.account);
                       sessionStorage.setItem("user_nickname", user.nickname);
@@ -63,12 +63,9 @@
                       $(".error").text("登录失败，密码不正确");break;
                     case 3:
                       $(".error").text("登录失败，用户名不存在");break;
-                    case 4:
-                      $(".error").text("数据库查询出现问题！请等待开发人员修复");break;
                   }
                 }
             });
-            return e.preventDefault();//没有return好像也可以？
   		});
 
   		function getUser(){

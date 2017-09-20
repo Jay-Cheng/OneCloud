@@ -1,9 +1,10 @@
 package dao;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 import dao.entity.LocalFileDO;
 
-public interface LocalFileDAO extends GenericDAO<LocalFileDO>, Moveable {
-    LocalDateTime rename(LocalFileDO newDO);
+public interface LocalFileDAO extends GenericDAO<LocalFileDO> {
+    LocalFileDO getByPath(long userID, long parent, String localName, String localType);
+    List<LocalFileDO> listByParent(long parent);
 }

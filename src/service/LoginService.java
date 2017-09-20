@@ -1,10 +1,7 @@
 package service;
 
-import manager.exception.DBQueryException;
-import manager.exception.UserNotFoundException;
-import web.dto.UserDTO;
+import com.alibaba.fastjson.JSONObject;
 
 public interface LoginService {
-    boolean checkPassword(String account, String password) throws UserNotFoundException, DBQueryException;
-    UserDTO getUserDTO();
+    JSONObject serve(String account, String password);
 }

@@ -1,7 +1,9 @@
 package service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import dao.entity.LocalFolderDO;
 
 public interface AddFolderService {
-    void serve(LocalFolderDO folder);
+    JSONObject serve(LocalFolderDO folder);
 }

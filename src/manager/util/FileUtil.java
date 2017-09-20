@@ -1,27 +1,29 @@
 package manager.util;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 import dao.entity.FileDO;
-import dao.entity.LocalFileDO;
-import web.dto.LocalFileDTO;
 
 public class FileUtil {
+    
     public static String getRealType(File file) {
         String type = "unknown";
         return type;
     }
     
-    public static LocalFileDTO BulidLocalFileDTO(FileDO file, LocalFileDO localfile) {
-        LocalFileDTO localfileDTO = new LocalFileDTO();
+    public static FileDO BuildFileDO(String fileBase, String md5) {
         
-        localfileDTO.setId(localfile.getId());
-        localfileDTO.setLdtModified(localfile.getLdtModified());
-        localfileDTO.setFileID(localfile.getFileID());
-        localfileDTO.setLocalName(localfile.getLocalName());
-        localfileDTO.setLocalType(localfile.getLocalType());
-        localfileDTO.setSize(file.getSize());
+        FileDO fileDO = new FileDO();
+        String url = fileBase + "\\" + md5;
+        File file = new File(url);
+        fileDO.setMd5(md5);
+        fileDO.setSize((int)file.length());
+        fileDO.setUrl(url);
+        fileDO.setType(getRealType(file));
+        fileDO.setLdtCreate(LocalDateTime.now());
+        fileDO.setLdtModified(fileDO.getLdtCreate());
         
-        return localfileDTO;
+        return fileDO;
     }
 }

@@ -1,12 +1,15 @@
 package dao.factory;
 
 import dao.LocalFileDAO;
-import dao.impl.LocalFileDAOHibernateImpl;
+import dao.impl.hibernate.LocalFileDAOHibernateImpl;
 
 public class LocalFileDAOFactory {
-    public LocalFileDAO getLocalFileDAO(String type) {
-        if ("Hibernate".equals(type)) {
-            return new LocalFileDAOHibernateImpl();
+    
+    private static final LocalFileDAOHibernateImpl hibernateImpl = new LocalFileDAOHibernateImpl();
+    
+    public static LocalFileDAO getInstance(String type) {
+        if ("hibernate".equalsIgnoreCase(type)) {
+            return hibernateImpl;
         }
         return null;
     }

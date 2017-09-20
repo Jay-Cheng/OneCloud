@@ -23,6 +23,7 @@ public class JDBCUtil {
     
     /**
      * 单例模式获取数据库连接
+     * TODO 多线程fix
      * @return 数据库连接
      */
     public static Connection getConnection() {

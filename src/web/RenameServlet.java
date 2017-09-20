@@ -2,7 +2,6 @@ package web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,12 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 
-import dao.entity.LocalFileDO;
-import dao.entity.LocalFolderDO;
 import manager.util.JSONUtil;
 import service.RenameService;
-import service.impl.RenameFileServiceImpl;
-import service.impl.RenameFolderServiceImpl;
+import service.factory.RenameServiceFactory;
 
 @WebServlet("/RenameServlet")
 public class RenameServlet extends HttpServlet {
@@ -28,28 +24,17 @@ public class RenameServlet extends HttpServlet {
 	    doPost(request, response);
 	}
 
-	@SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    JSONObject reqJSON = JSONUtil.getJSONObject(request.getReader());
-	    JSONObject respJSON = new JSONObject();
 	    
-        @SuppressWarnings("rawtypes")
-        RenameService service;
-        boolean isSuccess = false;
-        LocalDateTime ldtModified = null;
-	    if (reqJSON.getString("localType") == null) {
-	        service = new RenameFolderServiceImpl();
-	        ldtModified = service.rename(reqJSON.toJavaObject(LocalFolderDO.class));
-	    } else {
-	        service = new RenameFileServiceImpl();
-	        ldtModified = service.rename(reqJSON.toJavaObject(LocalFileDO.class));
-	    }
-	    if (ldtModified != null) {
-	        isSuccess = true;
-	    }
+	    long id = reqJSON.getLongValue("id");
+	    String localName = reqJSON.getString("localName");
+	    String localType = reqJSON.getString("localType");
+	    String type = reqJSON.getString("type");// 文件or文件夹
 	    
-	    respJSON.put("isSuccess", isSuccess);
-	    respJSON.put("ldt_modified", ldtModified);
+        RenameService renameService = RenameServiceFactory.getService(type);
+        JSONObject respJSON = renameService.serve(id, localName, localType);
+	    
 	    response.setContentType("application/json;charset=utf-8");
 	    PrintWriter writer = response.getWriter();
 	    writer.write(respJSON.toJSONString());

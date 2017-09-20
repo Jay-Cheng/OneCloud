@@ -1,7 +1,7 @@
 package service;
 
-import java.time.LocalDateTime;
+import com.alibaba.fastjson.JSONObject;
 
-public interface RenameService<T> {
-    LocalDateTime rename(T t);
+public interface RenameService {
+    JSONObject serve(long id, String localName, String localType);
 }

@@ -1,12 +1,15 @@
 package dao.factory;
 
 import dao.UserDAO;
-import dao.impl.UserDAOHibernateImpl;
+import dao.impl.hibernate.UserDAOHibernateImpl;
 
 public class UserDAOFactory {
-    public UserDAO getUserDAO(String type) {
-        if ("Hibernate".equals(type)) {
-            return new UserDAOHibernateImpl();
+    
+    private static final UserDAOHibernateImpl hibernateImpl = new UserDAOHibernateImpl();
+    
+    public static UserDAO getInstance(String type) {
+        if ("hibernate".equalsIgnoreCase(type)) {
+            return hibernateImpl;
         }
         return null;
     }

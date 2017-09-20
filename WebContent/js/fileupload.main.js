@@ -23,8 +23,8 @@ $(function() {
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify(data.fileinfo),
         		success: function(result) {
-        			if (result.state == 1) {// 文件刚刚上传
-        				data.localFile = result.localFile;
+        			if (result.status == 1) {// 文件刚刚上传
+        				data.localFile = result.data;
         				finishUpload(data);
         			}
         		}
@@ -81,8 +81,7 @@ function addFile(e, data, marker) {
 		userID: sessionStorage.getItem("user_id"),
 		localName: getFilenameWithoutSuffix(data.files[0].name),
 		localType: getSuffix(data.files[0].name),
-		parent: $("#dirbox_path").attr("data-folder-id"),
-		size: data.files[0].size
+		parent: $("#dirbox_path").attr("data-folder-id")
 	};
 	/* 生成一个“准备中”的任务节点 */
 	var fileName = data.files[0].name;
@@ -117,12 +116,12 @@ function addFile(e, data, marker) {
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(fileinfo),
 			success: function(result) {
-				if (result.state == 3) {// 文件在服务器已经存在，增加了用户对该文件的所有权标记
-					data.localFile = result.localFile;
+				if (result.status == 3) {// 文件在服务器已经存在，增加了用户对该文件的所有权标记
+					data.localFile = result.data;
 					finishUpload(data);
-				} else if (result.state == 5) {// 文件在服务器存在，且用户上传时选择的上传路径也有对该文件的标记
+				} else if (result.status == 5) {// 文件在服务器存在，且用户上传时选择的上传路径也有对该文件的标记
 					generateCompletedMissionNode(data);
-				} else if (result.state == 2) {// 文件在服务器不存在，需要进行上传
+				} else if (result.status == 2) {// 文件在服务器不存在，需要进行上传
 
 					/* 隐藏“准备中” */
 					data.context.find(".mission-file-preparing").hide();

@@ -1,13 +1,17 @@
 package dao.factory;
 
 import dao.FileDAO;
-import dao.impl.FileDAOHibernateImpl;
+import dao.impl.hibernate.FileDAOHibernateImpl;
 
 public class FileDAOFactory {
-    public FileDAO getFileDAO(String type) {
-        if ("Hibernate".equals(type)) {
-            return new FileDAOHibernateImpl();
+    
+    private static final FileDAOHibernateImpl hibernateImpl = new FileDAOHibernateImpl();
+    
+    public static FileDAO getInstance(String type) {
+        if ("hibernate".equalsIgnoreCase(type)) {
+            return hibernateImpl;
         }
         return null;
     }
+    
 }

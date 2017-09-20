@@ -100,10 +100,13 @@ function confirmEditName() {
     var id;
     var localName;
     var localType = null;
+    var type;
     if (itemTag.attr("data-folder-id") != undefined) {
+        type = "folder";
         id = itemTag.attr("data-folder-id");
         localName = newName;
     } else {
+        type = "file";
         id = itemTag.attr("data-file-id");
         localName = getFilenameWithoutSuffix(newName);
         localType = getSuffix(newName);
@@ -111,7 +114,8 @@ function confirmEditName() {
     var renameData = {
         id: id,
         localName: localName,
-        localType: localType
+        localType: localType,
+        type: type
     };
 
 
@@ -129,9 +133,9 @@ function confirmEditName() {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(renameData),
             success: function(result) {
-                if (result.isSuccess == true) {
+                if (result.status == 1) {
                     nameTag.text(newName);
-                    itemTag.find(".file-time").text(getFormattedDateTime(result.ldt_modified));
+                    itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
                     if (localType != null) {
                         var src = getFileIcon(localType);
                         itemTag.find(".thumb img").attr("src", src);
@@ -189,7 +193,7 @@ function remove() {
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify(moveData),
             success: function(result){
-                if (result.isSuccess == true) {
+                if (result.status == 1) {
                     /* 隐藏模态框中的文件夹节点 */
                     if (type == "folder") {
                         $('.treeNode-info[data-folder-id="' + id + '"]' ).parent().hide();
@@ -302,7 +306,7 @@ function moveTo() {
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify(moveData),
                 success: function(result) {
-                    if (result.isSuccess == true) {
+                    if (result.status == 1) {
                         /* 移动模态框中的文件夹节点 */
                         if (type == "folder") {
                             var newParentDir = $('.treeNode-info[data-folder-id="' + newParent + '"]' );

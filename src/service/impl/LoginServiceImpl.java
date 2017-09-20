@@ -3,61 +3,47 @@ package service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hibernate.Session;
+
+import com.alibaba.fastjson.JSONObject;
+
 import dao.UserDAO;
 import dao.entity.UserDO;
 import dao.factory.UserDAOFactory;
-import manager.exception.DBQueryException;
-import manager.exception.UserNotFoundException;
+import manager.util.HibernateUtil;
 import service.LoginService;
-import web.dto.UserDTO;
+import service.dto.DTOConvertor;
 
 public class LoginServiceImpl implements LoginService {
     
-    private UserDO loginUser = null;
+    private UserDAO userDAO = UserDAOFactory.getInstance("Hibernate");
     
-    /**
-     * 检查登录账户与密码是否匹配
-     * @return 若匹配返回true，不匹配返回false
-     * @throws DBQueryException 
-     * @throws 如果账户名在数据库中不存在，抛出UserNotFoundException
-     */
     @Override
-    public boolean checkPassword(String account, String password) throws UserNotFoundException, DBQueryException {
-        /* 设置账户为查询参数 */
-        Map<String, Object> params = new HashMap<>();
-        params.put("account", account);
+    public JSONObject serve(String account, String password) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
         
-        UserDAOFactory factory = new UserDAOFactory();
-        UserDAO userDAO = factory.getUserDAO("Hibernate");
+        JSONObject result = new JSONObject();
         
-        loginUser = userDAO.get(params);
-        /* 账户不存在，抛出异常 */
-        if (loginUser == null) {
-            throw new UserNotFoundException();
-        }
+        /* 设置查询参数，根据参数查询数据 */
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("account", account);
+        UserDO user = userDAO.get(queryParam);
         
-        if (loginUser.getPassword().equals(password)) {
-            return true;
+        if (user == null) {
+            result.put("status", 3);
+            result.put("msg", "account does not exist");
+        } else if (user.getPassword().equals(password)) {
+            result.put("status", 1);
+            result.put("msg", "success");
+            result.put("data", DTOConvertor.convert(user));
         } else {
-            loginUser = null;
-            return false;
+            result.put("status", 2);
+            result.put("msg", "incorrect password");
         }
+        
+        session.getTransaction().commit();
+        return result;
     }
     
-    /**
-     * 如果密码与账户匹配，转换UserDO为UserDTO
-     * @return UserDTO
-     */
-    public UserDTO getUserDTO() {
-        if (loginUser != null) {
-            UserDTO dto = new UserDTO();
-            dto.setId(loginUser.getId());
-            dto.setAccount(loginUser.getAccount());
-            dto.setNickname(loginUser.getNickname());
-            dto.setPhotoURL(loginUser.getPhotoURL());
-            dto.setUsedCapacity(loginUser.getUsedCapacity());
-            return dto;
-        }
-        return null;
-    }
 }

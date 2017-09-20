@@ -47,7 +47,7 @@ function createFolderNode(folderID, show) {
     /* 向服务器发送异步请求，获取对应folderID的内容 */
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&userID=" + sessionStorage.getItem("user_id") + "&folderID=" + folderID,
+        url: "RequestManageServlet?action=enterFolder&folderID=" + folderID,
         /* 
          * 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 
          * 修正：访问不到函数的参数，但可以访问函数内部的变量！
@@ -251,15 +251,15 @@ function mkfolder() {
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(newFolder),
                 success: function(result) {
-                    if (result.isSuccess == true) {
+                    if (result.status == 1) {
                         /* 模态框同步 */
                         var folder = [{
-                            id: result.id,
+                            id: result.folderID,
                             localName: newFolder.localName
                         }];
                         createDirNode(parent, folder, false);
                         /* 新建文件夹节点 */
-                        itemTag.attr("data-folder-id", result.id);
+                        itemTag.attr("data-folder-id", result.folderID);
                         timeTag.text(getFormattedDateTime(result.ldtModified));
                         nameTag.text(newFolder.localName);
                     } else {    
@@ -285,7 +285,7 @@ function mkfolder() {
 function getRecycleItems(){
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&userID=" + sessionStorage.getItem("user_id") + "&folderID=" + 3,
+        url: "RequestManageServlet?action=enterFolder&folderID=3",
         success: function(result) {
             var node = $("#recycle_folder");
 
