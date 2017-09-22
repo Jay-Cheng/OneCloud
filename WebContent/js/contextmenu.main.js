@@ -17,9 +17,7 @@ var menu = new BootstrapMenu(".disk-item", {
             name: "下载",
             iconClass: "fa-cloud-download",
             classNames: "right-click-menu",
-            onClick: function() {
-                alert("下载");
-            },
+            onClick: download,
         },
         moveTo: {
             name: "移动到",
@@ -339,4 +337,29 @@ function moveTo() {
 
     }
 
+}
+
+/************************************* 下载 *************************************/
+function download() {
+    var selectedItems = getSelectedItems();
+
+    var dataArr = new Array();
+    selectedItems.each(function(index) {
+        var itemTag = $(this);
+        /* 需要提交的数据 */
+        var id;
+        var type;
+        if (itemTag.attr("data-folder-id") != undefined) {
+            id = itemTag.attr("data-folder-id");
+            type = 0;// folder
+        } else {
+            id = itemTag.attr("data-file-id");
+            type = 1;// file
+        }
+        dataArr[index] = {
+            id: id,
+            t: type
+        };
+    });
+    window.location.href = "RequestManageServlet?action=download&dl=" + encodeURIComponent(JSON.stringify(dataArr));
 }

@@ -25,7 +25,9 @@ var recycle_menu = new BootstrapMenu(".recycle-item", {
 
 function shred() {
 	var selectedItem = getSelectedItems();
-	selectedItem.each(function() {
+
+	var dataArr = new Array();
+	selectedItem.each(function(index) {
 		var itemTag = $(this);
 		/* 需要提交的数据 */
 		var id;
@@ -37,34 +39,44 @@ function shred() {
 		    id = itemTag.attr("data-file-id");
 		    type = "file";
 		}
-		var shredData = {
+		dataArr[index] = {
 		    id: id,
 		    type: type
 		};
-
-		$.ajax({
-		    type: "POST",
-		    url: "RequestManageServlet?action=shred",
-		    contentType: "application/json;charset=utf-8",
-		    data: JSON.stringify(shredData),
-		    success: function(result){
-		    	if (result.status == 1) {
-		    		if (type == "folder") {
-		    			$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().remove();
-		    		}
-		    		/* 更新用户容量 */
-		    		var cap = result.cap;
-		    		sessionStorage.setItem("user_usedCapacity", cap);
-		    		var percentage = getUsedPercentage(cap);
-		    		$("#user_capacity").css("width", percentage).text(percentage);
-
-		    		itemTag.remove();
-		    	} else {
-		    		alert("删除失败！");
-		    	}
-		    }
-		});
 	});
+
+
+	$.ajax({
+	    type: "POST",
+	    url: "RequestManageServlet?action=shred",
+	    contentType: "application/json;charset=utf-8",
+	    data: JSON.stringify({shred:dataArr}),
+	    success: function(result) {
+	    	var resultArr = result.resultArr;
+	    	for (var i = 0; i < resultArr.length; i++) {
+	    		var id = resultArr[i].id;
+	    		if (resultArr[i].status == 1) {
+	    			if (resultArr[i].type == "folder") {
+	    				$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().remove();
+	    				$('#recycle_folder .recycle-item[data-folder-id="' + id + '"]').remove();
+	    			} else if (resultArr[i].type == "file") {
+	    				$('#recycle_folder .recycle-item[data-file-id="' + id + '"]').remove();
+	    			} else {
+	    				alert("未知错误");
+	    			}
+	    		} else {
+	    			alert("删除失败！");
+	    		}
+	    	}
+
+	    	/* 更新用户存储空间 */
+	    	var cap = result.cap;
+	    	sessionStorage.setItem("user_usedCapacity", cap);
+	    	var percentage = getUsedPercentage(cap);
+	    	$("#user_capacity").css("width", percentage).text(percentage);
+	    }
+	});
+
 }
 
 function restore() {

@@ -1,10 +1,9 @@
 package service.impl;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.hibernate.Session;
-
-import com.alibaba.fastjson.JSONObject;
 
 import dao.FileDAO;
 import dao.LocalFileDAO;
@@ -20,41 +19,35 @@ import service.ShredService;
 
 public class ShredServiceFileImpl implements ShredService {
     
+    private static ReentrantLock lock = new ReentrantLock(); 
+    
     private LocalFileDAO localFileDAO = LocalFileDAOFactory.getInstance("hibernate");
     private FileDAO fileDAO = FileDAOFactory.getInstance("hibernate");
     private UserDAO userDAO = UserDAOFactory.getInstance("hibernate");
     
     @Override
-    public JSONObject serve(long id) {
+    public boolean serve(long id) {
+        lock.lock();
+        
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        
-        JSONObject result = new JSONObject();
-        
-        
         try {
+            
             LocalFileDO localFile = localFileDAO.read(id);
+            localFileDAO.delete(localFile);
             FileDO file = fileDAO.read(localFile.getFileID());
             UserDO user = userDAO.read(localFile.getUserID());
-            localFileDAO.delete(localFile);
             user.setUsedCapacity(user.getUsedCapacity() - file.getSize());
             user.setLdtModified(LocalDateTime.now());
             userDAO.update(user);
             
-            result.put("cap", user.getUsedCapacity());
+            session.getTransaction().commit();
+            return true;
         } catch (Exception e) {
-            
             session.getTransaction().rollback();
-            result.put("status", 2);
-            result.put("msg", "fail");
-            return result;
+            return false;
+        } finally {
+            lock.unlock();
         }
-        
-        result.put("status", 1);
-        result.put("msg", "success");
-        
-        session.getTransaction().commit();
-        return result;
     }
-    
 }

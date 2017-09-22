@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 
 import dao.entity.FileDO;
+import dao.entity.LocalFileDO;
 
 public class FileUtil {
     
@@ -25,5 +26,19 @@ public class FileUtil {
         fileDO.setLdtModified(fileDO.getLdtCreate());
         
         return fileDO;
+    }
+    
+    /**
+     * 获取带后缀的完整文件名
+     */
+    public static String getFullFilename(LocalFileDO localFile) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(localFile.getLocalName());
+        if (localFile.getLocalType().length() != 0) {
+            stringBuilder.append(".");
+            stringBuilder.append(localFile.getLocalType());
+        }
+        String filename = stringBuilder.toString();
+        return filename;
     }
 }

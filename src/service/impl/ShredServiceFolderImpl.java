@@ -4,10 +4,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.hibernate.Session;
-
-import com.alibaba.fastjson.JSONObject;
 
 import dao.FileDAO;
 import dao.LocalFileDAO;
@@ -26,24 +25,26 @@ import service.ShredService;
 
 public class ShredServiceFolderImpl implements ShredService {
     
+    private static ReentrantLock lock = new ReentrantLock();
+    
     private UserDAO userDAO = UserDAOFactory.getInstance("hibernate");
     private FileDAO fileDAO = FileDAOFactory.getInstance("hibernate");
     private LocalFileDAO localFileDAO = LocalFileDAOFactory.getInstance("hibernate");
     private LocalFolderDAO localFolderDAO = LocalFolderDAOFactory.getInstance("hibernate");
     
     @Override
-    public JSONObject serve(long id) {
+    public boolean serve(long id) {
+        lock.lock();
+        
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         
-        JSONObject result = new JSONObject();
+        long userID = localFolderDAO.read(id).getUserID();
         
         Queue<Long> queue = new LinkedList<>();
         queue.add(id);
-        long deleteCap = 0L;// 删除的容量大小
-        
         try {
-            UserDO user = userDAO.read(localFolderDAO.read(id).getUserID());
+            long deleteCap = 0L;// 删除的容量大小
             while (!queue.isEmpty()) {
                 Long parent = queue.poll();
                 List<LocalFileDO> localFileList = localFileDAO.listByParent(parent);
@@ -57,27 +58,23 @@ public class ShredServiceFolderImpl implements ShredService {
                 for (LocalFolderDO localFolder: localFolderList) {
                     queue.add(localFolder.getId());
                 }
-                
                 localFolderDAO.delete(localFolderDAO.read(parent));
             }
+            
+            /* 更新用户存储空间 */
+            UserDO user = userDAO.read(userID);
             user.setUsedCapacity(user.getUsedCapacity() - deleteCap);
             user.setLdtModified(LocalDateTime.now());
             userDAO.update(user);
             
-            
-            result.put("cap", user.getUsedCapacity());
+            session.getTransaction().commit();
+            return true;
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
-            result.put("status", 2);
-            result.put("msg", "fail");
-            return result;
+            return false;
+        } finally {
+            lock.unlock();
         }
-        
-        result.put("status", 1);
-        result.put("msg", "success");
-        
-        session.getTransaction().commit();
-        return result;
     }
-    
 }

@@ -41,6 +41,7 @@ public class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
     public void update(T obj) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.update(obj);
+        session.flush();
     }
 
     @Override
