@@ -1,6 +1,7 @@
 $(function(){
 	$("#clear_recycle").click(function(){
-		alert("全部清空");
+		$("#recycle_folder .recycle-item").addClass("selected");
+		shred();
 	});
 });
 var recycle_menu = new BootstrapMenu(".recycle-item", {

@@ -36,6 +36,8 @@ public class RequestManageServlet extends HttpServlet {
             request.getRequestDispatcher("ShredServlet").forward(request, response);break;
         case "download":
             request.getRequestDispatcher("DownloadServlet").forward(request, response);break;
+        case "getFile":
+            request.getRequestDispatcher("GetFileServlet").forward(request, response);break;
         default:
             /* 使用异步请求时不能在服务端重定向 */
             response.getWriter().write("error:action doesn't match");

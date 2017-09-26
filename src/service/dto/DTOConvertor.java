@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.FileDAO;
+import dao.entity.FileDO;
 import dao.entity.LocalFileDO;
 import dao.entity.LocalFolderDO;
 import dao.entity.UserDO;
@@ -51,19 +52,19 @@ public class DTOConvertor {
         }
     }
     
-    public static LocalFileDTO convert(LocalFileDO entity, Integer size) {
-        if (entity != null) {
+    public static LocalFileDTO convert(LocalFileDO localFileEntity, FileDO fileEntity) {
+        if (localFileEntity != null) {
             LocalFileDTO dto = new LocalFileDTO();
-            dto.setId(entity.getId());
-            dto.setLdtModified(entity.getLdtModified());
-            dto.setFileID(entity.getFileID());
-            dto.setLocalName(entity.getLocalName());
-            dto.setLocalType(entity.getLocalType());
-            if (size == null) {
-                dto.setSize(fileDAO.read(dto.getFileID()).getSize());
-            } else {
-                dto.setSize(size);
+            dto.setId(localFileEntity.getId());
+            dto.setLdtModified(localFileEntity.getLdtModified());
+            dto.setFileID(localFileEntity.getFileID());
+            dto.setLocalName(localFileEntity.getLocalName());
+            dto.setLocalType(localFileEntity.getLocalType());
+            if (fileEntity == null) {
+                fileEntity = fileDAO.read(dto.getFileID());
             }
+            dto.setSize(fileEntity.getSize());
+            dto.setUrl(fileEntity.getUrl());
             return dto;
         } else {
             return null;

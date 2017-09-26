@@ -10,7 +10,8 @@ public class LocalFileDTO {
     private String localName;
     private String localType;
     private Integer size;
-    
+    private String url;
+
     public LocalFileDTO() {}
 
     public Long getId() {
@@ -61,4 +62,11 @@ public class LocalFileDTO {
         this.size = size;
     }
     
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

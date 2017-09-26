@@ -217,7 +217,12 @@ function finishUpload(data) {
 	generateCompletedMissionNode(data);
 	/* 生成主界面的文件节点 */
 	var fileName = data.files[0].name;
-	var fileImg = getFileIcon(getSuffix(fileName));
+	var fileImg;
+	if (isPicture(data.localFile.localType)) {
+		fileImg = "../" + data.localFile.url;
+	} else {
+		fileImg = getFileIcon(getSuffix(fileName));
+	}
 	var fileSize = getReadableSize(data.localFile.size);
 	var lastModifiedTime = getFormattedDateTime(data.localFile.ldtModified);
 	var id = data.localFile.id;

@@ -30,15 +30,14 @@ function getSuffix(filename) {
 function getFileIcon(suffix) {
 	var src = "img/icon/";
 	switch(suffix) {
-    	case "mp4": 
-        src += "video";
-        break;
-        case "jpg":
-        case "png": 
-        src += "picture";
-        break;
-        default: 
-        src += "file";
+        case "jpg": case "png": case "gif": src += "picture";break;
+        case "doc": src += "word";break;
+        case "ppt": src += "ppt";break;
+        case "xls": src += "xls";break;
+        case "txt": src += "txt";break;
+    	case "mp4": src += "video";break;
+    	case "mp3": src += "music";break;
+        default: src += "file";
 	}
 	src += ".png";
 	return src;
@@ -71,6 +70,15 @@ function getGapDays(date) {
 	var gapDays = Math.floor(gapDaysTime/(24*3600*1000));
 	return gapDays;
 }
+
+function isPicture(localType){
+	if ("JPG" == localType.toUpperCase() || "PNG" == localType.toUpperCase() || "GIF" == localType.toUpperCase()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 /*
  * 测试函数
  * 打印js对象

@@ -68,7 +68,7 @@ public class AddFileServiceImpl implements AddFileService {
                 localFile.setLdtCreate(LocalDateTime.now());
                 localFile.setLdtModified(localFile.getLdtCreate());
                 localFileDAO.create(localFile);
-                LocalFileDTO fileDTO = DTOConvertor.convert(localFile, file.getSize());
+                LocalFileDTO fileDTO = DTOConvertor.convert(localFile, file);
                 /* 更新用户的存储空间 */
                 increaseUsedCap(userID, file.getSize());
                 
@@ -98,7 +98,7 @@ public class AddFileServiceImpl implements AddFileService {
                         localFile.setLdtCreate(LocalDateTime.now());
                         localFile.setLdtModified(localFile.getLdtCreate());
                         localFileDAO.create(localFile);
-                        LocalFileDTO fileDTO = DTOConvertor.convert(localFile, file.getSize());
+                        LocalFileDTO fileDTO = DTOConvertor.convert(localFile, file);
                         /* 更新用户的存储空间 */
                         increaseUsedCap(userID, file.getSize());
                         result.put("status", 3);

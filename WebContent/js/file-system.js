@@ -12,6 +12,14 @@ $(function() {
 
     $("#recycle").on("click", "ul .disk-file-item .select", selectItem);
     $("#recycle").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
+
+
+    $("#nav_lately").click(getFile.bind(null, "lately"));
+    $("#nav_document").click(getFile.bind(null, "document"));
+    $("#nav_picture").click(getFile.bind(null, "picture"));
+    $("#nav_video").click(getFile.bind(null, "video"));
+    $("#nav_music").click(getFile.bind(null, "music"));
+
     getRecycleItems();
     //$("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
     showFolderContents(1);// 约定初始文件夹ID=1
@@ -86,7 +94,12 @@ function createFolderNode(folderID, show) {
                 var fileName = files[i].localName + fileType;
                 var fileSize = getReadableSize(files[i].size);
                 var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
-                var fileImg = getFileIcon(getSuffix(fileName));
+                var fileImg;
+                if (isPicture(files[i].localType)) {
+                    fileImg = "../" + files[i].url;
+                } else {
+                    fileImg = getFileIcon(getSuffix(fileName));
+                }
                 var fileNode = $('<li class="disk-file-item disk-item"></li>');
                 fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
                 fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
@@ -321,6 +334,49 @@ function getRecycleItems(){
                 fileNode.appendTo(node);                
             }
             node.appendTo($("#recycle"));
+        }
+    });
+}
+/******************************************文件分类******************************************/
+function getFile(type) {
+    $("#" + type + " ul").remove();// 删除旧节点
+    var node = $('<ul></ul>');
+    $.ajax({
+        type: "GET",
+        url: "RequestManageServlet?action=getFile&type=" + type,
+        contentType: "application/json; charset=utf-8",
+        success: function(result){
+            var files = result.files;
+            if (type != "picture") {
+                for (var i = 0; i < files.length; i++) {
+                    var fileID = files[i].id;
+                    var fileName = files[i].localName + "." + files[i].localType;
+                    var fileSize = getReadableSize(files[i].size);
+                    var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
+                    var fileImg;
+                    if (isPicture(files[i].localType)) {
+                        fileImg = "../" + files[i].url;
+                    } else {
+                        fileImg = getFileIcon(getSuffix(fileName));
+                    }
+                    var fileNode = $('<li class="disk-file-item"></li>');
+                    fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
+                    fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
+                    fileNode.attr("data-file-id", fileID);
+                    fileNode.appendTo(node);
+                    node.appendTo($("#" + type));                
+                }
+            } else {
+                for (var i = 0; i < files.length; i++) {
+                    var fileName = files[i].localName + "." + files[i].localType;
+                    var fileImg = "../" + files[i].url;
+                    var fileNode = $('<li class="picture"></li>');
+                    fileNode.append('<div class="picture-img"><img src="' + fileImg + '"></div>');
+                    fileNode.append('<div class="picture-info"><p><span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span><span class="picture-info-title">' + fileName + '</span></p></div>');
+                    fileNode.appendTo(node);
+                    node.appendTo($('#picture .picture-wall')); 
+                }   
+            }
         }
     });
 }

@@ -103,7 +103,7 @@
 
 				<div class="layout-nav">
 					<ul class="nav nav-pills nav-stacked">
-  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#lately">
+  						<li role="presentation"><a data-toggle="pill" href="#lately" id="nav_lately">
   						<span class="glyphicon glyphicon-time nav-title-icon"></span>
   						最近
   						</a></li>
@@ -111,19 +111,19 @@
   						<span class="glyphicon glyphicon-list-alt nav-title-icon"></span>
   						全部
   						</a></li>
-  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#document">
+  						<li role="presentation"><a data-toggle="pill" href="#document" id="nav_document">
   						<span class="glyphicon glyphicon-file nav-title-icon"></span>
   						文档
   						</a></li>
-  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#picture">
+  						<li role="presentation"><a data-toggle="pill" href="#picture"  id="nav_picture">
 						<span class="glyphicon glyphicon-picture nav-title-icon"></span>
   						图片
   						</a></li>
-  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#video">
+  						<li role="presentation"><a data-toggle="pill" href="#video" id="nav_video">
   						<span class="glyphicon glyphicon-facetime-video nav-title-icon"></span>
   						视频
   						</a></li>
-  						<li role="presentation" class="disabled"><a data-toggle="pill" href="#music">
+  						<li role="presentation"><a data-toggle="pill" href="#music" id="nav_music">
   						<span class="glyphicon glyphicon-music nav-title-icon"></span>
   						音乐
   						</a></li>
@@ -216,7 +216,11 @@
 						</ul>
 						-->
 					</div>
-					<div id="lately" class="tab-pane">lately</div>
+					<div id="lately" class="tab-pane">
+						<div class="lately-title">
+							<span>最近七天</span>
+						</div>
+					</div>
 
 					<div id="all" class="tab-pane">
 						<div class="disk-file-path-wrapper">
@@ -256,72 +260,12 @@
 					</div>
 
 					<div id="document" class="tab-pane">
-						<ul>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/word.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">文档.word</span>
-									</div>
-									<!--
-									<span class="fileedit">
-										<input type="text">
-									</span>
-									-->
-								</div>
-
-								<div class="file-info">
-									<span class="file-size">1.5M</span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/ppt.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">演示.ppt</span>
-									</div>
-								</div>
-
-								<div class="file-info">
-									<span class="file-size">1.5M</span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/xls.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">表格.xls</span>
-									</div>
-								</div>
-
-								<div class="file-info">
-									<span class="file-size">1.5M</span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-						</ul>
+						
 					</div>
 
 					<div id="picture" class="tab-pane">
 						<div class="picture-wall">
-							<ul>
+<!-- 							<ul>
 								<li class="picture">
 									<div class="picture-img">
 										<img src="users/picture/example.jpg">
@@ -333,53 +277,15 @@
 										</p>
 									</div>
 								</li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 
 					<div id="video" class="tab-pane">
-						<ul>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="users/video/snapshot/example.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">视频.mp4</span>
-									</div>
-								</div>
 
-								<div class="file-info">
-									<span class="file-size">1.5M</span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-						</ul>
 					</div>
 					<div id="music" class="tab-pane">
-						<ul>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/music.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">音乐.mp3</span>
-									</div>
-								</div>
-
-								<div class="file-info">
-									<span class="file-size">1.5M</span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-						</ul>
+						
 					</div>
 
 
