@@ -31,11 +31,13 @@
   <body>
 	<div class="container-fluid layout-wrapper">
 		<div class="row layout-header">
-
+			<!-- LOGO -->
 			<div class="col-xs-2" style="text-align: center;">
 				<h3 class="logo">一个<img src="img/favicon/cloud.png" />网盘</h3>
 			</div>
 
+
+			<!-- 任务列表按钮 -->
 			<div class="col-xs-1">
 				<a href="#transfer" data-toggle="pill" class="btn btn-default btn-circle btn-transfer" id="btn_transfer">
 					<img src="img/icon/transfer.png" />
@@ -43,6 +45,8 @@
 				</a>
 			</div>
 
+			
+			<!-- 搜索框 -->
 			<div class="col-xs-2">
                 <div class="input-group stylish-input-group">
                     <input type="text" class="form-control"  placeholder="输入文件名" />
@@ -54,8 +58,9 @@
                 </div>
 			</div>
 
+
+			<!-- 视图/排序控制 -->
 			<div class="col-xs-2 col-xs-offset-1">
-				
 				<div class="btn-group btn-group-view" data-toggle="buttons">
 					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
 						<input type="radio" name="view" id="view_by_list" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
@@ -64,7 +69,6 @@
 						<input type="radio" name="view" id="view_by_block" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 				</div>
-				
 				<div class="btn-group btn-group-sort" data-toggle="buttons">
 					<label class="btn btn-default active" style="border: 0px;" title="按字母排序">
 						<input type="radio" name="sort" id="sort_by_alpha" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" style="color: #337ab7;"></span>
@@ -73,24 +77,23 @@
 						<input type="radio" name="sort" id="sort_by_time" autocomplete="off" /><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 				</div>
-				
 			</div>
 
+			
+			<!-- 添加文件按钮 -->
 			<div class="col-xs-2 col-xs-offset-2">
-
 				<button type="button" class="btn btn-primary fileinput-button btn-upload" id="btn_upload">
                     <span>添加文件</span>
 				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple onchange="showFileUploadModal(files);">
 				</button>
-
 			</div>
-
-		</div>
+		</div><!-- end of header -->
 
 
 
 		<div class="row layout-body">
 			<div class="col-xs-2 layout-body-left">
+				<!-- 当前用户 -->
 				<div class="layout-user">
 					<img src="img/icon/user.png" alt="头像" class="img-circle" id="user_photo" />
 					<p id="user_nickname">nickname</p>
@@ -101,6 +104,8 @@
 					</div>
 				</div>
 
+
+				<!-- 导航栏 -->
 				<div class="layout-nav">
 					<ul class="nav nav-pills nav-stacked">
   						<li role="presentation"><a data-toggle="pill" href="#lately" id="nav_lately">
@@ -142,9 +147,19 @@
   						</a></li>
 					</ul>
 				</div>
-			</div>
+			</div><!-- end of left-body -->
+
+
+
 			<div class="col-xs-10 layout-body-content">
+				<!-- 主视图 -->
 				<div class="tab-content" id="main_view">
+
+					<div id="search" class="tab-pane">
+						search
+					</div>
+
+
 					<div id="transfer" class="tab-pane">
 						<div class="mission-list-title">
 							<span>任务列表</span>
@@ -155,72 +170,27 @@
 								<button class="btn btn-default" id="cancel_all_mission">取消全部</button>
 							</div>
 						</div>
-						<ul id="loading_mission_list"></ul>
-						<!-- 备份 -->
-						<!--
 						<ul id="loading_mission_list">
-							<li>
-								<div class="mission-head">
-									<div class="mission-icon-wrapper">
-										<span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span>
-									</div>
-									<div class="thumb">
-										<img src="img/icon/file.png" class="thumb-icon">
-									</div>
-									<div class="mission-info">
-										<span class="mission-file-name">022568.jpg</span>
-										<span class="mission-file-size">6.6M<span class="mission-file-preparing">&nbsp;&nbsp;&nbsp;准备中...</span></span>
-									
-									</div>
-								</div>
-								<div class="progress mission-progress">
-  									<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" style="width: 0%">
-  									</div>
-								</div>
-								<div class="mission-control">
-									<a class="upload-pause" style="display: none;"><span class="glyphicon glyphicon-pause"></span></a>
-									<a class="upload-cancel"><span class="glyphicon glyphicon-remove"></span></a>
-								</div>
-							</li>
+							
 						</ul>
-						-->
 						<div class="dynamic-mission-list-title" id="dynamic_title_complete">
 							<p>已完成 (<span id="complete_mission_count">0</span>)</p>
 							<div class="btn-modify-all" id="remove_all_record">
 								<button class="btn btn-default">清空记录</button>
 							</div>
 						</div>
-						<ul id="complete_mission_list"></ul>
-						<!-- 备份 -->
-						<!--
 						<ul id="complete_mission_list">
-							<li>
-								<div class="mission-head">
-									<div class="mission-icon-wrapper">
-										<span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span>
-									</div>
-									<div class="thumb">
-										<img src="img/icon/file.png" class="thumb-icon">
-									</div>
-									<div class="mission-info">
-										<span class="mission-file-name">无法移除的模板(已完成).file</span>
-										<span class="mission-file-size">6.6MB</span>
-									</div>
-								</div>
-								<div class="mission-complete">
-								</div>
-								<div class="mission-control">
-									<a class="remove-record"><span class="glyphicon glyphicon-remove"></span></a>
-								</div>
-							</li>
+							
 						</ul>
-						-->
 					</div>
+
+
 					<div id="lately" class="tab-pane">
 						<div class="lately-title">
 							<span>最近七天</span>
 						</div>
 					</div>
+
 
 					<div id="all" class="tab-pane">
 						<div class="disk-file-path-wrapper">
@@ -229,65 +199,24 @@
 							</div>
 							<ol class="breadcrumb disk-file-path" id="disk_file_path">
     							<li data-folder-id="1"><a href="javascript:void(0)" class="active">我的网盘</a></li>
-								<!--		
-    							<li><a href="#">文件夹</a></li>
-    							-->
 							</ol>
 							<button class="btn btn-default mkfolder" id="mkfolder">新建文件夹</button>
 						</div>
-						<!-- 备份 -->
-						<!--
-						<ul>
-							<li class="disk-file-item">
-								<div class="file-head">
-									<div class="select">
-										<input type="checkbox">
-									</div>
-									<div class="thumb">
-										<img src="img/icon/folder.png" class="thumb-icon">
-									</div>
-									<div class="file-title">
-										<span class="file-name">文件夹1</span>
-									</div>
-								</div>
-								<div class="file-info">
-									<span class="file-size"></span>
-									<span class="file-time">2017-07-07 07:07</span>
-								</div>								
-							</li>
-						</ul>
-						-->
 					</div>
 
-					<div id="document" class="tab-pane">
-						
-					</div>
+
+					<div id="document" class="tab-pane"></div>
+
 
 					<div id="picture" class="tab-pane">
-						<div class="picture-wall">
-<!-- 							<ul>
-								<li class="picture">
-									<div class="picture-img">
-										<img src="users/picture/example.jpg">
-									</div>
-									<div class="picture-info">
-										<p>
-											<span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span>
-											<span class="picture-info-title">example.jpg</span>
-										</p>
-									</div>
-								</li>
-							</ul> -->
-						</div>
+						<div class="picture-wall"></div>
 					</div>
 
-					<div id="video" class="tab-pane">
 
-					</div>
-					<div id="music" class="tab-pane">
-						
-					</div>
+					<div id="video" class="tab-pane"></div>
 
+
+					<div id="music" class="tab-pane"></div>
 
 
 					<div id="safebox" class="tab-pane">
@@ -303,7 +232,11 @@
   							</div>
 						</div>
 					</div>
+
+
 					<div id="share" class="tab-pane">share</div>
+
+
 					<div id="recycle" class="tab-pane">
 						<div class="recycle-title">
 							<span>文件在回收站保存7天</span>
@@ -311,9 +244,7 @@
 								<button class="btn btn-default" id="clear_recycle">全部清空</button>
 							</div>
 						</div>
-						<ul id="recycle_folder">
-							
-						</ul>
+						<ul id="recycle_folder"></ul>
 					</div>
 				</div>
 			</div>
@@ -337,11 +268,11 @@
 									<img src="img/icon/word.png" class="thumb-icon" id="modal_file_thumb">
 								</div>
 								<div class="modal-file-title">
-									<span class="file-name" id="modal_file_name">文档.word</span>
+									<span class="file-name" id="modal_file_name"></span>
 								</div>
 							</div>
 							<div class="modal-addtional-info" id="modal_addtional_info">
-								等<span>3</span>个文件
+								等<span>?</span>个文件
 							</div>							
 						</div>
         			</div>
@@ -360,45 +291,8 @@
         								</div>
         								 
 	        							<ul>
-	        							<!--
-    	        							<li>
-        										<div class="treeNode-info" style="padding-left: 25px;">
-        											<span class="glyphicon glyphicon-folder-close"></span>
-        											<span class="treeNode-info-name">新建文件夹1</span>
-        										</div>
-        										<ul></ul>
-    	        							</li>
-    	    								<li>
-        										<div class="treeNode-info" style="padding-left: 25px;">
-        											<span class="glyphicon glyphicon-folder-close"></span>
-        											<span class="treeNode-info-name">新建文件夹2</span>
-        										</div>
-        										<ul>
-        											<li>
-        												<div class="treeNode-info" style="padding-left: 45px;">
-        													<span class="glyphicon glyphicon-folder-close"></span>
-        													<span class="treeNode-info-name">新建文件夹21</span>
-        												</div>
-        												<ul></ul>
-        											</li>
-        											<li>
-        												<div class="treeNode-info" style="padding-left: 45px;">
-        													<span class="glyphicon glyphicon-folder-close"></span>
-        													<span class="treeNode-info-name">新建文件夹22</span>
-        												</div>
-        												<ul></ul>
-        											</li>
-        										</ul>
-    	    								</li>
-        									<li>
-        										<div class="treeNode-info" style="padding-left: 25px;">
-        											<span class="glyphicon glyphicon-folder-close"></span>
-        											<span class="treeNode-info-name">新建文件夹3</span>
-        										</div>
-        										<ul></ul>
-        									</li>
-        								-->    								
-        								</ul>
+	        								
+	        							</ul>
         							</li>
         						</ul>	
         					</div>
@@ -412,27 +306,6 @@
     		</div>
   		</div>
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <script src="js-lib/jquery-3.2.1.min.js"></script>
