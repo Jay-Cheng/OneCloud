@@ -1,5 +1,6 @@
 $(function() {
     $("#all").on("click", "ul [data-folder-id]", enterFolder);
+    $("#search").on("click", "ul [data-folder-id]", enterFolder);
     $("#all").on("click", ".disk-file-path-wrapper .disk-file-path li", goBack);
     $("#mkfolder").click(mkfolder);
 
@@ -67,49 +68,9 @@ function createFolderNode(folderID, show) {
             /* 生成“选择路径”模态框的文件夹节点 */
             createDirNode(this.folderID, folders, !show);/* 必须在参数前面加上this. */
             /* 生成当前文件夹下所有文件夹节点 */
-            for (var i = 0; i < folders.length; i++) {
-                var folderID = folders[i].id;
-                var folderName = folders[i].localName;
-                var lastModifiedTime = getFormattedDateTime(folders[i].ldtModified);
-                var folderNode = $('<li class="disk-file-item disk-item"></li>');
-                folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
-                folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
-                /* 设置文件夹ID */
-                folderNode.attr("data-folder-id", folderID);
-                /* 绑定事件处理函数 */
-                // folderNode.on("click", enterFolder);
-                // folderNode.on("contextmenu", rightClickSelectItem);
-                // folderNode.find(".select").on("click", selectItem);
-                /* 追加该节点到当前文件夹 */
-                folderNode.appendTo(node);
-            }
-            // node.on("click", "[data-folder-id]", enterFolder);
+            generateFolderNode(folders, node);
             /* 生成当前文件夹下所有文件节点 */
-            for (var i = 0; i < files.length; i++) {
-                var fileType = files[i].localType;
-                if (fileType != "") {
-                    fileType = "." + fileType;
-                }
-                var fileID = files[i].id;
-                var fileName = files[i].localName + fileType;
-                var fileSize = getReadableSize(files[i].size);
-                var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
-                var fileImg;
-                if (isPicture(files[i].localType)) {
-                    fileImg = "../" + files[i].url;
-                } else {
-                    fileImg = getFileIcon(getSuffix(fileName));
-                }
-                var fileNode = $('<li class="disk-file-item disk-item"></li>');
-                fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
-                fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
-                fileNode.attr("data-file-id", fileID);
-                /* 绑定事件处理函数 */
-                // fileNode.find(".select").on("click", selectItem);
-                // fileNode.on("contextmenu", rightClickSelectItem);
-                /* 追加该节点到当前文件夹 */
-                fileNode.appendTo(node);                
-            }
+            generateFileNode(files, node);
             if (!show) {
                 node.hide();
             }
@@ -117,6 +78,45 @@ function createFolderNode(folderID, show) {
         }
     });
 }
+function generateFolderNode(folders, parent) {
+    for (var i = 0; i < folders.length; i++) {
+        var folderID = folders[i].id;
+        var folderName = folders[i].localName;
+        var lastModifiedTime = getFormattedDateTime(folders[i].ldtModified);
+        var folderNode = $('<li class="disk-file-item disk-item"></li>');
+        folderNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="img/icon/folder.png" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + folderName + '</span></div></div>');
+        folderNode.append('<div class="file-info"><span class="file-size"></span><span class="file-time">' + lastModifiedTime + '</span></div>');
+        /* 设置文件夹ID */
+        folderNode.attr("data-folder-id", folderID);
+        folderNode.appendTo(parent);
+    }
+}
+function generateFileNode(files, parent) {
+    for (var i = 0; i < files.length; i++) {
+        var fileType = files[i].localType;
+        if (fileType != "") {
+            fileType = "." + fileType;
+        }
+        var fileID = files[i].id;
+        var fileName = files[i].localName + fileType;
+        var fileSize = getReadableSize(files[i].size);
+        var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
+        var fileImg;
+        if (isPicture(files[i].localType)) {
+            fileImg = "../" + files[i].url;
+        } else {
+            fileImg = getFileIcon(getSuffix(fileName));
+        }
+        var fileNode = $('<li class="disk-file-item disk-item"></li>');
+        fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
+        fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
+        fileNode.attr("data-file-id", fileID);
+
+        fileNode.appendTo(parent);                
+    }
+}
+
+
 /* 
  * 单击文件夹后，更新面包屑导航并列出该文件夹下的所有文件
  * 该函数绑定到文件夹<li>节点的click事件上
@@ -124,6 +124,7 @@ function createFolderNode(folderID, show) {
 function enterFolder() {
     /* 判断该文件是否是文件夹 */
     if ($(this).attr("data-folder-id") != undefined) {
+        $("#nav_all").tab("show");
         /* 生成一个该文件夹的面包屑导航节点 */
         var breadNode = $('<li></li>');
         /* 设置面包屑节点的名字 */
@@ -340,32 +341,17 @@ function getRecycleItems(){
 /******************************************文件分类******************************************/
 function getFile(type) {
     $("#" + type + " ul").remove();// 删除旧节点
-    var node = $('<ul></ul>');
     $.ajax({
         type: "GET",
         url: "RequestManageServlet?action=getFile&type=" + type,
         contentType: "application/json; charset=utf-8",
         success: function(result){
             var files = result.files;
+            var node = $('<ul></ul>');
             if (type != "picture") {
-                for (var i = 0; i < files.length; i++) {
-                    var fileID = files[i].id;
-                    var fileName = files[i].localName + "." + files[i].localType;
-                    var fileSize = getReadableSize(files[i].size);
-                    var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
-                    var fileImg;
-                    if (isPicture(files[i].localType)) {
-                        fileImg = "../" + files[i].url;
-                    } else {
-                        fileImg = getFileIcon(getSuffix(fileName));
-                    }
-                    var fileNode = $('<li class="disk-file-item"></li>');
-                    fileNode.append('<div class="file-head"><div class="select"><input type="checkbox"></div><div class="thumb"><img src="' + fileImg + '" class="thumb-icon"></div><div class="file-title"><span class="file-name">' + fileName + '</span></div></div>');
-                    fileNode.append('<div class="file-info"><span class="file-size">' + fileSize + '</span><span class="file-time">' + lastModifiedTime + '</span></div>');
-                    fileNode.attr("data-file-id", fileID);
-                    fileNode.appendTo(node);
-                    node.appendTo($("#" + type));                
-                }
+                generateFileNode(files, node);
+                node.find(".disk-file-item").removeClass("disk-item");
+                node.appendTo($("#" + type));
             } else {
                 for (var i = 0; i < files.length; i++) {
                     var fileName = files[i].localName + "." + files[i].localType;

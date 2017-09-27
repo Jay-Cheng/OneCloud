@@ -48,12 +48,12 @@
 			
 			<!-- 搜索框 -->
 			<div class="col-xs-2">
-                <div class="input-group stylish-input-group">
-                    <input type="text" class="form-control"  placeholder="输入文件名" />
+                <div class="input-group stylish-input-group" id="search_control">
+                    <input type="text" class="form-control" placeholder="输入文件名" oninput="$('#btn_search').click();"/>
                     <span class="input-group-addon">
-                        <button type="submit">
+                        <a href="#search" data-toggle="pill" id="btn_search">
                             <span class="glyphicon glyphicon-search"></span>
-                        </button>  
+                        </a>  
                     </span>
                 </div>
 			</div>
@@ -65,7 +65,7 @@
 					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
 						<input type="radio" name="view" id="view_by_list" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
-					<label class="btn btn-default" style="border: 0px;" title="略缩图视图">
+					<label class="btn btn-default disabled" style="border: 0px;" title="略缩图视图">
 						<input type="radio" name="view" id="view_by_block" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
 					</label>
 				</div>
@@ -156,12 +156,14 @@
 				<div class="tab-content" id="main_view">
 
 					<div id="search" class="tab-pane">
-						search
+						<div class="fixed-title">
+							<span>共<span>n</span>个结果</span>
+						</div>
 					</div>
 
 
 					<div id="transfer" class="tab-pane">
-						<div class="mission-list-title">
+						<div class="fixed-title">
 							<span>任务列表</span>
 						</div>
 						<div class="dynamic-mission-list-title" id="dynamic_title_loading">
@@ -186,7 +188,7 @@
 
 
 					<div id="lately" class="tab-pane">
-						<div class="lately-title">
+						<div class="fixed-title">
 							<span>最近七天</span>
 						</div>
 					</div>
@@ -238,7 +240,7 @@
 
 
 					<div id="recycle" class="tab-pane">
-						<div class="recycle-title">
+						<div class="fixed-title">
 							<span>文件在回收站保存7天</span>
 							<div class="btn-modify-all">
 								<button class="btn btn-default" id="clear_recycle">全部清空</button>
@@ -323,11 +325,12 @@
     <script src="js/fileupload.main.js"></script>
     <script src="js/contextmenu.main.js"></script>
     <script src="js/contextmenu.recycle.js"></script>
+    <script src="js/search.js"></script>
     <script>
     	/* 禁用默认的右键菜单 */
 		document.oncontextmenu = function(){return false;}
     	$(function() {
-    		$("#nav_all").click();
+    		$("#nav_all").tab("show");
 
     		/* 加载登录用户的信息 */
 		    $("#user_photo").attr("src", sessionStorage.getItem("user_photoURL"));

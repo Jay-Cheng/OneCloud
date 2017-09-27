@@ -25,4 +25,15 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
         return result;
     }
 
+    @Override
+    public List<LocalFolderDO> listByName(long userID, String name) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        @SuppressWarnings("unchecked")
+        Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent!=2 and folder.parent!=3 and folder.userID=:userID and folder.localName like :name");
+        query.setParameter("userID", userID);
+        query.setParameter("name", "%" + name + "%");
+        List<LocalFolderDO> result = query.list();
+        return result;
+    }
+
 }

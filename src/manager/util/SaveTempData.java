@@ -10,9 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import dao.LocalFileDAO;
+import dao.LocalFolderDAO;
 import dao.entity.LocalFileDO;
 import dao.entity.LocalFolderDO;
 import dao.entity.UserDO;
+import dao.factory.LocalFileDAOFactory;
+import dao.factory.LocalFolderDAOFactory;
 import dao.impl.hibernate.LocalFileDAOHibernateImpl;
 
 public class SaveTempData {
