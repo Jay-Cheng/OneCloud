@@ -1,7 +1,8 @@
 $(function() {
 	$("#btn_search").click(function() {
 		$('[role="presentation"][class="active"]').removeClass("active");
-
+		$("#view_control").css("visibility","hidden");
+		
 		var input = $('#search_control input').val();
 		if (input.length == 0) {
 			$("#search .fixed-title span span").text("0");

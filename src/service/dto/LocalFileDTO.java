@@ -2,12 +2,10 @@ package service.dto;
 
 import java.time.LocalDateTime;
 
-public class LocalFileDTO {
+public class LocalFileDTO extends Sortable {
     
     private Long id;
-    private LocalDateTime ldtModified;
     private Long fileID;
-    private String localName;
     private String localType;
     private Integer size;
     private String url;
@@ -22,10 +20,6 @@ public class LocalFileDTO {
         this.id = id;
     }
 
-    public LocalDateTime getLdtModified() {
-        return ldtModified;
-    }
-
     public void setLdtModified(LocalDateTime ldtModified) {
         this.ldtModified = ldtModified;
     }
@@ -36,10 +30,6 @@ public class LocalFileDTO {
 
     public void setFileID(Long fileID) {
         this.fileID = fileID;
-    }
-
-    public String getLocalName() {
-        return localName;
     }
 
     public void setLocalName(String localName) {

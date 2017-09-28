@@ -1,29 +1,42 @@
 $(function() {
+    /* 进入文件夹/后退/新建文件夹事件绑定 */
     $("#all").on("click", "ul [data-folder-id]", enterFolder);
     $("#search").on("click", "ul [data-folder-id]", enterFolder);
     $("#all").on("click", ".disk-file-path-wrapper .disk-file-path li", goBack);
     $("#mkfolder").click(mkfolder);
 
-    /* 文件选择相关事件处理 */
+    /* 文件选择相关事件绑定 */
     $("body:not(#path_modal)").click(resetSelectedState);
-
     $("#select_all").click(selectAll);// 为全选绑定事件处理函数
     $("#all").on("click", "ul .disk-file-item .select", selectItem);
     $("#all").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
-
     $("#recycle").on("click", "ul .disk-file-item .select", selectItem);
     $("#recycle").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
 
+    /* 最近/文档/图片/视频/音乐分类文件 */
+    $("#nav_lately").click(function(){getFile.call(this, "lately");});
+    $("#nav_document").click(function(){getFile.call(this, "document");});
+    $("#nav_picture").click(function(){getFile.call(this, "picture");});
+    $("#nav_video").click(function(){getFile.call(this, "video");});
+    $("#nav_music").click(function(){getFile.call(this, "music");});
 
-    $("#nav_lately").click(getFile.bind(null, "lately"));
-    $("#nav_document").click(getFile.bind(null, "document"));
-    $("#nav_picture").click(getFile.bind(null, "picture"));
-    $("#nav_video").click(getFile.bind(null, "video"));
-    $("#nav_music").click(getFile.bind(null, "music"));
+    /* 视图控制事件 */
+    $("#nav_all").click(function(){$("#view_control").css("visibility","visible");});
+    $("#nav_recycle").click(function(){$("#view_control").css("visibility","hidden");});
+
+    $("#sort_by_alpha").click(function(){refreshAllFolder.call(this);});
+    $("#sort_by_time").click(function(){refreshAllFolder.call(this);});
 
     getRecycleItems();
-    //$("#disk_file_path li").click(goBack);// 为初始面包屑节点绑定事件处理函数
     showFolderContents(1);// 约定初始文件夹ID=1
+
+    function refreshAllFolder(){
+        var currentFolderID = $("#all ul:visible").attr("data-folder-id");
+        $("#all ul").remove();
+        $(this).addClass("active");
+        $(this).siblings().removeClass("active");
+        showFolderContents(currentFolderID);
+    }
 });
 
 function showFolderContents(folderID) {
@@ -50,13 +63,15 @@ function showFolderContents(folderID) {
  * 但由于请求异步，会导致上一级获得"undefined"的情况
  */
 function createFolderNode(folderID, show) {
+    /* 获取排序类型 */
+    var sortType = getSortType();
     /* 生成一个文件夹节点<ul>，设置data-folder-id属性，该属性是该文件夹在数据库存储的ID */
     var node = $("<ul></ul>");
     node.attr("data-folder-id", folderID);
     /* 向服务器发送异步请求，获取对应folderID的内容 */
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&folderID=" + folderID,
+        url: "RequestManageServlet?action=enterFolder&folderID=" + folderID + "&sortType=" + sortType,
         /* 
          * 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 
          * 修正：访问不到函数的参数，但可以访问函数内部的变量！
@@ -299,7 +314,7 @@ function mkfolder() {
 function getRecycleItems(){
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&folderID=3",
+        url: "RequestManageServlet?action=enterFolder&folderID=3&sortType=1",
         success: function(result) {
             var node = $("#recycle_folder");
 
@@ -340,6 +355,13 @@ function getRecycleItems(){
 }
 /******************************************文件分类******************************************/
 function getFile(type) {
+    /* 防止无意义的刷新 */
+    if ($(this).parent().hasClass("active")) {
+        return;
+    }
+    /* 隐藏视图控制 */
+    $("#view_control").css("visibility","hidden");
+
     $("#" + type + " ul").remove();// 删除旧节点
     $.ajax({
         type: "GET",
@@ -365,4 +387,17 @@ function getFile(type) {
             }
         }
     });
+}
+
+/******************************************文件排序******************************************/
+/* 获取排序类型，返回0表示按字母排序，返回1表示按时间排序 */
+function getSortType(){
+    if ($("#sort_by_alpha").hasClass("active")) {
+        return 0;
+    } else if ($("#sort_by_time").hasClass("active")) {
+        return 1;
+    } else {
+        return null;
+    }
+    
 }

@@ -2,11 +2,9 @@ package service.dto;
 
 import java.time.LocalDateTime;
 
-public class LocalFolderDTO {
+public class LocalFolderDTO extends Sortable {
     
     private Long id;
-    private LocalDateTime ldtModified;
-    private String localName;
     
     public Long getId() {
         return id;
@@ -14,14 +12,8 @@ public class LocalFolderDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    public LocalDateTime getLdtModified() {
-        return ldtModified;
-    }
     public void setLdtModified(LocalDateTime ldtModified) {
         this.ldtModified = ldtModified;
-    }
-    public String getLocalName() {
-        return localName;
     }
     public void setLocalName(String localName) {
         this.localName = localName;

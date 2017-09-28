@@ -3,6 +3,7 @@ var capacity = 1024*1024*10;
 $(function() {
 	$("#btn_transfer").click(function() {
 		$('[role="presentation"][class="active"]').removeClass("active");
+		$("#view_control").css("visibility","hidden");
 	});
 	$("#fileupload").fileupload({
 		dataType: "json",

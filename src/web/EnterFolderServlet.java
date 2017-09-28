@@ -23,9 +23,10 @@ public class EnterFolderServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    long userID = (long) request.getSession().getAttribute("userID");
 	    long folderID = Long.parseLong(request.getParameter("folderID"));
+	    int sortType = Integer.parseInt(request.getParameter("sortType"));
 	    
 	    ReadFolderService readFolderService = new ReadFolderServiceImpl();	    
-	    JSONObject respJSON = readFolderService.serve(userID, folderID);
+	    JSONObject respJSON = readFolderService.serve(userID, folderID, sortType);
 	    
         response.setContentType("application/json;charset=utf-8"); 
         PrintWriter writer = response.getWriter();

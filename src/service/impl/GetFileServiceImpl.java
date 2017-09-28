@@ -11,7 +11,10 @@ import dao.entity.LocalFileDO;
 import dao.factory.LocalFileDAOFactory;
 import manager.util.HibernateUtil;
 import service.GetFileService;
+import service.SortService;
 import service.dto.DTOConvertor;
+import service.dto.LocalFileDTO;
+import service.factory.SortServiceFactory;
 
 public class GetFileServiceImpl implements GetFileService {
     
@@ -25,8 +28,9 @@ public class GetFileServiceImpl implements GetFileService {
         JSONObject result = new JSONObject();
 
         List<LocalFileDO> files = null;
+        int sortType = 0;// 默认按字母排序
         switch(type) {
-        case "lately":files = localFileDAO.listRecentFile(userID);break;
+        case "lately":files = localFileDAO.listRecentFile(userID);sortType = 1;break;// 按时间排序
         case "document":files = localFileDAO.listDocument(userID);break;
         case "picture":files = localFileDAO.listPicture(userID);break;
         case "video":files = localFileDAO.listVideo(userID);break;
@@ -36,7 +40,11 @@ public class GetFileServiceImpl implements GetFileService {
             throw new IllegalArgumentException();
         }
         
-        result.put("files", DTOConvertor.convertFileList(files));
+        List<LocalFileDTO> fileDTOList = DTOConvertor.convertFileList(files);
+        LocalFileDTO[] fileDTOArray = fileDTOList.toArray(new LocalFileDTO[fileDTOList.size()]);
+        SortService sorter = SortServiceFactory.getService(sortType);
+        sorter.serve(fileDTOArray);
+        result.put("files", fileDTOArray);
         
         session.getTransaction().commit();
         return result;

@@ -58,26 +58,28 @@
                 </div>
 			</div>
 
-
 			<!-- 视图/排序控制 -->
-			<div class="col-xs-2 col-xs-offset-1">
-				<div class="btn-group btn-group-view" data-toggle="buttons">
-					<label class="btn btn-default active" style="border: 0px;" title="列表视图">
-						<input type="radio" name="view" id="view_by_list" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
-					</label>
-					<label class="btn btn-default disabled" style="border: 0px;" title="略缩图视图">
-						<input type="radio" name="view" id="view_by_block" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
-					</label>
-				</div>
-				<div class="btn-group btn-group-sort" data-toggle="buttons">
-					<label class="btn btn-default active" style="border: 0px;" title="按字母排序">
-						<input type="radio" name="sort" id="sort_by_alpha" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" style="color: #337ab7;"></span>
-					</label>
-					<label class="btn btn-default" style="border: 0px;" title="按时间排序">
-						<input type="radio" name="sort" id="sort_by_time" autocomplete="off" /><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #337ab7;"></span>
-					</label>
+			<div id="view_control">
+				<div class="col-xs-2 col-xs-offset-1">
+					<div class="btn-group btn-group-view" data-toggle="buttons">
+						<label class="btn btn-default active" style="border: 0px;" title="列表视图">
+							<input type="radio" name="view" id="view_by_list" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-list" aria-hidden="true" style="color: #337ab7;"></span>
+						</label>
+						<label class="btn btn-default disabled" style="border: 0px;" title="略缩图视图">
+							<input type="radio" name="view" id="view_by_block" autocomplete="off" /><span class="glyphicon glyphicon-th-large" aria-hidden="true" style="color: #337ab7;"></span>
+						</label>
+					</div>
+					<div class="btn-group btn-group-sort" data-toggle="buttons">
+						<label class="btn btn-default active" style="border: 0px;" title="按字母排序" id="sort_by_alpha">
+							<input type="radio" name="sort" autocomplete="off" checked="checked" /><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" style="color: #337ab7;"></span>
+						</label>
+						<label class="btn btn-default" style="border: 0px;" title="按时间排序" id="sort_by_time">
+							<input type="radio" name="sort" autocomplete="off" /><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #337ab7;"></span>
+						</label>
+					</div>
 				</div>
 			</div>
+
 
 			
 			<!-- 添加文件按钮 -->

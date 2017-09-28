@@ -16,9 +16,11 @@ import dao.factory.LocalFileDAOFactory;
 import dao.factory.LocalFolderDAOFactory;
 import manager.util.HibernateUtil;
 import service.ReadFolderService;
+import service.SortService;
 import service.dto.DTOConvertor;
 import service.dto.LocalFileDTO;
 import service.dto.LocalFolderDTO;
+import service.factory.SortServiceFactory;
 
 public class ReadFolderServiceImpl implements ReadFolderService {
     
@@ -26,7 +28,7 @@ public class ReadFolderServiceImpl implements ReadFolderService {
     private LocalFileDAO localFileDAO = LocalFileDAOFactory.getInstance("hibernate");
     
     @Override
-    public JSONObject serve(long userID, long folderID) {
+    public JSONObject serve(long userID, long folderID, int sortType) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         
@@ -39,13 +41,21 @@ public class ReadFolderServiceImpl implements ReadFolderService {
         }
         queryParam.put("parent", folderID);
         
+        
         List<LocalFolderDO> localFolderList = localFolderDAO.list(queryParam);
         List<LocalFolderDTO> folderDTOList = DTOConvertor.convertFolderList(localFolderList);
-        result.put("folders", folderDTOList);
+        LocalFolderDTO[] folderDTOArray = folderDTOList.toArray(new LocalFolderDTO[folderDTOList.size()]);
         
         List<LocalFileDO> localFileList = localFileDAO.list(queryParam);
         List<LocalFileDTO> fileDTOList = DTOConvertor.convertFileList(localFileList);
-        result.put("files", fileDTOList);
+        LocalFileDTO[] fileDTOArray = fileDTOList.toArray(new LocalFileDTO[fileDTOList.size()]);
+        
+        SortService sorter = SortServiceFactory.getService(sortType);
+        sorter.serve(folderDTOArray);
+        sorter.serve(fileDTOArray);
+        
+        result.put("folders", folderDTOArray);
+        result.put("files", fileDTOArray);
         
         session.getTransaction().commit();
         return result;
