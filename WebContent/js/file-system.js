@@ -24,12 +24,9 @@ $(function() {
     $("#nav_all").click(function(){$("#view_control").css("visibility","visible");});
     $("#nav_recycle").click(function(){$("#view_control").css("visibility","hidden");});
 
+    /* 排序控制事件 */
     $("#sort_by_alpha").click(function(){refreshAllFolder.call(this);});
     $("#sort_by_time").click(function(){refreshAllFolder.call(this);});
-
-    getRecycleItems();
-    showFolderContents(1);// 约定初始文件夹ID=1
-
     function refreshAllFolder(){
         var currentFolderID = $("#all ul:visible").attr("data-folder-id");
         $("#all ul").remove();
@@ -37,6 +34,21 @@ $(function() {
         $(this).siblings().removeClass("active");
         showFolderContents(currentFolderID);
     }
+
+    /* 显示容量信息的悬浮框 */
+    $("[data-toggle='popover']").popover({
+        html : true,    
+        title: "容量信息",
+        content: function() {
+            var node = $('<p style="width:200px;">已使用:<span></span>&nbsp;&nbsp;&nbsp;总容量:10M</p>');
+            node.find("span").text(getReadableSize(sessionStorage.getItem("user_usedCapacity")));
+            return node;
+        },   
+    });
+    /* 获取回收站文件 */
+    getRecycleItems();
+    /* 显示初始文件夹 */
+    showFolderContents(1);// 约定初始文件夹ID=1
 });
 
 function showFolderContents(folderID) {
