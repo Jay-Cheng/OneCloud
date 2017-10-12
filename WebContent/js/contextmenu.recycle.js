@@ -72,7 +72,7 @@ function shred() {
 
 	    	/* 更新用户存储空间 */
 	    	var cap = result.cap;
-	    	sessionStorage.setItem("user_usedCapacity", cap);
+	    	localStorage.setItem("user_usedCapacity", cap);
 	    	var percentage = getUsedPercentage(cap);
 	    	$("#user_capacity").css("width", percentage).text(percentage);
 	    }

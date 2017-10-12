@@ -29,10 +29,11 @@ public abstract class DownloadService {
     /** 保存在客户端的文件名 */
     protected String filename = null;
     
+    protected String filebase = null;
     /**
      * 根据客户端参数jsonArray生成客户端的文件结构
      */
-    public abstract void init(JSONArray jsonArray);
+    public abstract void init(JSONArray jsonArray, String filebase);
     
     /**
      * @return 保存在客户端的文件名

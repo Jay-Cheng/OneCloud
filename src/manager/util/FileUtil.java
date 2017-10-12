@@ -75,14 +75,14 @@ public class FileUtil {
     public static FileDO BuildFileDO(String fileBase, String md5) {
         
         FileDO fileDO = new FileDO();
-        String url = fileBase + "\\" + md5;
+        String url = fileBase + File.separator + md5;
         File file = new File(url);
         fileDO.setMd5(md5);
         fileDO.setSize((int)file.length());
         
         String mimeType = getRealType(file);
         url = addSuffix(file, mimeType);
-        url = url.substring(url.indexOf("onecloud"));
+        url = url.substring(url.indexOf("onecloud_files") + 15);
                 
         fileDO.setType(mimeType);
         fileDO.setUrl(url);

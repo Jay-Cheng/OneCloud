@@ -24,7 +24,7 @@ public class DownloadServlet extends HttpServlet {
 	    JSONArray jsonArray = JSON.parseArray(jsonString);
 	    
 	    DownloadService downloader = new DownloadServiceImpl();
-	    downloader.init(jsonArray);
+	    downloader.init(jsonArray, request.getServletContext().getInitParameter("filebase"));
 	    
 	    String filename = downloader.getFilename();
 	    filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");

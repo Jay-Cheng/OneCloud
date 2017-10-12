@@ -24,7 +24,8 @@ import service.DownloadService;
 public class DownloadServiceImpl extends DownloadService {
 
     @Override
-    public void init(JSONArray jsonArray) {
+    public void init(JSONArray jsonArray, String filebase) {
+        this.filebase = filebase;
         String parentPath = "";// 初始路径为空
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -65,7 +66,7 @@ public class DownloadServiceImpl extends DownloadService {
             zos = new ZipOutputStream(out);
             for (Entry<String, String> entry : filePathMap.entrySet()) {
                 zos.putNextEntry(new ZipEntry(entry.getKey()));
-                File file = new File(entry.getValue());
+                File file = new File(filebase + File.separator + entry.getValue());
                 try {
                     fis = new FileInputStream(file);
                     int hasRead;
@@ -74,7 +75,9 @@ public class DownloadServiceImpl extends DownloadService {
                         zos.write(buffer, 0, hasRead);
                     }
                 } finally {
-                    fis.close();
+                    if (fis != null) {
+                        fis.close();
+                    }
                 }
             }
             /* 往zip里添加空文件夹 */

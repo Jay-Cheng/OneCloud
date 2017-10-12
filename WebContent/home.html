@@ -289,7 +289,7 @@
         					<div class="dirbox-body">
         						<ul>
         							<li>
-        								<div class="treeNode-info" style="padding-left: 5px;" data-folder-id="1">
+        								<div class="treeNode-info" style="padding-left: 5px;" data-folder-id="1" id="treeNode_root">
         									<span class="glyphicon glyphicon-folder-open"></span>
         									<span class="treeNode-info-name">我的网盘</span>
         								</div>
@@ -332,12 +332,19 @@
 		document.oncontextmenu = function(){return false;}
     	$(function() {
     		$("#nav_all").tab("show");
-
     		/* 加载登录用户的信息 */
-		    $("#user_photo").attr("src", sessionStorage.getItem("user_photoURL"));
-		    $("#user_nickname").text(sessionStorage.getItem("user_nickname"));
-		    var percentage = getUsedPercentage(sessionStorage.getItem("user_usedCapacity"));
+		    $("#user_photo").attr("src", localStorage.getItem("user_photoURL"));
+		    $("#user_nickname").text(localStorage.getItem("user_nickname"));
+		    var percentage = getUsedPercentage(localStorage.getItem("user_usedCapacity"));
 		    $("#user_capacity").css("width", percentage).text(percentage);
+    	});
+    	/* 判断是否需要重定向 */
+    	$(document).ajaxComplete(function(event,xhr){
+    		var sessionStatus = xhr.getResponseHeader("sessionStatus");
+    		if (sessionStatus == "timeout") {
+	    		top.location = "login.html";
+    			return false;
+    		}
     	});
     </script>
   </body>

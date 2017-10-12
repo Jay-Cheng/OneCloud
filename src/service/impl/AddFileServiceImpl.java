@@ -32,10 +32,10 @@ public class AddFileServiceImpl implements AddFileService {
     private FileDAO fileDAO = FileDAOFactory.getInstance("hibernate");
     private LocalFileDAO localFileDAO = LocalFileDAOFactory.getInstance("hibernate");
     
-    public final String fileBase;
+    public final String filebase;
     
-    public AddFileServiceImpl(String fileBase) {
-        this.fileBase = fileBase;
+    public AddFileServiceImpl(String filebase) {
+        this.filebase = filebase;
     }
     
     /**
@@ -62,7 +62,7 @@ public class AddFileServiceImpl implements AddFileService {
         try {
             if (uploaded) {
                 
-                FileDO file = FileUtil.BuildFileDO(fileBase, md5);
+                FileDO file = FileUtil.BuildFileDO(filebase, md5);
                 long fileID = fileDAO.create(file);
                 localFile.setFileID(fileID);
                 localFile.setLdtCreate(LocalDateTime.now());

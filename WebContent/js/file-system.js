@@ -32,6 +32,7 @@ $(function() {
         $("#all ul").remove();
         $(this).addClass("active");
         $(this).siblings().removeClass("active");
+        $("#treeNode_root").next().empty()
         showFolderContents(currentFolderID);
     }
 
@@ -41,7 +42,7 @@ $(function() {
         title: "容量信息",
         content: function() {
             var node = $('<p style="width:200px;">已使用:<span></span>&nbsp;&nbsp;&nbsp;总容量:10M</p>');
-            node.find("span").text(getReadableSize(sessionStorage.getItem("user_usedCapacity")));
+            node.find("span").text(getReadableSize(localStorage.getItem("user_usedCapacity")));
             return node;
         },   
     });
@@ -130,7 +131,7 @@ function generateFileNode(files, parent) {
         var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
         var fileImg;
         if (isPicture(files[i].localType)) {
-            fileImg = "../" + files[i].url;
+            fileImg = "../onecloud_files/" + files[i].url;
         } else {
             fileImg = getFileIcon(getSuffix(fileName));
         }
@@ -389,7 +390,7 @@ function getFile(type) {
             } else {
                 for (var i = 0; i < files.length; i++) {
                     var fileName = files[i].localName + "." + files[i].localType;
-                    var fileImg = "../" + files[i].url;
+                    var fileImg = "../onecloud_files/" + files[i].url;
                     var fileNode = $('<li class="picture"></li>');
                     fileNode.append('<div class="picture-img"><img src="' + fileImg + '"></div>');
                     fileNode.append('<div class="picture-info"><p><span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span><span class="picture-info-title">' + fileName + '</span></p></div>');

@@ -71,7 +71,7 @@ function updateCompleteCount(plus) {
  * 绑定在模态框上传按钮click上的事件处理函数
  */
 function addFile(e, data, marker) {
-	if ((data.files[0].size + Number(sessionStorage.getItem("user_usedCapacity"))) > capacity) {
+	if ((data.files[0].size + Number(localStorage.getItem("user_usedCapacity"))) > capacity) {
 		alert("容量超出上限，无法上传");
 		data.abort();
 		return;
@@ -79,7 +79,7 @@ function addFile(e, data, marker) {
 	/* 获取该文件的必要信息，用于提交到服务器 */
 	var fileinfo = {
 		uploaded: false,
-		userID: sessionStorage.getItem("user_id"),
+		userID: localStorage.getItem("user_id"),
 		localName: getFilenameWithoutSuffix(data.files[0].name),
 		localType: getSuffix(data.files[0].name),
 		parent: $("#dirbox_path").attr("data-folder-id")
@@ -192,7 +192,7 @@ function generateCompletedMissionNode(data) {
 	updateCompleteCount(true);
 	$("#dynamic_title_complete").css("display", "block");
 	var missionNode = $("<li></li>");
-	missionNode.append('<div class="mission-head"><div class="mission-icon-wrapper"><span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span></div><div class="thumb"><img src="img/icon/file.png" class="thumb-icon"></div><div class="mission-info"><span class="mission-file-name">' + data.files[0].name + '</span><span class="mission-file-size">' + getReadableSize(data.files[0].size) + '</span></div></div>');
+	missionNode.append('<div class="mission-head"><div class="mission-icon-wrapper"><span class="glyphicon glyphicon-upload" style="color: #337ab7;"></span></div><div class="thumb"><img src="' + getFileIcon(getSuffix(data.files[0].name)) + '" class="thumb-icon"></div><div class="mission-info"><span class="mission-file-name">' + data.files[0].name + '</span><span class="mission-file-size">' + getReadableSize(data.files[0].size) + '</span></div></div>');
 	missionNode.append('<div class="mission-complete"></div>');
 	missionNode.append('<div class="mission-control"><a class="remove-record"><span class="glyphicon glyphicon-remove"></span></a></div>');
 	data.context = missionNode;
@@ -210,8 +210,8 @@ function generateCompletedMissionNode(data) {
 /* 上传结束后，生成所有所需的节点 */
 function finishUpload(data) {
 	/* 修改用户容量 */
-	var cap = data.files[0].size + Number(sessionStorage.getItem("user_usedCapacity"));
-	sessionStorage.setItem("user_usedCapacity", cap);
+	var cap = data.files[0].size + Number(localStorage.getItem("user_usedCapacity"));
+	localStorage.setItem("user_usedCapacity", cap);
 	var percentage = getUsedPercentage(cap);
 	$("#user_capacity").css("width", percentage).text(percentage);
 
@@ -220,7 +220,7 @@ function finishUpload(data) {
 	var fileName = data.files[0].name;
 	var fileImg;
 	if (isPicture(data.localFile.localType)) {
-		fileImg = "../" + data.localFile.url;
+		fileImg = "../onecloud_files/" + data.localFile.url;
 	} else {
 		fileImg = getFileIcon(getSuffix(fileName));
 	}

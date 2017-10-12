@@ -50,11 +50,11 @@
                     case 1:
                       $(".error").text("登录成功");
                       var user = result.data;
-                      sessionStorage.setItem("user_id", user.id);
-                      sessionStorage.setItem("user_account", user.account);
-                      sessionStorage.setItem("user_nickname", user.nickname);
-                      sessionStorage.setItem("user_photoURL", user.photoURL);
-                      sessionStorage.setItem("user_usedCapacity", user.usedCapacity);
+                      localStorage.setItem("user_id", user.id);
+                      localStorage.setItem("user_account", user.account);
+                      localStorage.setItem("user_nickname", user.nickname);
+                      localStorage.setItem("user_photoURL", user.photoURL);
+                      localStorage.setItem("user_usedCapacity", user.usedCapacity);
                       window.location.href = "home.html";
                       break;
                     case 2:
