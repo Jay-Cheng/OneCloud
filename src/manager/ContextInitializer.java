@@ -16,7 +16,7 @@ public class ContextInitializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         System.out.println("contextInitialized");
         ServletContext context = event.getServletContext();
-        context.setInitParameter("filebase", "D:\\Java\\apache-tomcat-8.5.14\\webapps\\onecloud_files");
+        context.setInitParameter("filebase", "/home/jay/Programming/Java/apache-tomcat-8.5.23/webapps/onecloud_files");
     }
 
     @Override
