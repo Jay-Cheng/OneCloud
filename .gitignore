@@ -47,4 +47,5 @@ Temporary Items
 .apdisk
 
 # Java
-build
+target
+*.class
