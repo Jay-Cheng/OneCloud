@@ -1,6 +1,7 @@
 # OneCloud
 ## 一、简介
-基于Java Web的网盘单页应用，前端UI参考了[微云](https://www.weiyun.com/)和[百度网盘](https://pan.baidu.com/)。
+基于Java Web的网盘单页应用（SPA），采取前后端分离的架构，前后端只通过JSON进行数据交换（**未使用JSP**）。前端UI参考了[微云](https://www.weiyun.com/)和[百度网盘](https://pan.baidu.com/)。
+
 - 开发环境
     - OS：Ubuntu 16.04LTS
     - IDE：Eclipse Oxygen.1a Release (4.7.1a)
@@ -13,6 +14,7 @@
 - 后端框架
     - Hibernate v5.2.10
 - 其它
+    - Maven v3.5.0
     - [右键菜单](https://github.com/dgoguerra/bootstrap-menu)
     - [browser-md5-file](https://github.com/forsigner/browser-md5-file)
     - [jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
@@ -32,10 +34,11 @@
 - 可优化
     - 一个文件夹下有文件更新，如果该文件夹已经生成，删除生成的节点（下次触发“进入文件夹事件”时会重新生成）
 ## 三、部署
+
 1. 安装上述环境
 2. 设置MySQL字符集为UTF-8，然后运行init.sql
 3. 在Eclipse中把Server的Server Location设置为Use Tomcat installation, Deploy path设置为webapps
-4. 在tomcat的安装目录下的webapps文件夹下新建一个文件夹onecloud_files，用于放置用户上传的文件（见manager包下的ContextInitializer.java），注意这一项会影响前端用户上传图片的显示
+4. 在tomcat的安装目录下的webapps文件夹下新建一个文件夹onecloud_files，用于放置用户上传的文件（见com.zhengzijie.onecloud.manager包下的ContextInitializer.java），注意这一项会影响前端用户上传图片的显示
 5. 直接登录，注册功能暂不开放
 ## 四、实现
 // TDDO
