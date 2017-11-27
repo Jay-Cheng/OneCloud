@@ -1,45 +1,23 @@
-package com.zhengzijie.onecloud.dao.entity;
+package com.zhengzijie.onecloud.web.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "user")
-public class UserDO {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  
+public class UserDTO {
     private Long id;
     
-    @Column(name = "ldt_create", nullable = false)
     private LocalDateTime ldtCreate;
     
-    @Column(name = "ldt_modified", nullable = false)
     private LocalDateTime ldtModified;
 
-    @Column(name = "username", unique = true, nullable = false)
     private String username;
     
-    @Column(name = "password", nullable = false)
-    private String password;
-    
-    @Column(name = "nickname", nullable = false)
     private String nickname;
     
-    @Column(name = "photo_url", unique = true, nullable = false)
     private String photoURL;
     
-    @Column(name = "used_capacity", nullable = false)
     private Long usedCapacity;
     
-    @Column(name = "safe_password")
-    private String safePassword;
-    
-    public UserDO() {}
+    public UserDTO() {}
 
     public Long getId() {
         return id;
@@ -73,14 +51,6 @@ public class UserDO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -103,14 +73,6 @@ public class UserDO {
 
     public void setUsedCapacity(Long usedCapacity) {
         this.usedCapacity = usedCapacity;
-    }
-
-    public String getSafePassword() {
-        return safePassword;
-    }
-
-    public void setSafePassword(String safePassword) {
-        this.safePassword = safePassword;
     }
     
 }

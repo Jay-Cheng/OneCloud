@@ -10,15 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.DynamicUpdate;
-
-
 @Entity
 @Table(name = "local_folder", uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "parent", "local_name" })})
-@DynamicUpdate(true)
 public class LocalFolderDO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     
     @Column(name = "ldt_create", nullable = false)
