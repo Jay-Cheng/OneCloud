@@ -74,5 +74,12 @@ public class UserDTO {
     public void setUsedCapacity(Long usedCapacity) {
         this.usedCapacity = usedCapacity;
     }
+
+    @Override
+    public String toString() {
+        return "UserDTO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", username="
+                + username + ", nickname=" + nickname + ", photoURL=" + photoURL + ", usedCapacity=" + usedCapacity
+                + "]";
+    }
     
 }

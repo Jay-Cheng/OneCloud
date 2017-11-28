@@ -80,5 +80,11 @@ public class LocalFolderDO {
     public void setParent(Long parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return "LocalFolderDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", userID="
+                + userID + ", localName=" + localName + ", parent=" + parent + "]";
+    }
     
 }

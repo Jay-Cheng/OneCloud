@@ -103,5 +103,12 @@ public class LocalFileDO {
     public void setParent(Long parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return "LocalFileDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", userID="
+                + userID + ", fileID=" + fileID + ", localName=" + localName + ", localType=" + localType + ", parent="
+                + parent + "]";
+    }
     
 }

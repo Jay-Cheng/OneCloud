@@ -32,6 +32,7 @@ public class DAOTest {
     @Transactional @Test
     public void testUserDAO() {
         assertEquals("admin", userDAO.get(1L).getUsername());
+        assertEquals("admin", userDAO.getByUsername("admin").getUsername());
     }
     
     @Autowired

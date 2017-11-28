@@ -112,5 +112,12 @@ public class UserDO {
     public void setSafePassword(String safePassword) {
         this.safePassword = safePassword;
     }
+
+    @Override
+    public String toString() {
+        return "UserDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", username="
+                + username + ", password=" + password + ", nickname=" + nickname + ", photoURL=" + photoURL
+                + ", usedCapacity=" + usedCapacity + ", safePassword=" + safePassword + "]";
+    }
     
 }

@@ -91,4 +91,11 @@ public class FileDO {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "FileDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", md5=" + md5
+                + ", size=" + size + ", type=" + type + ", url=" + url + "]";
+    }
+    
 }

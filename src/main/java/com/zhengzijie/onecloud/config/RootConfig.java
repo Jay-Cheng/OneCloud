@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.zhengzijie.onecloud.Marker4ComponentScan;
 
 @Configuration
-@ImportResource("classpath:beans.xml")
+@ImportResource("classpath:beans.xml")// 持久层相关的Bean
 @ComponentScan(basePackageClasses = { Marker4ComponentScan.class }
     , excludeFilters = { @Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class) })
 public class RootConfig {

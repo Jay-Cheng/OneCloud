@@ -7,9 +7,11 @@ import com.zhengzijie.onecloud.web.dto.UserDTO;
 public interface UserService {
     
     /**
-     * @return userDTO object if login successfully.
+     * @return JSON web token if login successfully.
      * @throws NoSuchUserException if username does not exist. 
      * @throws IncorrectPasswordException  if password is incorrect.
      */
-    UserDTO login(String username, String password) throws NoSuchUserException, IncorrectPasswordException;
+    String login(String username, String password) throws NoSuchUserException, IncorrectPasswordException;
+    
+    UserDTO getUser(String username);
 }
