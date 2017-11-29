@@ -68,6 +68,18 @@ public class HomeController {
         return result;
     }
     
+    /**
+     * 搜索用户网盘内的文件
+     * 如：GET api/users/admin/disk/search?input=txt，搜索用户网盘内文件名含“txt”的文件及文件夹
+     */
+    @RequestMapping(value = "/users/{username}/disk/search", method = RequestMethod.GET)
+    public Map<String, Object> search(@PathVariable String username
+            , @RequestParam(required = true) String input) {
+        long userID = userService.getUser(username).getId();
+        Map<String, Object> result = diskService.search(userID, input);
+        return result;
+    }
+    
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Error> illegalArgument(IllegalArgumentException e) {
         Error error = new Error(e.getMessage());

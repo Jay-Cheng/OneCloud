@@ -42,7 +42,7 @@ public class DiskServiceImpl implements DiskService {
         case "audio":files = localFileDAO.listAudio(userID);break;
         
         case "disk":return getFolderContents(userID, 1, 0);
-        case "safebox": return getFolderContents(userID, 2, 0);
+//        case "safebox": return getFolderContents(userID, 2, 0);// TODO 功能未实现
         case "recycle":return getFolderContents(userID, 3, 0);
             
         case "share":break;// TODO 功能未实现
@@ -83,6 +83,20 @@ public class DiskServiceImpl implements DiskService {
         Map<String, Object> result = new HashMap<>();
         result.put("folders", folderDTOArray);
         result.put("files", fileDTOArray);
+        return result;
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Map<String, Object> search(long userID, String input) {
+        List<LocalFolderDO> localFolderList = localFolderDAO.listByName(userID, input);
+        List<LocalFolderDTO> folderDTOList = convertor.convertFolderList(localFolderList);
+        
+        List<LocalFileDO> localFileList = localFileDAO.listByName(userID, input);
+        List<LocalFileDTO> fileDTOList = convertor.convertFileList(localFileList);
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("folders", folderDTOList);
+        result.put("files", fileDTOList);
         return result;
     }
 }
