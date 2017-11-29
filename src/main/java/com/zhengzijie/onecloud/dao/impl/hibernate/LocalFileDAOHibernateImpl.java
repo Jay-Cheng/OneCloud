@@ -69,7 +69,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public List<LocalFileDO> listPicture(long userID) {
+    public List<LocalFileDO> listPhoto(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent!=2 and file.parent!=3 and file.userID=:userID and (file.localType='jpg' or file.localType='png' or file.localType='gif')");
@@ -89,7 +89,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public List<LocalFileDO> listMusic(long userID) {
+    public List<LocalFileDO> listAudio(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent!=2 and file.parent!=3 and file.userID=:userID and file.localType='mp3'");

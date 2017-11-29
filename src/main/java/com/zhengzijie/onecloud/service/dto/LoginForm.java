@@ -1,4 +1,4 @@
-package com.zhengzijie.onecloud.web.dto;
+package com.zhengzijie.onecloud.service.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -10,9 +10,9 @@ public interface LocalFileDAO extends GenericDAO<LocalFileDO> {
     
     List<LocalFileDO> listRecentFile(long userID);
     List<LocalFileDO> listDocument(long userID);
-    List<LocalFileDO> listPicture(long userID);
+    List<LocalFileDO> listPhoto(long userID);
     List<LocalFileDO> listVideo(long userID);
-    List<LocalFileDO> listMusic(long userID);
+    List<LocalFileDO> listAudio(long userID);
     
     List<LocalFileDO> listByName(long userID, String name);
 }

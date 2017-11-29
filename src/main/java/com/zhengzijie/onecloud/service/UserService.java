@@ -2,7 +2,7 @@ package com.zhengzijie.onecloud.service;
 
 import com.zhengzijie.onecloud.manager.exception.IncorrectPasswordException;
 import com.zhengzijie.onecloud.manager.exception.NoSuchUserException;
-import com.zhengzijie.onecloud.web.dto.UserDTO;
+import com.zhengzijie.onecloud.service.dto.UserDTO;
 
 public interface UserService {
     

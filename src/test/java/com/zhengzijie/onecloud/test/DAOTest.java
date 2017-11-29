@@ -17,8 +17,8 @@ import com.zhengzijie.onecloud.config.RootConfig;
 import com.zhengzijie.onecloud.config.WebConfig;
 import com.zhengzijie.onecloud.dao.FileDAO;
 import com.zhengzijie.onecloud.dao.UserDAO;
-import com.zhengzijie.onecloud.manager.DataConvertor;
-import com.zhengzijie.onecloud.web.dto.UserDTO;
+import com.zhengzijie.onecloud.manager.DTOConvertor;
+import com.zhengzijie.onecloud.service.dto.UserDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -33,15 +33,6 @@ public class DAOTest {
     public void testUserDAO() {
         assertEquals("admin", userDAO.get(1L).getUsername());
         assertEquals("admin", userDAO.getByUsername("admin").getUsername());
-    }
-    
-    @Autowired
-    private ModelMapper modelMapper;
-    
-    @Transactional @Test
-    public void testModelMapper() {
-        UserDTO userDTO = modelMapper.map(userDAO.get(1L), UserDTO.class);
-        assertEquals("admin", userDTO.getUsername());
     }
     
     @Autowired

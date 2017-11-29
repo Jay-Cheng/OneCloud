@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zhengzijie.onecloud.manager.exception.IncorrectPasswordException;
 import com.zhengzijie.onecloud.manager.exception.NoSuchUserException;
 import com.zhengzijie.onecloud.service.UserService;
-import com.zhengzijie.onecloud.web.dto.LoginForm;
+import com.zhengzijie.onecloud.service.dto.LoginForm;
 
 @RestController
 @RequestMapping(value = "/api", produces = "application/json", consumes = "application/json")

@@ -6,22 +6,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zhengzijie.onecloud.dao.UserDAO;
 import com.zhengzijie.onecloud.dao.entity.UserDO;
-import com.zhengzijie.onecloud.manager.DataConvertor;
+import com.zhengzijie.onecloud.manager.DTOConvertor;
 import com.zhengzijie.onecloud.manager.JWTUtil;
 import com.zhengzijie.onecloud.manager.exception.IncorrectPasswordException;
 import com.zhengzijie.onecloud.manager.exception.NoSuchUserException;
 import com.zhengzijie.onecloud.service.UserService;
-import com.zhengzijie.onecloud.web.dto.UserDTO;
+import com.zhengzijie.onecloud.service.dto.UserDTO;
 
-@Service
-@Transactional
+@Transactional @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;
     
     @Autowired
-    private DataConvertor dataConvertor;
+    private DTOConvertor convertor;
     
     @Override @Transactional(readOnly = true)
     public String login(String username, String password) throws NoSuchUserException, IncorrectPasswordException {
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return null;
         } else {
-            return dataConvertor.convertToDTO(user);
+            return convertor.convertToDTO(user);
         }
     }
 }

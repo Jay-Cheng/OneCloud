@@ -58,6 +58,9 @@ public class WebConfig implements WebMvcConfigurer {
         return new AuthenticationInterceptor();
     }
     
+    /**
+     * 配置拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**");

@@ -44,9 +44,9 @@ public class ControllerTest {
      * 如果没有在WebConfig配置类里加上ComponentScan则Controller不会被扫描到，
      * 但测试时Controller却被扫描到了
      */
-    @Test
-    public void testLoginController() throws Exception {
+//    @Test
+//    public void testLoginController() throws Exception {
 //        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.view().name("login"));;
-    }
+//        mockMvc.perform(MockMvcRequestBuilders.post("/authentication")).andExpect(MockMvcResultMatchers.view().name("login"));;
+//    }
 }
