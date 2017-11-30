@@ -1,9 +1,9 @@
-package com.zhengzijie.onecloud.service.dto;
+package com.zhengzijie.onecloud.web.reqbody;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class LoginForm {
+public class LoginReqBody {
     
     @NotNull @Size(min=5, max=16)
     private String username;
@@ -11,7 +11,7 @@ public class LoginForm {
     @NotNull @Size(min=5, max=16)
     private String password;
     
-    public LoginForm() {}
+    public LoginReqBody() {}
     
     public String getUsername() {
         return username;

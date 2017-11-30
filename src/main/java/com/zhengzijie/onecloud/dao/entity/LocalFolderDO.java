@@ -9,11 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "local_folder", uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "parent", "local_name" })})
 public class LocalFolderDO {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "ldt_create", nullable = false)
@@ -25,10 +28,10 @@ public class LocalFolderDO {
     @Column(name = "user_id", nullable = false)
     private Long userID;
     
-    @Column(name = "local_name", nullable = false)
+    @Column(name = "local_name", nullable = false) @NotNull @Size(min=1, max=100)
     private String localName;
     
-    @Column(name = "parent", nullable = false)
+    @Column(name = "parent", nullable = false) @NotNull
     private Long parent;
     
     public LocalFolderDO() {}

@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zhengzijie.onecloud.manager.exception.IncorrectPasswordException;
 import com.zhengzijie.onecloud.manager.exception.NoSuchUserException;
 import com.zhengzijie.onecloud.service.UserService;
-import com.zhengzijie.onecloud.service.dto.LoginForm;
+import com.zhengzijie.onecloud.web.reqbody.LoginReqBody;
 
 @RestController
-@RequestMapping(value = "/api", produces = "application/json", consumes = "application/json")
+@RequestMapping(value = "/api/v1", produces = "application/json", consumes = "application/json")
 public class LoginController {
     
     @Autowired
     private UserService userService;
     
     /**
-     * POST api/authentication 
+     * POST api/v1/authentication <br />
      * 检查用户名与密码，若用户名与密码匹配，返回一个该用户的Token，
      * 该Token可用于访问该用户的资源
      */
     @RequestMapping(value = "/authentication", method = RequestMethod.POST)
-    public Map<String, Object> authentication(@RequestBody @Valid LoginForm loginForm) throws NoSuchUserException, IncorrectPasswordException {
-        System.out.println(loginForm);
+    public Map<String, Object> authentication(@RequestBody @Valid LoginReqBody reqBody) throws NoSuchUserException, IncorrectPasswordException {
+        String token = userService.login(reqBody.getUsername(), reqBody.getPassword());
+        
         Map<String, Object> result = new HashMap<>();
-        String token = userService.login(loginForm.getUsername(), loginForm.getPassword());
         result.put("token", token);
         return result;
     }
