@@ -3,18 +3,21 @@ package com.zhengzijie.onecloud.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+
+@Controller 
 @RequestMapping("/")
 public class ViewController {
     
     @RequestMapping(method=RequestMethod.GET)
-    public String getLoginView() {
-        return "login";
+    public ModelAndView getLoginView() {
+        return new ModelAndView("login");
     }
     
-    @RequestMapping(value="/{user}",method=RequestMethod.GET)
-    public String getHomeView() {
-        return "home";
+    @RequestMapping(value="home", method=RequestMethod.GET)
+    public ModelAndView getHomeView() {
+        return new ModelAndView("home");
     }
+    
 }

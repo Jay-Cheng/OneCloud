@@ -24,6 +24,10 @@ public class JWTUtil {
         return jwt;
     }
     
+    /**
+     * 解析JWT
+     * @return 持有改token的username
+     */
     public static String parseToken(String token) {
         return Jwts.parser()
                 .setSigningKey(key)

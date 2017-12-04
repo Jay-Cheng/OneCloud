@@ -14,5 +14,7 @@ public interface LocalFileDAO extends GenericDAO<LocalFileDO> {
     List<LocalFileDO> listVideo(long userID);
     List<LocalFileDO> listAudio(long userID);
     
+    List<LocalFileDO> listByLocalType(long userID, String[] localTypes);
+    
     List<LocalFileDO> listByName(long userID, String name);
 }

@@ -86,7 +86,7 @@
 			<div class="col-xs-2 col-xs-offset-2">
 				<button type="button" class="btn btn-primary fileinput-button btn-upload" id="btn_upload">
                     <span>添加文件</span>
-				    <input id="fileupload" type="file" name="files[]" data-url="UploadServlet" multiple onchange="showFileUploadModal(files);">
+				    <input id="fileupload" type="file" name="files[]" multiple onchange="showFileUploadModal(files);">
 				</button>
 			</div>
 		</div><!-- end of header -->
@@ -110,7 +110,7 @@
 				<!-- 导航栏 -->
 				<div class="layout-nav">
 					<ul class="nav nav-pills nav-stacked">
-  						<li role="presentation"><a data-toggle="pill" href="#lately" id="nav_lately">
+  						<li role="presentation"><a data-toggle="pill" href="#recent" id="nav_recent">
   						<span class="glyphicon glyphicon-time nav-title-icon"></span>
   						最近
   						</a></li>
@@ -118,11 +118,11 @@
   						<span class="glyphicon glyphicon-list-alt nav-title-icon"></span>
   						全部
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#document" id="nav_document">
+  						<li role="presentation"><a data-toggle="pill" href="#doc" id="nav_doc">
   						<span class="glyphicon glyphicon-file nav-title-icon"></span>
   						文档
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#picture"  id="nav_picture">
+  						<li role="presentation"><a data-toggle="pill" href="#photo"  id="nav_photo">
 						<span class="glyphicon glyphicon-picture nav-title-icon"></span>
   						图片
   						</a></li>
@@ -130,7 +130,7 @@
   						<span class="glyphicon glyphicon-facetime-video nav-title-icon"></span>
   						视频
   						</a></li>
-  						<li role="presentation"><a data-toggle="pill" href="#music" id="nav_music">
+  						<li role="presentation"><a data-toggle="pill" href="#audio" id="nav_audio">
   						<span class="glyphicon glyphicon-music nav-title-icon"></span>
   						音乐
   						</a></li>
@@ -189,7 +189,7 @@
 					</div>
 
 
-					<div id="lately" class="tab-pane">
+					<div id="recent" class="tab-pane">
 						<div class="fixed-title">
 							<span>最近七天</span>
 						</div>
@@ -209,10 +209,10 @@
 					</div>
 
 
-					<div id="document" class="tab-pane"></div>
+					<div id="doc" class="tab-pane"></div>
 
 
-					<div id="picture" class="tab-pane">
+					<div id="photo" class="tab-pane">
 						<div class="picture-wall"></div>
 					</div>
 
@@ -220,7 +220,7 @@
 					<div id="video" class="tab-pane"></div>
 
 
-					<div id="music" class="tab-pane"></div>
+					<div id="audio" class="tab-pane"></div>
 
 
 					<div id="safebox" class="tab-pane">
@@ -331,12 +331,39 @@
     	/* 禁用默认的右键菜单 */
 		document.oncontextmenu = function(){return false;}
     	$(function() {
+
     		$("#nav_all").tab("show");
-    		/* 加载登录用户的信息 */
-		    $("#user_photo").attr("src", localStorage.getItem("user_photoURL"));
-		    $("#user_nickname").text(localStorage.getItem("user_nickname"));
-		    var percentage = getUsedPercentage(localStorage.getItem("user_usedCapacity"));
-		    $("#user_capacity").css("width", percentage).text(percentage);
+    		$.ajax({
+    			type: "GET",
+    			url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username"),
+    			contentType: "application/json; charset=utf-8",
+    			success:function(user){
+    				sessionStorage.setItem("user_id", user.id);
+    				sessionStorage.setItem("user_username", user.username);
+    				sessionStorage.setItem("user_nickname", user.nickname);
+    				sessionStorage.setItem("user_photoURL", user.photoURL);
+    				sessionStorage.setItem("user_usedCapacity", user.usedCapacity);
+    	    		/* 加载登录用户的信息 */
+    			    $("#user_photo").attr("src", sessionStorage.getItem("user_photoURL"));
+    			    $("#user_nickname").text(sessionStorage.getItem("user_nickname"));
+    			    var percentage = getUsedPercentage(sessionStorage.getItem("user_usedCapacity"));
+    			    $("#user_capacity").css("width", percentage).text(percentage);
+    			    /* 显示容量信息的悬浮框 */
+    			    $("[data-toggle='popover']").popover({
+    			        html : true,    
+    			        title: "容量信息",
+    			        content: function() {
+    			            var node = $('<p style="width:200px;">已使用:<span></span>&nbsp;&nbsp;&nbsp;总容量:10M</p>');
+    			            node.find("span").text(getReadableSize(sessionStorage.getItem("user_usedCapacity")));
+    			            return node;
+    			        },   
+    			    });
+    			    /* 获取回收站文件 */
+    			    getRecycleItems();
+    			    /* 显示初始文件夹 */
+    			    showFolderContents(1);// 约定初始文件夹ID=1
+    			}
+    		});
     	});
     	/* 判断是否需要重定向 */
     	$(document).ajaxComplete(function(event,xhr){

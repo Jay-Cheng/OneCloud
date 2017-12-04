@@ -32,7 +32,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         } else if (result.isEmpty()) {
             return null;
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("multiple result");
         }
     }
 
@@ -72,7 +72,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     public List<LocalFileDO> listPhoto(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
-        Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent!=2 and file.parent!=3 and file.userID=:userID and (file.localType='jpg' or file.localType='png' or file.localType='gif')");
+        Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent!=2 and file.parent!=3 and file.userID=:userID and (file.localType='jpeg' or file.localType='png' or file.localType='gif' or file.localType='jpg')");
         query.setParameter("userID", userID);
         List<LocalFileDO> result = query.list();
         return result;
@@ -107,5 +107,11 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         query.setParameter("name", "%" + name + "%");
         List<LocalFileDO> result = query.list();
         return result;
+    }
+
+    @Override
+    public List<LocalFileDO> listByLocalType(long userID, String[] localTypes) {
+        // TODO
+        throw new RuntimeException();
     }
 }

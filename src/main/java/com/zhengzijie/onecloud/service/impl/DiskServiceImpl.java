@@ -185,7 +185,7 @@ public class DiskServiceImpl implements DiskService {
             localFileDAO.remove(localFile);
         }
         
-        /* 删除文件夹 */
+        /* 删除文件夹和该文件夹内的所有子文件夹，以及它们包含的文件 */
         for (int i = 0; i < folders.size(); i++) {
             Queue<Long> queue = new LinkedList<>();
             queue.add(folders.get(i));

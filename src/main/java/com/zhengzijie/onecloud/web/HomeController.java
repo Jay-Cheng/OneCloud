@@ -27,7 +27,7 @@ import com.zhengzijie.onecloud.web.reqbody.RenameFileReqBody;
 import com.zhengzijie.onecloud.web.reqbody.RenameFolderReqBody;
 import com.zhengzijie.onecloud.web.reqbody.ShredReqBody;
 
-@RestController
+@RestController 
 @RequestMapping(value = "/api/v1", produces = "application/json", consumes = "application/json")
 public class HomeController {
     
@@ -144,19 +144,16 @@ public class HomeController {
     
     /**
      * 功能：彻底删除回收站的文件<br />
-     * 示例：DELETE api/v1/users/admin/disk/recycle，请求体：{"files":[11,22],"folders":[33,44]}，
+     * 示例：DELETE api/v1/users/admin/recycle，请求体：{"files":[11,22],"folders":[33,44]}，
      * 删除ID=11,22的文件和ID=33,44的文件夹，并更新用户已用空间
      */
-    @RequestMapping(value = "/users/{username}/disk/recycle", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/users/{username}/recycle", method = RequestMethod.DELETE)
     public UserDTO shred(@PathVariable String username
             , @RequestBody @Valid ShredReqBody reqBody) {
         long userID = userService.getUser(username).getId();
         // TODO 参数校验
         return diskService.shred(reqBody.getFolders(), reqBody.getFiles(), userID);
     }
-    
-    
-    
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Error> illegalArgument(IllegalArgumentException e) {

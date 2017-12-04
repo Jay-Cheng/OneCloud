@@ -5,7 +5,10 @@ function getUsedPercentage(bytes) {
 }
 /* 把字节数转为易读的单位 */
 function getReadableSize(bytes) {
-    var s = ['Bytes', 'K', 'M', 'G', 'T', 'P'];
+	if (Number(bytes) == 0){
+		return "0.0 B"
+	}
+    var s = ['B', 'K', 'M', 'G', 'T', 'P'];
     var e = Math.floor(Math.log(bytes)/Math.log(1024));
     return (bytes/Math.pow(1024, Math.floor(e))).toFixed(1)+" "+s[e];
 }
@@ -28,10 +31,11 @@ function getSuffix(filename) {
 }
 
 function getFileIcon(suffix) {
+	suffix = suffix.toLowerCase();
 	var src = "img/icon/";
 	switch(suffix) {
-        case "jpg": case "png": case "gif": src += "picture";break;
-        case "doc": src += "word";break;
+        case "jpg": case "png": case "gif": case "jpeg":src += "picture";break;
+        case "doc":case "docx": src += "word";break;
         case "ppt": src += "ppt";break;
         case "xls": src += "xls";break;
         case "txt": src += "txt";break;
@@ -72,7 +76,7 @@ function getGapDays(date) {
 }
 
 function isPicture(localType){
-	if ("JPG" == localType.toUpperCase() || "PNG" == localType.toUpperCase() || "GIF" == localType.toUpperCase()) {
+	if ("JPG" == localType.toUpperCase() || "PNG" == localType.toUpperCase() || "GIF" == localType.toUpperCase() || "JPEG" == localType.toUpperCase()) {
 		return true;
 	} else {
 		return false;

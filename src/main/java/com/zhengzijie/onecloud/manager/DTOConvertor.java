@@ -17,6 +17,10 @@ import com.zhengzijie.onecloud.service.dto.LocalFileDTO;
 import com.zhengzijie.onecloud.service.dto.LocalFolderDTO;
 import com.zhengzijie.onecloud.service.dto.UserDTO;
 
+
+/**
+ * 将DO转换为DTO的工具类
+ */
 @Component
 public class DTOConvertor {
     

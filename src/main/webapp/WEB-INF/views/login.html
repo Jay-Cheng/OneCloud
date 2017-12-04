@@ -23,7 +23,7 @@
   		<div class="col-md-4 col-md-offset-4">
   			<h1 style="text-align: center;">一个<img src="img/favicon/cloud.png" alt="cloud">网盘</h1>
   				<div class="form-group">
-    				<input type="text" class="form-control" id="account" placeholder="用户名">
+    				<input type="text" class="form-control" id="username" placeholder="用户名">
     				<br />
    					<input type="password" class="form-control" id="password" placeholder="密码">
   				</div>
@@ -41,34 +41,30 @@
   	$(document).ready(function(){
   		$("#btn_login").click(function(){
   			$.ajax({
-                type: "POST",
-                url: "RequestManageServlet?action=login",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(getUser()),
-                success: function(result) {
-                  switch (result.status) {
-                    case 1:
-                      $(".error").text("登录成功");
-                      var user = result.data;
-                      localStorage.setItem("user_id", user.id);
-                      localStorage.setItem("user_account", user.account);
-                      localStorage.setItem("user_nickname", user.nickname);
-                      localStorage.setItem("user_photoURL", user.photoURL);
-                      localStorage.setItem("user_usedCapacity", user.usedCapacity);
-                      window.location.href = "home.html";
-                      break;
-                    case 2:
-                      $(".error").text("登录失败，密码不正确");break;
-                    case 3:
-                      $(".error").text("登录失败，用户名不存在");break;
-                  }
-                }
-            });
+          type: "POST",
+          url: "http://localhost:8080/OneCloud/api/v1/authentication",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(getUser()),
+          statusCode:{
+            404:function(){
+              $(".error").text("登录失败，用户名不存在");
+            },
+            401:function(){
+              $(".error").text("登录失败，密码不正确");
+            }
+          },
+          success: function(result) {
+            $(".error").text("登录成功");
+            sessionStorage.setItem("token", result.token);
+            sessionStorage.setItem("user_username", "admin");
+            window.location.href = "http://localhost:8080/OneCloud/home";
+          }
+        });
   		});
 
   		function getUser(){
   			var user = {
-  				account:"admin",
+  				username:"admin",
   				password:"admin"
   			};
   			return user;

@@ -6,9 +6,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +16,7 @@ import com.zhengzijie.onecloud.manager.exception.NoSuchUserException;
 import com.zhengzijie.onecloud.service.UserService;
 import com.zhengzijie.onecloud.web.reqbody.LoginReqBody;
 
-@RestController
+@RestController 
 @RequestMapping(value = "/api/v1", produces = "application/json", consumes = "application/json")
 public class LoginController {
     
@@ -40,15 +37,15 @@ public class LoginController {
         return result;
     }
     
-    @ExceptionHandler(NoSuchUserException.class)
-    public ResponseEntity<Error> noSuchUser(NoSuchUserException e) {
-        Error error = new Error("username not fonund");
-        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
-    }
-    
-    @ExceptionHandler(IncorrectPasswordException.class)
-    public ResponseEntity<Error> incorrectPassword(IncorrectPasswordException e) {
-        Error error = new Error("incorrect password");
-        return new ResponseEntity<Error>(error, HttpStatus.UNAUTHORIZED);
-    }
+//    @ExceptionHandler(NoSuchUserException.class)
+//    public ResponseEntity<Error> noSuchUser(NoSuchUserException e) {
+//        Error error = new Error("username not fonund");
+//        return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
+//    }
+//    
+//    @ExceptionHandler(IncorrectPasswordException.class)
+//    public ResponseEntity<Error> incorrectPassword(IncorrectPasswordException e) {
+//        Error error = new Error("incorrect password");
+//        return new ResponseEntity<Error>(error, HttpStatus.UNAUTHORIZED);
+//    }
 }
