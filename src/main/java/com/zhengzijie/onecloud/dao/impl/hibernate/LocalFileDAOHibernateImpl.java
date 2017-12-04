@@ -1,7 +1,14 @@
 package com.zhengzijie.onecloud.dao.impl.hibernate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -58,7 +65,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         return result;
     }
 
-    @Override
+    @Override @Deprecated
     public List<LocalFileDO> listDocument(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
@@ -68,7 +75,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         return result;
     }
 
-    @Override
+    @Override @Deprecated
     public List<LocalFileDO> listPhoto(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
@@ -78,7 +85,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         return result;
     }
 
-    @Override
+    @Override @Deprecated
     public List<LocalFileDO> listVideo(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
@@ -88,7 +95,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         return result;
     }
 
-    @Override
+    @Override @Deprecated
     public List<LocalFileDO> listAudio(long userID) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
@@ -111,7 +118,28 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
 
     @Override
     public List<LocalFileDO> listByLocalType(long userID, String[] localTypes) {
-        // TODO
-        throw new RuntimeException();
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<LocalFileDO> cq = cb.createQuery(LocalFileDO.class);
+        Root<LocalFileDO> root = cq.from(LocalFileDO.class);
+        
+        Predicate equalUserIDCondition = cb.equal(root.get("userID"), userID);
+        Predicate notInSafeboxCondition = cb.notEqual(root.get("parent"), 2);
+        Predicate notInRecycleCondition = cb.notEqual(root.get("parent"), 3);
+        
+        List<Predicate> equalLocalTypeConditionList = new ArrayList<>();
+        for (String type : localTypes) {
+            Predicate condition = cb.equal(root.get("localType"), type);
+            equalLocalTypeConditionList.add(condition);
+        }
+        Predicate MatchOneLocalTypeCondition = cb.or(equalLocalTypeConditionList.toArray(new Predicate[equalLocalTypeConditionList.size()]));
+        
+        Predicate[] conditionArray = {equalUserIDCondition, notInSafeboxCondition, notInRecycleCondition
+                , MatchOneLocalTypeCondition};
+        cq.where(conditionArray);
+        TypedQuery<LocalFileDO> query = session.createQuery(cq);
+        List<LocalFileDO> result = query.getResultList();
+        
+        return result;
     }
 }

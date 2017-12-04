@@ -48,17 +48,30 @@ public class DiskServiceImpl implements DiskService {
         List<LocalFileDO> files = null;
         int sortType = 0;// 默认按字母排序
         switch(menu) {
-        case "recent":files = localFileDAO.listRecentFile(userID);sortType = 1;break;// 按时间排序
-        case "doc":files = localFileDAO.listDocument(userID);break;
-        case "photo":files = localFileDAO.listPhoto(userID);break;
-        case "video":files = localFileDAO.listVideo(userID);break;
-        case "audio":files = localFileDAO.listAudio(userID);break;
-        
+        case "recent":
+            files = localFileDAO.listRecentFile(userID);
+            sortType = 1;// 按时间排序
+            break;
+        case "doc":
+            String[] docTypeArray = {"txt", "doc", "docx", "ppt", "xls"};
+            files = localFileDAO.listByLocalType(userID, docTypeArray);
+            break;
+        case "photo":
+            String[] photoTypeArray = {"jpeg", "jpg", "png", "gif"};
+            files = localFileDAO.listByLocalType(userID, photoTypeArray);
+            break;
+        case "video":
+            String[] videoTypeArray = {"mp4"};
+            files = localFileDAO.listByLocalType(userID, videoTypeArray);
+            break;
+        case "audio":
+            String[] audioTypeArray = {"mp3"};
+            files = localFileDAO.listByLocalType(userID, audioTypeArray);
+            break;
         case "disk":return getFolderContents(userID, 1, 0);
-//        case "safebox": return getFolderContents(userID, 2, 0);// TODO 功能未实现
         case "recycle":return getFolderContents(userID, 3, 0);
-            
-        case "share":break;// TODO 功能未实现
+//        case "safebox": return getFolderContents(userID, 2, 0);// TODO 功能未实现
+//        case "share":break;// TODO 功能未实现
         }
         
         if (files == null) {
