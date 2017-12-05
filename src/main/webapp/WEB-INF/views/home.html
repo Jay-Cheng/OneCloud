@@ -373,6 +373,11 @@
     			return false;
     		}
     	});
+
+    	$(document).ajaxSend(function(event,xhr) {
+    		var token = sessionStorage.getItem("token");
+    		xhr.setRequestHeader("Authorization", "Bearer " + token);  
+    	});
     </script>
   </body>
 </html>

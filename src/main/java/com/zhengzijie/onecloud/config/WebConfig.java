@@ -19,7 +19,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.zhengzijie.onecloud.Marker4ComponentScan;
-import com.zhengzijie.onecloud.web.interceptor.AuthenticationInterceptor;
+import com.zhengzijie.onecloud.web.filter.AuthorizationInterceptor;
 
 @Configuration
 //@ComponentScan("com.zhengzijie.onecloud.web")
@@ -77,8 +77,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean 
-    public AuthenticationInterceptor authenticationInterceptor() {
-        return new AuthenticationInterceptor();
+    public AuthorizationInterceptor authorizationInterceptor() {
+        return new AuthorizationInterceptor();
     }
     
     /**
@@ -86,7 +86,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(authorizationInterceptor()).addPathPatterns("/api/v1/users/**");
     }
     
 }
