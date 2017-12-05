@@ -362,5 +362,6 @@ function download() {
  			}
         }
     });
-    window.location.href = "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/files?files="+fileParams+"&folders="+folderParams;
+    var url = "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/files?token=Bearer "+sessionStorage.getItem("token")+"&files="+fileParams+"&folders="+folderParams;
+    window.location.href = url
 }

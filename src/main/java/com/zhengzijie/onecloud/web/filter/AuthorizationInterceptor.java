@@ -19,7 +19,10 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        String token = request.getHeader("Authorization");
+        String token = null;
+        if ((token = request.getParameter("token")) == null) {
+            token = request.getHeader("Authorization");
+        }
         
         if (token == null) {
             String message = "An access token is required to request this resource";
