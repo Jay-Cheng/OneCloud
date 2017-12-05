@@ -1,9 +1,11 @@
 package com.zhengzijie.onecloud.web;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.validation.Valid;
 
@@ -19,14 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zhengzijie.onecloud.dao.entity.FileDO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
-import com.zhengzijie.onecloud.service.FileService;
+import com.zhengzijie.onecloud.service.DownloadService;
+import com.zhengzijie.onecloud.service.UploadService;
 import com.zhengzijie.onecloud.web.reqbody.UploadReqBody;
 
 @RestController 
 @RequestMapping(value = "/api/v1")
 public class FileController {
     @Autowired
-    private FileService fileService;
+    private UploadService uploadService;
+    @Autowired
+    private DownloadService downloadService;
     @Autowired
     private ModelMapper modelMapper;
     
@@ -42,16 +47,16 @@ public class FileController {
         String contentRange = req.getHeader("content-range");
         if (isFirstPart(contentRange)) {
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
-            return fileService.serveFirstPart(part, reqbody.getMd5(), localFile);
+            return uploadService.serveFirstPart(part, reqbody.getMd5(), localFile);
         } else if (isLastPart(contentRange)) {
             FileDO file = new FileDO();
             file.setMd5(reqbody.getMd5());
             file.setType(part.getHeader("content-type"));
             file.setSize(Long.parseLong(contentRange.split("/")[1]));
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
-            return fileService.serveLastPart(part, localFile, file);
+            return uploadService.serveLastPart(part, localFile, file);
         } else {
-            fileService.savePart(part, reqbody.getMd5());
+            uploadService.savePart(part, reqbody.getMd5());
             return null;
         }
     }
@@ -63,7 +68,7 @@ public class FileController {
     @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.DELETE, params="cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelUpload(@RequestParam String cancel) throws InterruptedException {
-        fileService.cancel(cancel);
+        uploadService.cancel(cancel);
     }
     
     /**
@@ -72,8 +77,28 @@ public class FileController {
      */
     @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.GET, params="resume")
     public Long resumeUpload(@RequestParam String resume) {
-        return fileService.resmue(resume);
+        return uploadService.resmue(resume);
     }
+    
+    /**
+     * 功能：下载<br />
+     * 示例：GET api/v1/users/admin/disk/files?files=1,2&folders=3,4，打包下载ID=1,2的文件和ID=3,4的文件夹
+     */
+    @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.GET, params = {"files", "folders"})
+    public void download(@RequestParam List<Long> files, @RequestParam List<Long> folders
+            , HttpServletResponse response) throws IOException {
+        if (files.size() + folders.size() == 0) {
+            throw new IllegalArgumentException("params must contain at least one file or folder");
+        }
+        
+        String filename = downloadService.generateZipFilename(files, folders);
+        filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");
+        response.setContentType("application/octet-stream;");
+        response.setHeader("Content-disposition","attachment; filename=" + filename);
+        
+        downloadService.download(files, folders, response.getOutputStream());
+    }
+    
     
     /**
      * 根据Content-Range请求头(如：bytes 0-9999/312329)，判断文件块是否是首个块（chunk）

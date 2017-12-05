@@ -341,23 +341,26 @@ function moveTo() {
 function download() {
     var selectedItems = getSelectedItems();
 
-    var dataArr = new Array();
+    var fileParams = "";
+    var folderParams = "";
     selectedItems.each(function(index) {
         var itemTag = $(this);
-        /* 需要提交的数据 */
         var id;
-        var type;
         if (itemTag.attr("data-folder-id") != undefined) {
             id = itemTag.attr("data-folder-id");
-            type = 0;// folder
+            if (folderParams.length == 0){
+            	folderParams = id;
+            } else {
+            	folderParams = folderParams + "," + id;
+            }
         } else {
             id = itemTag.attr("data-file-id");
-            type = 1;// file
+ 			if (fileParams.length == 0){
+ 				fileParams = id;
+ 			} else {
+ 				fileParams = fileParams + "," + id;
+ 			}
         }
-        dataArr[index] = {
-            id: id,
-            t: type
-        };
     });
-    window.location.href = "RequestManageServlet?action=download&dl=" + encodeURIComponent(JSON.stringify(dataArr));
+    window.location.href = "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/files?files="+fileParams+"&folders="+folderParams;
 }

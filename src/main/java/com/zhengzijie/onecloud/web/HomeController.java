@@ -5,9 +5,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -153,11 +150,5 @@ public class HomeController {
         long userID = userService.getUser(username).getId();
         // TODO 参数校验
         return diskService.shred(reqBody.getFolders(), reqBody.getFiles(), userID);
-    }
-    
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Error> illegalArgument(IllegalArgumentException e) {
-        Error error = new Error(e.getMessage());
-        return new ResponseEntity<Error>(error, HttpStatus.BAD_REQUEST);
     }
 }

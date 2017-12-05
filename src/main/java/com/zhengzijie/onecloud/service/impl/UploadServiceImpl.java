@@ -22,15 +22,10 @@ import com.zhengzijie.onecloud.dao.entity.FileDO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
 import com.zhengzijie.onecloud.dao.entity.UserDO;
 import com.zhengzijie.onecloud.manager.DTOConvertor;
-import com.zhengzijie.onecloud.service.FileService;
+import com.zhengzijie.onecloud.service.UploadService;
 
 @Service
-public class FileServiceImpl implements FileService {
-    
-    /** 服务端保存所有上传文件的根路径 */
-    private final String FILE_BASE = "Programming/Java/apache-tomcat-8.5.23/webapps/OneCloud_Upload" + File.separator;
-    /** 所有上传文件URL的根 */
-    private final String URL_ROOT = "http://localhost:8080/OneCloud_Upload/";
+public class UploadServiceImpl implements UploadService {
     
     @Autowired
     private UserDAO userDAO;
