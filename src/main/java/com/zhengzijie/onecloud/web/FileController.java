@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zhengzijie.onecloud.dao.entity.FileDO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
+import com.zhengzijie.onecloud.manager.validation.ParamChecker;
 import com.zhengzijie.onecloud.service.DownloadService;
 import com.zhengzijie.onecloud.service.UploadService;
 import com.zhengzijie.onecloud.web.reqbody.UploadReqBody;
@@ -34,7 +35,10 @@ public class FileController {
     private DownloadService downloadService;
     @Autowired
     private ModelMapper modelMapper;
-    
+    @Autowired
+    private ParamChecker paramChecker;
+    /** 分块文件的大小，与前端保持一致 */
+    private static final long MAX_CHUNK_SIZE = 102400;
     /**
      * 功能：接收分块上传的文件块
      * 示例：POST api/v1/users/admin/disk/files
@@ -47,8 +51,19 @@ public class FileController {
         System.out.println(req.getHeader("content-range"));
         String contentRange = req.getHeader("content-range");
         
+        /* 检查云盘存储空间是否足够 */
+        long size;
+        if (contentRange != null) {
+            size = Long.parseLong(contentRange.split("/")[1]);
+        } else {
+            size = part.getSize();
+        }
+        if (!paramChecker.isUserStorageEnough(reqbody.getUserID(), size)) {
+            throw new IllegalArgumentException("Not enough storage to upload this file");
+        }
+        
         /* 处理没有Content-Range请求头的小文件 */
-        if (contentRange == null && part.getSize() <= 102400) {
+        if (contentRange == null && part.getSize() <= MAX_CHUNK_SIZE) {
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
             return uploadService.serveSmallFile(part, reqbody.getMd5(), localFile);
         }
@@ -60,7 +75,7 @@ public class FileController {
             FileDO file = new FileDO();
             file.setMd5(reqbody.getMd5());
             file.setType(part.getHeader("content-type"));
-            file.setSize(Long.parseLong(contentRange.split("/")[1]));
+            file.setSize(size);
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
             uploadService.savePart(part, reqbody.getMd5());
             return uploadService.serveLastPart(localFile, file);

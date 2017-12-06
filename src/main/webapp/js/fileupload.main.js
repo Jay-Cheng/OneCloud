@@ -83,11 +83,11 @@ function updateCompleteCount(plus) {
  * 绑定在模态框上传按钮click上的事件处理函数
  */
 function addFile(e, data, marker) {
-	// if ((data.files[0].size + Number(sessionStorage.getItem("user_usedCapacity"))) > capacity) {
-	// 	alert("容量超出上限，无法上传");
-	// 	data.abort();
-	// 	return;
-	// }
+	if ((data.files[0].size + Number(sessionStorage.getItem("user_usedCapacity"))) > capacity) {
+		alert("容量超出上限，无法上传");
+		data.abort();
+		return;
+	}
 	/* 获取该文件的必要信息，用于提交到服务器 */
 	var fileinfo = {
 		userID: sessionStorage.getItem("user_id"),
