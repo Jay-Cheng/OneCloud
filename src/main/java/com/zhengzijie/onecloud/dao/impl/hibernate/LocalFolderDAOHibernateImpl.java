@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import com.zhengzijie.onecloud.dao.LocalFolderDAO;
 import com.zhengzijie.onecloud.dao.entity.LocalFolderDO;
-import com.zhengzijie.onecloud.manager.util.HibernateUtil;
 
+@Repository
 public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFolderDO> implements LocalFolderDAO {
 
     public LocalFolderDAOHibernateImpl() {
@@ -17,7 +18,7 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
 
     @Override
     public List<LocalFolderDO> listByParent(long parent) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent = :parent");
         query.setParameter("parent", parent);
@@ -27,7 +28,7 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
 
     @Override
     public List<LocalFolderDO> listByName(long userID, String name) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent!=2 and folder.parent!=3 and folder.userID=:userID and folder.localName like :name");
         query.setParameter("userID", userID);

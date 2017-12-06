@@ -9,14 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "file")
-@DynamicUpdate(true)
 public class FileDO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     
     @Column(name = "ldt_create", nullable = false)
@@ -28,9 +25,8 @@ public class FileDO {
     @Column(name = "md5", unique = true, nullable = false)
     private String md5;
     
-    /* size是Int型，所以单个文件最大4GB */
     @Column(name = "size", nullable = false)
-    private Integer size;
+    private Long size;
     
     @Column(name = "type", nullable = false)
     private String type;
@@ -72,11 +68,11 @@ public class FileDO {
         this.md5 = md5;
     }
 
-    public Integer getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(Long size) {
         this.size = size;
     }
 
@@ -94,6 +90,12 @@ public class FileDO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "FileDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", md5=" + md5
+                + ", size=" + size + ", type=" + type + ", url=" + url + "]";
     }
     
 }

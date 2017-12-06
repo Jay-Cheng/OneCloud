@@ -25,54 +25,43 @@ var recycle_menu = new BootstrapMenu(".recycle-item", {
 });
 
 function shred() {
-	var selectedItem = getSelectedItems();
-
-	var dataArr = new Array();
-	selectedItem.each(function(index) {
-		var itemTag = $(this);
-		/* 需要提交的数据 */
-		var id;
-		var type;
-		if (itemTag.attr("data-folder-id") != undefined) {
-		    id = itemTag.attr("data-folder-id");
-		    type = "folder";
-		} else {
-		    id = itemTag.attr("data-file-id");
-		    type = "file";
-		}
-		dataArr[index] = {
-		    id: id,
-		    type: type
-		};
+	var selectedItems = getSelectedItems();
+	/* 需要提交的数据 */
+	var fileIDArray = new Array();
+	var folderIDArray = new Array();
+	selectedItems.each(function() {
+	    var itemTag = $(this);
+	    if (itemTag.attr("data-folder-id") != undefined) {
+	        var id = itemTag.attr("data-folder-id");
+	        folderIDArray.push(id);
+	    } else {
+	        var id = itemTag.attr("data-file-id");
+	        fileIDArray.push(id);
+	    }
 	});
-
+	var shredData = {
+	    files: fileIDArray,
+	    folders: folderIDArray
+	};
 
 	$.ajax({
-	    type: "POST",
-	    url: "RequestManageServlet?action=shred",
+	    type: "DELETE",
+	    url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/recycle",
 	    contentType: "application/json;charset=utf-8",
-	    data: JSON.stringify({shred:dataArr}),
+	    data: JSON.stringify(shredData),
 	    success: function(result) {
-	    	var resultArr = result.resultArr;
-	    	for (var i = 0; i < resultArr.length; i++) {
-	    		var id = resultArr[i].id;
-	    		if (resultArr[i].status == 1) {
-	    			if (resultArr[i].type == "folder") {
-	    				$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().remove();
-	    				$('#recycle_folder .recycle-item[data-folder-id="' + id + '"]').remove();
-	    			} else if (resultArr[i].type == "file") {
-	    				$('#recycle_folder .recycle-item[data-file-id="' + id + '"]').remove();
-	    			} else {
-	    				alert("未知错误");
-	    			}
-	    		} else {
-	    			alert("删除失败！");
-	    		}
-	    	}
 
+	    	for (var i = 0; i < folderIDArray.length; i++){
+	    		$('.treeNode-info[data-folder-id="'+folderIDArray[i]+'"]').parent().remove();
+	    		$('#recycle_folder .recycle-item[data-folder-id="'+folderIDArray[i]+'"]').remove();
+	    	}
+	    	for (var i = 0; i < fileIDArray.length; i++){
+	    		$('#recycle_folder .recycle-item[data-file-id="'+fileIDArray[i]+'"]').remove();
+	    	}
+	    	
 	    	/* 更新用户存储空间 */
-	    	var cap = result.cap;
-	    	localStorage.setItem("user_usedCapacity", cap);
+	    	var cap = result.usedCapacity;
+	    	sessionStorage.setItem("user_usedCapacity", cap);
 	    	var percentage = getUsedPercentage(cap);
 	    	$("#user_capacity").css("width", percentage).text(percentage);
 	    }
@@ -81,44 +70,66 @@ function shred() {
 }
 
 function restore() {
-	var selectedItem = getSelectedItems();
-	selectedItem.each(function() {
-		var itemTag = $(this);
-		/* 需要提交的数据 */
-		var id;
-		var type;
-		if (itemTag.attr("data-folder-id") != undefined) {
-		    id = itemTag.attr("data-folder-id");
-		    type = "folder";
-		} else {
-		    id = itemTag.attr("data-file-id");
-		    type = "file";
-		}
-		var restoreData = {
-		    id: id,
-		    type: type,
-		    moveTo: 1
-		};
+	var selectedItems = getSelectedItems();
+	/* 需要提交的数据 */
+	var fileIDArray = new Array();
+	var folderIDArray = new Array();
+	selectedItems.each(function() {
+	    var itemTag = $(this);
+	    if (itemTag.attr("data-folder-id") != undefined) {
+	        var id = itemTag.attr("data-folder-id");
+	        folderIDArray.push(id);
+	    } else {
+	        var id = itemTag.attr("data-file-id");
+	        fileIDArray.push(id);
+	    }
+	});
+	var restoreData = {
+	    files: fileIDArray,
+	    folders: folderIDArray,
+	    dest: 1
+	};
 
-		$.ajax({
-		    type: "POST",
-		    url: "RequestManageServlet?action=move",
-		    contentType: "application/json;charset=utf-8",
-		    data: JSON.stringify(restoreData),
-		    success: function(result){
-		    	if (result.status == 1) {
-		    		if (type == "folder") {
-		    			$('.treeNode-info[data-folder-id="' + id + '"]' ).parent().show();
-		    		}
-		    		
-		    		itemTag.removeClass("recycle-item");
-		    		itemTag.addClass("disk-item");
-		    		itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
-		    		itemTag.appendTo($('ul[data-folder-id="1"]'));
-		    	} else {
-		    		alert("还原失败！");
-		    	}
-		    }
-		});
+	$.ajax({
+	    type: "PATCH",
+	    url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/move",
+	    contentType: "application/json;charset=utf-8",
+	    data: JSON.stringify(restoreData),
+	    success: function(result){
+
+	    	for (var i = 0; i < folderIDArray.length; i++){
+	    		var newParentDir = $('.treeNode-info[data-folder-id="1"]');
+	    		/* 注意设置padding */
+	    		var paddingParam = parseInt(newParentDir.css("padding-left"), 10) + 20 + "px";
+	    		var moveDir = $('.treeNode-info[data-folder-id="' + folderIDArray[i] + '"]');
+	    		var paddingBefore = parseInt(moveDir.css("padding-left"));
+	    		moveDir.css("padding-left", paddingParam);
+	    		var paddingAfter = parseInt(moveDir.css("padding-left"));
+	    		var paddingAdjustment = paddingAfter - paddingBefore; 
+	    		var moveSubDirs = moveDir.next().find(".treeNode-info");
+	    		moveSubDirs.each(function(){
+	    		    var paddingParam = parseInt($(this).css("padding-left"), 10) + paddingAdjustment + "px";
+	    		    $(this).css("padding-left", paddingParam);
+	    		})
+	    		moveDir.parent().appendTo(newParentDir.next());
+
+	    		moveDir.parent().show();
+
+	    		var itemTag = $('li[data-folder-id="'+folderIDArray[i]+'"]');
+	    		itemTag.removeClass("recycle-item");
+	    		itemTag.addClass("disk-item");
+	    		itemTag.find(".file-time").text(getFormattedDateTime(result.folders[i].ldtModified));
+	    		itemTag.appendTo($('ul[data-folder-id="1"]'));
+	    	}
+	    	for (var i = 0; i < fileIDArray.length; i++){
+	    	    var itemTag = $('li[data-file-id="'+fileIDArray[i]+'"]');
+	    		itemTag.removeClass("recycle-item");
+	    		itemTag.addClass("disk-item");
+	    		itemTag.find(".file-time").text(getFormattedDateTime(result.files[i].ldtModified));
+	    		itemTag.appendTo($('ul[data-folder-id="1"]'));
+	    	}
+	    		
+
+	    }
 	});
 }

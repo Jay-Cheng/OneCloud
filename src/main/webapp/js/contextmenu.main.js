@@ -92,32 +92,7 @@ function confirmEditName() {
     var nameTag = inputTag.parent().prev().find(".file-name");
     var originalName = nameTag.text();
     var newName = inputTag.val();
-
-
-    /* 需要交给服务器的数据 */
-    var id;
-    var localName;
-    var localType = null;
-    var type;
-    if (itemTag.attr("data-folder-id") != undefined) {
-        type = "folder";
-        id = itemTag.attr("data-folder-id");
-        localName = newName;
-    } else {
-        type = "file";
-        id = itemTag.attr("data-file-id");
-        localName = getFilenameWithoutSuffix(newName);
-        localType = getSuffix(newName);
-    }
-    var renameData = {
-        id: id,
-        localName: localName,
-        localType: localType,
-        type: type
-    };
-
-
-    if (newName.length ==0) {
+    if (newName.length == 0) {
         // TO DO 判断是否全为空格
         alert("名字不能为空");
     } else if (originalName == newName) {
@@ -125,22 +100,43 @@ function confirmEditName() {
     } else if (checkDuplicateName(itemTag, newName)) {
         alert("文件名产生冲突");
     } else if (originalName != newName) {
+        /* 需要交给服务器的数据 */
+        var renameData;
+        var req_url = "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/"
+        if (itemTag.attr("data-folder-id") != undefined) {
+            req_url += "folders/" + itemTag.attr("data-folder-id");
+            var localName = newName;
+            renameData = {
+                localName: localName,
+            };
+        } else {
+            req_url += "files/" + itemTag.attr("data-file-id");
+            var localName = getFilenameWithoutSuffix(newName);
+            var localType = getSuffix(newName);
+            renameData = {
+                localName: localName,
+                localType: localType,
+            };
+        }
+
         $.ajax({
-            type: "POST",
-            url: "RequestManageServlet?action=rename",
+            type: "PATCH",
+            url: req_url,
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(renameData),
             success: function(result) {
-                if (result.status == 1) {
-                    nameTag.text(newName);
-                    itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
-                    if (localType != null) {
-                        var src = getFileIcon(localType);
-                        itemTag.find(".thumb img").attr("src", src);
-                    }
+                var localName = result.localName;
+                
+                itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
+
+                if (result.localType != null) {
+                    localName = localName + "." + result.localType;
+                    var src = getFileIcon(result.localType);
+                    itemTag.find(".thumb img").attr("src", src);
                 } else {
-                    alert("重命名失败！");
+                    $('.treeNode-info[data-folder-id="'+itemTag.attr("data-folder-id")+'"]').find(".treeNode-info-name").text(localName);
                 }
+                nameTag.text(localName);
             }
         });
     }
@@ -166,48 +162,51 @@ function checkDuplicateName(itemTag, newName) {
 
 /************************************* 删除 *************************************/
 function remove() {
-    var selectedItem = getSelectedItems();
-    selectedItem.each(function() {
+    var selectedItems = getSelectedItems();
+    /* 需要提交的数据 */
+    var fileIDArray = new Array();
+    var folderIDArray = new Array();
+    selectedItems.each(function() {
         var itemTag = $(this);
-        /* 需要提交的数据 */
-        var id;
-        var type;
         if (itemTag.attr("data-folder-id") != undefined) {
-            id = itemTag.attr("data-folder-id");
-            type = "folder";
+            var id = itemTag.attr("data-folder-id");
+            folderIDArray.push(id);
         } else {
-            id = itemTag.attr("data-file-id");
-            type = "file";
+            var id = itemTag.attr("data-file-id");
+            fileIDArray.push(id);
         }
-        var moveData = {
-            id: id,
-            type: type,
-            moveTo: 3
-        };
+    });
+    var moveData = {
+        files: fileIDArray,
+        folders: folderIDArray,
+        dest: 3
+    };
+    $.ajax({
+        type: "PATCH",
+        url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/move",
+        contentType: "application/json;charset=utf-8",
+        data: JSON.stringify(moveData),
+        success: function(result){
+            /* 重置选择路径 */
+            $("#dirbox_path").attr("data-folder-id", 1).text("我的网盘");
+            for (var i = 0; i < folderIDArray.length; i++){
+                /* 隐藏模态框中的文件夹节点 */
+                $('.treeNode-info[data-folder-id="'+folderIDArray[i]+'"]' ).parent().hide();
 
-        $.ajax({
-            type: "POST",
-            url: "RequestManageServlet?action=move",
-            contentType: "application/json;charset=utf-8",
-            data: JSON.stringify(moveData),
-            success: function(result){
-                if (result.status == 1) {
-                    /* 隐藏模态框中的文件夹节点 */
-                    if (type == "folder") {
-                        $('.treeNode-info[data-folder-id="' + id + '"]' ).parent().hide();
-                        /* 重置选择路径 */
-                        $("#dirbox_path").attr("data-folder-id", 1).text("我的网盘");
-                    }
-
-                    itemTag.removeClass("disk-item");
-                    itemTag.addClass("recycle-item");
-                    itemTag.find(".file-time").text(getRemainDays(result.ldtModified));
-                    itemTag.appendTo($("#recycle_folder"));
-                } else {
-                    alert("删除失败");
-                }
+                var itemTag = $('li[data-folder-id="'+folderIDArray[i]+'"]');
+                itemTag.removeClass("disk-item");
+                itemTag.addClass("recycle-item");
+                itemTag.find(".file-time").text(getRemainDays(result.folders[i].ldtModified));
+                itemTag.appendTo($("#recycle_folder"));
             }
-        });
+            for (var i = 0; i < fileIDArray.length; i++){
+                var itemTag = $('li[data-file-id="'+fileIDArray[i]+'"]');
+                itemTag.removeClass("disk-item");
+                itemTag.addClass("recycle-item");
+                itemTag.find(".file-time").text(getRemainDays(result.files[i].ldtModified));
+                itemTag.appendTo($("#recycle_folder"));
+            }
+        }
     });
 }
 function getRemainDays(date) {
@@ -279,62 +278,61 @@ function moveTo() {
 
 
         $("#path_modal").modal("hide");
-        /* 开始移动 */
+
+        /* 需要提交的数据 */
+        var fileIDArray = new Array();
+        var folderIDArray = new Array();
         selectedItems.each(function() {
             var itemTag = $(this);
-            /* 需要提交的数据 */
-            var id;
-            var type;
             if (itemTag.attr("data-folder-id") != undefined) {
-                id = itemTag.attr("data-folder-id");
-                type = "folder";
+                var id = itemTag.attr("data-folder-id");
+                folderIDArray.push(id);
             } else {
-                id = itemTag.attr("data-file-id");
-                type = "file";
+                var id = itemTag.attr("data-file-id");
+                fileIDArray.push(id);
             }
-            var moveData = {
-                id: id,
-                type: type,
-                moveTo: newParent
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "RequestManageServlet?action=move",
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify(moveData),
-                success: function(result) {
-                    if (result.status == 1) {
-                        /* 移动模态框中的文件夹节点 */
-                        if (type == "folder") {
-                            var newParentDir = $('.treeNode-info[data-folder-id="' + newParent + '"]' );
-                            /* 注意设置padding */
-                            var paddingParam = parseInt(newParentDir.css("padding-left"), 10) + 20 + "px";
-                            var moveDir = $('.treeNode-info[data-folder-id="' + id + '"]');
-                            var paddingBefore = parseInt(moveDir.css("padding-left"));
-                            moveDir.css("padding-left", paddingParam);
-                            var paddingAfter = parseInt(moveDir.css("padding-left"));
-                            var paddingAdjustment = paddingAfter - paddingBefore; 
-                            var moveSubDirs = moveDir.next().find(".treeNode-info");
-                            moveSubDirs.each(function(){
-                                var paddingParam = parseInt($(this).css("padding-left"), 10) + paddingAdjustment + "px";
-                                $(this).css("padding-left", paddingParam);
-                            })
-
-                            moveDir.parent().appendTo(newParentDir.next());
-                        }
-
-                        itemTag.find(".file-time").text(getFormattedDateTime(result.ldtModified));
-                        itemTag.appendTo($('ul[data-folder-id="' + newParent + '"]'));
-                    } else {
-                        alert("移动失败");
-                    }
-                }
-            });
         });
+        var moveData = {
+            files: fileIDArray,
+            folders: folderIDArray,
+            dest: newParent
+        };
+        $.ajax({
+            type: "PATCH",
+            url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/move",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(moveData),
+            success: function(result) {
+                /* 移动模态框中的文件夹节点 */
+                for (var i = 0; i < folderIDArray.length; i++) {
+                    var itemTag = $('li[data-folder-id="'+folderIDArray[i]+'"]');
+                    var newParentDir = $('.treeNode-info[data-folder-id="' + newParent + '"]' );
+                    /* 注意设置padding */
+                    var paddingParam = parseInt(newParentDir.css("padding-left"), 10) + 20 + "px";
+                    var moveDir = $('.treeNode-info[data-folder-id="' + folderIDArray[i] + '"]');
+                    var paddingBefore = parseInt(moveDir.css("padding-left"));
+                    moveDir.css("padding-left", paddingParam);
+                    var paddingAfter = parseInt(moveDir.css("padding-left"));
+                    var paddingAdjustment = paddingAfter - paddingBefore; 
+                    var moveSubDirs = moveDir.next().find(".treeNode-info");
+                    moveSubDirs.each(function(){
+                        var paddingParam = parseInt($(this).css("padding-left"), 10) + paddingAdjustment + "px";
+                        $(this).css("padding-left", paddingParam);
+                    })
+                    moveDir.parent().appendTo(newParentDir.next());
 
+                    itemTag.find(".file-time").text(getFormattedDateTime(result.folders[i].ldtModified));
+                    itemTag.appendTo($('ul[data-folder-id="' + newParent + '"]'));
+                }
+
+                for (var i = 0; i < fileIDArray.length; i++) {
+                    var itemTag = $('li[data-file-id="'+fileIDArray[i]+'"]');
+                    itemTag.find(".file-time").text(getFormattedDateTime(result.files[i].ldtModified));
+                    itemTag.appendTo($('ul[data-folder-id="' + newParent + '"]'));
+                }   
+            }
+        });
         $("#modal_btn_submit").off("click");
-
     }
 
 }
@@ -343,23 +341,27 @@ function moveTo() {
 function download() {
     var selectedItems = getSelectedItems();
 
-    var dataArr = new Array();
+    var fileParams = "";
+    var folderParams = "";
     selectedItems.each(function(index) {
         var itemTag = $(this);
-        /* 需要提交的数据 */
         var id;
-        var type;
         if (itemTag.attr("data-folder-id") != undefined) {
             id = itemTag.attr("data-folder-id");
-            type = 0;// folder
+            if (folderParams.length == 0){
+            	folderParams = id;
+            } else {
+            	folderParams = folderParams + "," + id;
+            }
         } else {
             id = itemTag.attr("data-file-id");
-            type = 1;// file
+ 			if (fileParams.length == 0){
+ 				fileParams = id;
+ 			} else {
+ 				fileParams = fileParams + "," + id;
+ 			}
         }
-        dataArr[index] = {
-            id: id,
-            t: type
-        };
     });
-    window.location.href = "RequestManageServlet?action=download&dl=" + encodeURIComponent(JSON.stringify(dataArr));
+    var url = "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/files?token=Bearer "+sessionStorage.getItem("token")+"&files="+fileParams+"&folders="+folderParams;
+    window.location.href = url;
 }

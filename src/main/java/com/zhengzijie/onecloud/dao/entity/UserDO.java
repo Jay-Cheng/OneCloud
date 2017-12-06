@@ -9,14 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 @Entity
 @Table(name = "user")
-@DynamicUpdate(true)
 public class UserDO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     
     @Column(name = "ldt_create", nullable = false)
@@ -25,8 +21,8 @@ public class UserDO {
     @Column(name = "ldt_modified", nullable = false)
     private LocalDateTime ldtModified;
 
-    @Column(name = "account", unique = true, nullable = false)
-    private String account;
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
     
     @Column(name = "password", nullable = false)
     private String password;
@@ -69,12 +65,12 @@ public class UserDO {
         this.ldtModified = ldtModified;
     }
 
-    public String getAccount() {
-        return account;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -115,6 +111,13 @@ public class UserDO {
 
     public void setSafePassword(String safePassword) {
         this.safePassword = safePassword;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDO [id=" + id + ", ldtCreate=" + ldtCreate + ", ldtModified=" + ldtModified + ", username="
+                + username + ", password=" + password + ", nickname=" + nickname + ", photoURL=" + photoURL
+                + ", usedCapacity=" + usedCapacity + ", safePassword=" + safePassword + "]";
     }
     
 }

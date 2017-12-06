@@ -14,11 +14,11 @@ $(function() {
     $("#recycle").on("contextmenu", "ul .disk-file-item", rightClickSelectItem);
 
     /* 最近/文档/图片/视频/音乐分类文件 */
-    $("#nav_lately").click(function(){getFile.call(this, "lately");});
-    $("#nav_document").click(function(){getFile.call(this, "document");});
-    $("#nav_picture").click(function(){getFile.call(this, "picture");});
+    $("#nav_recent").click(function(){getFile.call(this, "recent");});
+    $("#nav_doc").click(function(){getFile.call(this, "doc");});
+    $("#nav_photo").click(function(){getFile.call(this, "photo");});
     $("#nav_video").click(function(){getFile.call(this, "video");});
-    $("#nav_music").click(function(){getFile.call(this, "music");});
+    $("#nav_audio").click(function(){getFile.call(this, "audio");});
 
     /* 视图控制事件 */
     $("#nav_all").click(function(){$("#view_control").css("visibility","visible");});
@@ -35,21 +35,6 @@ $(function() {
         $("#treeNode_root").next().empty()
         showFolderContents(currentFolderID);
     }
-
-    /* 显示容量信息的悬浮框 */
-    $("[data-toggle='popover']").popover({
-        html : true,    
-        title: "容量信息",
-        content: function() {
-            var node = $('<p style="width:200px;">已使用:<span></span>&nbsp;&nbsp;&nbsp;总容量:10M</p>');
-            node.find("span").text(getReadableSize(localStorage.getItem("user_usedCapacity")));
-            return node;
-        },   
-    });
-    /* 获取回收站文件 */
-    getRecycleItems();
-    /* 显示初始文件夹 */
-    showFolderContents(1);// 约定初始文件夹ID=1
 });
 
 function showFolderContents(folderID) {
@@ -84,9 +69,10 @@ function createFolderNode(folderID, show) {
     /* 向服务器发送异步请求，获取对应folderID的内容 */
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&folderID=" + folderID + "&sortType=" + sortType,
+        contentType:"application/json",
+        url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/folders/"+folderID+"?sort="+sortType,
         /* 
-         * 在success的回调函数中访问不到外部的folderID，所以添加下面的参数 
+         * 在succe	ss的回调函数中访问不到外部的folderID，所以添加下面的参数 
          * 修正：访问不到函数的参数，但可以访问函数内部的变量！
          */  
         folderID: folderID,
@@ -131,7 +117,7 @@ function generateFileNode(files, parent) {
         var lastModifiedTime = getFormattedDateTime(files[i].ldtModified);
         var fileImg;
         if (isPicture(files[i].localType)) {
-            fileImg = "../onecloud_files/" + files[i].url;
+            fileImg = files[i].url;
         } else {
             fileImg = getFileIcon(getSuffix(fileName));
         }
@@ -289,24 +275,21 @@ function mkfolder() {
         } else {
             $.ajax({
                 type: "POST",
-                url: "RequestManageServlet?action=addFolder",
+                url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/folders",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(newFolder),
                 success: function(result) {
-                    if (result.status == 1) {
-                        /* 模态框同步 */
-                        var folder = [{
-                            id: result.folderID,
-                            localName: newFolder.localName
-                        }];
-                        createDirNode(parent, folder, false);
-                        /* 新建文件夹节点 */
-                        itemTag.attr("data-folder-id", result.folderID);
-                        timeTag.text(getFormattedDateTime(result.ldtModified));
-                        nameTag.text(newFolder.localName);
-                    } else {    
-                        alert("新建文件夹失败");
-                    }
+                    /* 模态框同步 */
+                    var folder = [{
+                        id: result.id,
+                        localName: result.localName
+                    }];
+                    createDirNode(parent, folder, false);
+                    /* 新建文件夹节点 */
+                    itemTag.attr("data-folder-id", result.id);
+                    timeTag.text(getFormattedDateTime(result.ldtModified));
+                    nameTag.text(result.localName);
+
                     /* 移除文件名编辑框 */
                     inputTag.parent().remove();
 
@@ -327,7 +310,8 @@ function mkfolder() {
 function getRecycleItems(){
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=enterFolder&folderID=3&sortType=1",
+        url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/disk/folders/3?sort=1",
+        contentType: "application/json; charset=utf-8",
         success: function(result) {
             var node = $("#recycle_folder");
 
@@ -378,24 +362,24 @@ function getFile(type) {
     $("#" + type + " ul").remove();// 删除旧节点
     $.ajax({
         type: "GET",
-        url: "RequestManageServlet?action=getFile&type=" + type,
+        url: "http://localhost:8080/OneCloud/api/v1/users/"+sessionStorage.getItem("user_username")+"/"+ type,
         contentType: "application/json; charset=utf-8",
         success: function(result){
             var files = result.files;
             var node = $('<ul></ul>');
-            if (type != "picture") {
+            if (type != "photo") {
                 generateFileNode(files, node);
                 node.find(".disk-file-item").removeClass("disk-item");
                 node.appendTo($("#" + type));
             } else {
                 for (var i = 0; i < files.length; i++) {
                     var fileName = files[i].localName + "." + files[i].localType;
-                    var fileImg = "../onecloud_files/" + files[i].url;
+                    var fileImg = files[i].url;
                     var fileNode = $('<li class="picture"></li>');
                     fileNode.append('<div class="picture-img"><img src="' + fileImg + '"></div>');
                     fileNode.append('<div class="picture-info"><p><span class="glyphicon glyphicon-picture nav-title-icon" style="color: #337ab7;font-size: 18px;"></span><span class="picture-info-title">' + fileName + '</span></p></div>');
                     fileNode.appendTo(node);
-                    node.appendTo($('#picture .picture-wall')); 
+                    node.appendTo($('#photo .picture-wall')); 
                 }   
             }
         }

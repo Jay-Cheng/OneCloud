@@ -5,13 +5,24 @@ import java.time.LocalDateTime;
 public class LocalFileDTO extends Sortable {
     
     private Long id;
+    private LocalDateTime ldtCreate;
+    private Long userID;
     private Long fileID;
     private String localType;
-    private Integer size;
+    private Long parent;
+    private Long size;
     private String url;
 
     public LocalFileDTO() {}
 
+    public void setLdtModified(LocalDateTime ldtModified) {
+        this.ldtModified = ldtModified;
+    }
+    
+    public void setLocalName(String localName) {
+        this.localName = localName;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -20,8 +31,20 @@ public class LocalFileDTO extends Sortable {
         this.id = id;
     }
 
-    public void setLdtModified(LocalDateTime ldtModified) {
-        this.ldtModified = ldtModified;
+    public LocalDateTime getLdtCreate() {
+        return ldtCreate;
+    }
+
+    public void setLdtCreate(LocalDateTime ldtCreate) {
+        this.ldtCreate = ldtCreate;
+    }
+
+    public Long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
     public Long getFileID() {
@@ -32,10 +55,6 @@ public class LocalFileDTO extends Sortable {
         this.fileID = fileID;
     }
 
-    public void setLocalName(String localName) {
-        this.localName = localName;
-    }
-
     public String getLocalType() {
         return localType;
     }
@@ -44,14 +63,22 @@ public class LocalFileDTO extends Sortable {
         this.localType = localType;
     }
 
-    public Integer getSize() {
+    public Long getParent() {
+        return parent;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
+
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(Long size) {
         this.size = size;
     }
-    
+
     public String getUrl() {
         return url;
     }
@@ -59,4 +86,12 @@ public class LocalFileDTO extends Sortable {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "LocalFileDTO [id=" + id + ", ldtCreate=" + ldtCreate + ", userID=" + userID + ", fileID=" + fileID
+                + ", localType=" + localType + ", parent=" + parent + ", size=" + size + ", url=" + url
+                + ", ldtModified=" + ldtModified + ", localName=" + localName + "]";
+    }
+    
 }

@@ -10,6 +10,7 @@ public abstract class Sortable {
     public LocalDateTime getLdtModified() {
         return ldtModified;
     }
+    
     public String getLocalName() {
         return localName;
     }

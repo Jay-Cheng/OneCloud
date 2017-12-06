@@ -12,11 +12,15 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhengzijie.onecloud.dao.GenericDAO;
-import com.zhengzijie.onecloud.manager.util.HibernateUtil;
 
-public class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
+public abstract class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
+    
+    @Autowired 
+    protected SessionFactory sessionFactory;
     
     private Class<T> type;
     
@@ -25,32 +29,32 @@ public class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
     }
     
     @Override
-    public long create(T obj) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    public long save(T obj) {
+        Session session = sessionFactory.getCurrentSession();
         return (long) session.save(obj);
     }
     
     @Override
-    public T read(long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    public T get(long id) {
+        Session session = sessionFactory.getCurrentSession();
         T obj = session.get(type, id);
         return obj;
     }
 
     @Override
     public void update(T obj) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.update(obj);
         session.flush();
     }
 
     @Override
-    public void delete(T obj) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    public void remove(T obj) {
+        Session session = sessionFactory.getCurrentSession();
         session.delete(obj);
     }
 
-    @Override
+    @Override @Deprecated
     public T get(Map<String, Object> params) {
         List<T> result = list(params);
         if (result.size() == 1) {
@@ -62,9 +66,9 @@ public class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
         }
     }
 
-    @Override
+    @Override @Deprecated
     public List<T> list(Map<String, Object> params) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(type);
