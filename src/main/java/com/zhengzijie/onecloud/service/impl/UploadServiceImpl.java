@@ -57,7 +57,7 @@ public class UploadServiceImpl implements UploadService {
                     result.put("msg", "localfile already exists");
                     return result;
                 } else {
-                    localFile.setLocalName(addNameIndex(localFile.getLocalName()));
+                    localFile.setLocalName(resolveLocalNameConflict(localFile.getLocalName()));
                     duplicate = localFileDAO.getByPath(localFile.getUserID()
                             , localFile.getParent(),localFile.getLocalName(), localFile.getLocalType());
                 }
@@ -91,7 +91,7 @@ public class UploadServiceImpl implements UploadService {
         /* 如果存在重名，则为文件名添加数字下标，直到无重名为止 */
         while (localFileDAO.getByPath(localFile.getUserID()
                 , localFile.getParent(), localFile.getLocalName(), localFile.getLocalType()) != null) {
-            localFile.setLocalName(addNameIndex(localFile.getLocalName()));
+            localFile.setLocalName(resolveLocalNameConflict(localFile.getLocalName()));
         }
         /* 新建一行LocalFile数据，并更新用户使用空间 */
         localFile.setLdtCreate(LocalDateTime.now());
@@ -145,8 +145,19 @@ public class UploadServiceImpl implements UploadService {
      * @param localName 原文件名
      * @return 原文件名加上一个数字下标的字符串
      */
-    private String addNameIndex(String localName) {
-        // TODO temporary method
+    private String resolveLocalNameConflict(String localName) {
+        if (localName.length() > 2) {
+            String end = localName.substring(localName.length() - 3);
+            if (end.matches("\\(\\d\\)") && end.charAt(1) != '0') {// 判断localName是否以形如“(n)”的字符串结尾
+                int i = Integer.parseInt(end.substring(1, 2));// 括号中间的数字
+                i++;
+                StringBuilder sb = new StringBuilder();
+                sb.append(localName.substring(0, localName.length() - 3));
+                sb.append('(').append(i).append(')');
+                
+                return sb.toString();
+            }
+        }
         return localName + "(1)";
     }
     

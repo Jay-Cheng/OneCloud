@@ -43,6 +43,7 @@ public class FileController {
     public Map<String, Object> upload(HttpServletRequest req, 
             @RequestPart("files[]") Part part
             , @Valid UploadReqBody reqbody) throws IOException {
+        // TODO 参数校验
         System.out.println(req.getHeader("content-range"));
         String contentRange = req.getHeader("content-range");
         if (isFirstPart(contentRange)) {
@@ -68,6 +69,7 @@ public class FileController {
     @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.DELETE, params="cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelUpload(@RequestParam String cancel) throws InterruptedException {
+        // TODO 参数校验
         uploadService.cancel(cancel);
     }
     
@@ -77,6 +79,7 @@ public class FileController {
      */
     @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.GET, params="resume")
     public Long resumeUpload(@RequestParam String resume) {
+        // TODO 参数校验
         return uploadService.resmue(resume);
     }
     
@@ -87,6 +90,7 @@ public class FileController {
     @RequestMapping(value="/users/{username}/disk/files", method = RequestMethod.GET, params = {"files", "folders"})
     public void download(@RequestParam List<Long> files, @RequestParam List<Long> folders
             , HttpServletResponse response) throws IOException {
+        // TODO 参数校验
         if (files.size() + folders.size() == 0) {
             throw new IllegalArgumentException("params must contain at least one file or folder");
         }

@@ -211,7 +211,7 @@ function finishUpload(data) {
 
 	generateCompletedMissionNode(data);
 	/* 生成主界面的文件节点 */
-	var fileName = data.files[0].name;
+	var fileName = data.result.file.localName + "." + data.result.file.localType;
 	var fileImg;
 	if (isPicture(data.result.file.localType)) {
 		fileImg = data.result.file.url;
