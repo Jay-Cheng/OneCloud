@@ -365,12 +365,15 @@
     			}
     		});
     	});
+
     	/* 判断是否需要重定向 */
-    	$(document).ajaxComplete(function(event,xhr){
-    		var sessionStatus = xhr.getResponseHeader("sessionStatus");
-    		if (sessionStatus == "timeout") {
-	    		top.location = "login.html";
-    			return false;
+    	$(document).ajaxError(function(event,xhr) {
+    		if (xhr.status == 401) {
+    			alert("登录已失效，请重新登录");
+    			top.location = "http://localhost:8080/OneCloud/";
+    			return false;  
+    		} else {
+    			alert("出现了未知错误！");
     		}
     	});
 
