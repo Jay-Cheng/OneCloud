@@ -46,6 +46,13 @@ public class FileController {
         // TODO 参数校验
         System.out.println(req.getHeader("content-range"));
         String contentRange = req.getHeader("content-range");
+        
+        /* 处理没有Content-Range请求头的小文件 */
+        if (contentRange == null && part.getSize() <= 102400) {
+            LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
+            return uploadService.serveSmallFile(part, reqbody.getMd5(), localFile);
+        }
+        
         if (isFirstPart(contentRange)) {
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
             return uploadService.serveFirstPart(part, reqbody.getMd5(), localFile);
@@ -55,7 +62,8 @@ public class FileController {
             file.setType(part.getHeader("content-type"));
             file.setSize(Long.parseLong(contentRange.split("/")[1]));
             LocalFileDO localFile = modelMapper.map(reqbody, LocalFileDO.class);
-            return uploadService.serveLastPart(part, localFile, file);
+            uploadService.savePart(part, reqbody.getMd5());
+            return uploadService.serveLastPart(localFile, file);
         } else {
             uploadService.savePart(part, reqbody.getMd5());
             return null;

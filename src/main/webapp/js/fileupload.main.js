@@ -16,7 +16,10 @@ $(function() {
 			data.context.find(".progress-bar").css("width", progress + "%").text(progress + "%");
 		},
 		always: function(e, data) {
-			data.result = data.formData.result;
+			console.log(data.result);
+			if (data.result == undefined) {
+				data.result = data.formData.result;
+			}
 			if (data.result != undefined) {
 				switch(data.result.status_code){
 					case 111:

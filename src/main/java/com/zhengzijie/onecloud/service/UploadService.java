@@ -19,12 +19,17 @@ public interface UploadService extends FileService {
     /**
      * 保存最后一个文件块，并插入、更新相应的数据
      */
-    Map<String, Object> serveLastPart(Part part, LocalFileDO localFile, FileDO file) throws IOException;
+    Map<String, Object> serveLastPart(LocalFileDO localFile, FileDO file) throws IOException;
     
     /**
      * 保存文件块到文件系统
      */
     void savePart(Part part, String md5) throws IOException;
+    
+    /**
+     * 保存小文件
+     */
+    Map<String, Object> serveSmallFile(Part part, String md5, LocalFileDO localFile) throws IOException;
     
     /**
      * 取消上传，删除上传到一半的文件

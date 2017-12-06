@@ -79,8 +79,7 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override @Transactional(isolation=Isolation.SERIALIZABLE)
-    public synchronized Map<String, Object> serveLastPart(Part part, LocalFileDO localFile, FileDO file) throws IOException {
-        savePart(part, file.getMd5());
+    public synchronized Map<String, Object> serveLastPart(LocalFileDO localFile, FileDO file) throws IOException {
         /* 保存新上传文件的信息 */
         file.setUrl(URL_ROOT + file.getMd5());
         file.setLdtCreate(LocalDateTime.now());
@@ -118,6 +117,20 @@ public class UploadServiceImpl implements UploadService {
         }
         bis.close();
         fos.close();
+    }
+    
+    @Override @Transactional
+    public Map<String, Object> serveSmallFile(Part part, String md5, LocalFileDO localFile) throws IOException {
+        Map<String, Object> result = serveFirstPart(part, md5, localFile);
+        if (result == null) {
+            FileDO file = new FileDO();
+            file.setMd5(md5);
+            file.setType(part.getHeader("content-type"));
+            file.setSize(part.getSize());
+            return serveLastPart(localFile, file);
+        } else {
+            return result;
+        }
     }
     
     @Override @Transactional(readOnly = true)
