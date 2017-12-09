@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhengzijie.onecloud.dao.FileDAO">
+  <resultMap id="fileDOResultMap" type="FileDO">
+    <id property="id" column="id"/>
+    <result property="ldtCreate" column="ldt_create"/>
+    <result property="ldtModified" column="ldt_modified"/>
+  </resultMap>
+  <sql id="columns">
+      id,
+      ldt_create,
+      ldt_modified,
+      md5,
+      size,
+      type,
+      url
+  </sql>
+  <select id="get" parameterType="long" resultMap="fileDOResultMap">
+    select
+      <include refid="columns" />
+      from file 
+      where id = #{id}
+  </select>
+  
+  <insert id="save" parameterType="FileDO" useGeneratedKeys="true" keyProperty="id">
+    insert into file 
+      (ldt_create,ldt_modified,md5,size,type,url) 
+      values(#{ldtCreate},#{ldtModified},#{md5},#{size},#{type},#{url})
+  </insert>
+  
+  <update id="update" parameterType="FileDO">
+    update file set
+      ldt_modified = #{ldtModified},
+      md5 = #{md5},
+      size = #{size},
+      type = #{type},
+      url = #{url}
+    where id = #{id}
+  </update>
+  
+  <delete id="remove" parameterType="FileDO">
+    delete from file where id = #{id}
+  </delete>
+  
+  <select id="getByMd5" parameterType="string" resultMap="fileDOResultMap">
+    select
+      <include refid="columns" />
+      from file 
+      where md5 = #{md5}
+  </select>
+
+</mapper>

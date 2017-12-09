@@ -19,6 +19,7 @@ import com.zhengzijie.onecloud.config.WebConfig;
 import com.zhengzijie.onecloud.dao.FileDAO;
 import com.zhengzijie.onecloud.dao.LocalFileDAO;
 import com.zhengzijie.onecloud.dao.UserDAO;
+import com.zhengzijie.onecloud.dao.entity.FileDO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
 import com.zhengzijie.onecloud.dao.entity.UserDO;
 
@@ -62,7 +63,28 @@ public class DAOTest {
     
     @Transactional @Test
     public void testFileDAO() {
-        assertTrue(143001L == fileDAO.get(2L).getSize());
+        FileDO getTest = fileDAO.get(29L);
+        assertTrue(306407 == getTest.getSize());
+        
+        FileDO saveTest = new FileDO();
+        saveTest.setLdtCreate(LocalDateTime.now());
+        saveTest.setLdtModified(LocalDateTime.now());
+        saveTest.setMd5("save" + System.currentTimeMillis());
+        saveTest.setSize(System.currentTimeMillis());
+        saveTest.setType("save test");
+        saveTest.setUrl("save" + System.currentTimeMillis());
+        fileDAO.save(saveTest);
+        System.out.println(saveTest.getId());// 数据库生成的自增主键
+        
+        FileDO updateTest = fileDAO.get(33L);
+        updateTest.setMd5("update" + System.currentTimeMillis());
+        updateTest.setUrl("update" + System.currentTimeMillis());
+        fileDAO.update(updateTest);
+        
+        FileDO removeTest = fileDAO.get(saveTest.getId());
+        fileDAO.remove(removeTest);
+        
+        System.out.println(fileDAO.getByMd5("8486f0c3cd2d48fd0b24eb1045e338f6"));
     }
     
     @Autowired
