@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhengzijie.onecloud.dao.LocalFolderDAO">
+  <resultMap id="localFolderDOResultMap" type="LocalFolderDO">
+    <id property="id" column="id"/>
+    <result property="ldtCreate" column="ldt_create"/>
+    <result property="ldtModified" column="ldt_modified"/>
+    <result property="userID" column="user_id"/>
+    <result property="localName" column="local_name"/>
+    <result property="parent" column="parent"/>
+  </resultMap>
+  <sql id="columns">
+      id,
+      ldt_create,
+      ldt_modified,
+      user_id,
+      local_name,
+      parent
+  </sql>
+  <select id="get" parameterType="long" resultMap="localFolderDOResultMap">
+    select
+      <include refid="columns" />
+      from local_folder 
+      where id = #{id}
+  </select>
+  
+  <insert id="save" parameterType="LocalFolderDO" useGeneratedKeys="true" keyProperty="id">
+    insert into local_folder 
+      (ldt_create,ldt_modified,user_id,local_name,parent) 
+      values(#{ldtCreate},#{ldtModified},#{userID},#{localName},#{parent})
+  </insert>
+  
+  <update id="update" parameterType="LocalFolderDO">
+    update local_folder set
+      ldt_modified = #{ldtModified},
+      user_id = #{userID},
+      local_name = #{localName},
+      parent = #{parent}
+    where id = #{id}
+  </update>
+  
+  <delete id="remove" parameterType="LocalFolderDO">
+    delete from local_folder where id = #{id}
+  </delete>
+  
+  <select id="listByParent" parameterType="long" resultMap="localFolderDOResultMap">
+    select
+      <include refid="columns" />
+      from local_folder 
+      where parent = #{parent}
+  </select>
+
+  <select id="listByName" resultMap="localFolderDOResultMap">
+    select
+      <include refid="columns" />
+      from local_folder 
+      where parent != 2 
+      and parent != 3 
+      and user_id = #{userID} 
+      and local_name like '%${name}%'
+  </select>
+
+</mapper>

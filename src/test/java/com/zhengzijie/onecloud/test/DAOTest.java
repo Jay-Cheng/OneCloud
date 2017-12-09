@@ -18,9 +18,11 @@ import com.zhengzijie.onecloud.config.RootConfig;
 import com.zhengzijie.onecloud.config.WebConfig;
 import com.zhengzijie.onecloud.dao.FileDAO;
 import com.zhengzijie.onecloud.dao.LocalFileDAO;
+import com.zhengzijie.onecloud.dao.LocalFolderDAO;
 import com.zhengzijie.onecloud.dao.UserDAO;
 import com.zhengzijie.onecloud.dao.entity.FileDO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
+import com.zhengzijie.onecloud.dao.entity.LocalFolderDO;
 import com.zhengzijie.onecloud.dao.entity.UserDO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,6 +88,36 @@ public class DAOTest {
         
         System.out.println(fileDAO.getByMd5("8486f0c3cd2d48fd0b24eb1045e338f6"));
     }
+    
+    @Autowired
+    private LocalFolderDAO localFolderDAO;
+    
+    @Transactional @Test
+    public void testLocalFolderDAO() {
+        LocalFolderDO getTest = localFolderDAO.get(1L);
+        assertEquals("home", getTest.getLocalName());
+        
+        LocalFolderDO saveTest = new LocalFolderDO();
+        saveTest.setLdtCreate(LocalDateTime.now());
+        saveTest.setLdtModified(LocalDateTime.now());
+        saveTest.setLocalName("save test");
+        saveTest.setUserID(System.currentTimeMillis());
+        saveTest.setParent(System.currentTimeMillis());
+        localFolderDAO.save(saveTest);
+        System.out.println(saveTest.getId());// 数据库生成的自增主键
+        
+        LocalFolderDO updateTest = localFolderDAO.get(11L);
+        updateTest.setUserID(System.currentTimeMillis());
+        updateTest.setParent(System.currentTimeMillis());
+        updateTest.setLocalName("update test");
+        localFolderDAO.update(updateTest);
+        
+        LocalFolderDO removeTest = localFolderDAO.get(saveTest.getId());
+        localFolderDAO.remove(removeTest);
+        
+        System.out.println(localFolderDAO.listByParent(1L));
+        System.out.println(localFolderDAO.listByName(1L, "图"));
+    }    
     
     @Autowired
     private LocalFileDAO localFileDAO;

@@ -17,7 +17,7 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
     }
 
     @Override
-    public List<LocalFolderDO> listByParent(long parent) {
+    public List<LocalFolderDO> listByParent(Long parent) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent = :parent");
@@ -27,7 +27,7 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
     }
 
     @Override
-    public List<LocalFolderDO> listByName(long userID, String name) {
+    public List<LocalFolderDO> listByName(Long userID, String name) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent!=2 and folder.parent!=3 and folder.userID=:userID and folder.localName like :name");
