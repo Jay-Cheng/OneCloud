@@ -40,10 +40,38 @@
         </property>
     </bean>
     
+    <!-- 配置MyBatis的SqlSessionFactory --> 
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath:mybatis/*.xml" />  
+        <property name="typeAliasesPackage" value="com.zhengzijie.onecloud.dao.entity" /> 
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="false"/>
+            </bean>
+        </property>
+    </bean>
+    <!-- 使用MapperFactoryBean不需要为DAO接口提供实现（将会与HibernateImpl产生冲突，抛NoUniqueBean异常）
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zhengzijie.onecloud.dao.UserDAO" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean> -->
+    <!-- MapperScannerConfigurer会查找类路径下的映射器
+    ，并自动将它们创建成MapperFactoryBean，之后自动装配（将会优先于HibernateImpl) -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.zhengzijie.onecloud.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean>
+     
     <!-- 配置事务管理器 -->
-    <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <tx:annotation-driven proxy-target-class="false" transaction-manager="dataSourceTransactionManager" />
+    <!-- TransactionManager for MyBatis -->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- TransactionManager for Hibernate
+    <bean id="hibernateTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
         <property name="dataSource" ref="dataSource"></property>
-    </bean>
+    </bean> -->
 </beans>

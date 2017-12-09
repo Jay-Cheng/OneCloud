@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhengzijie.onecloud.dao.UserDAO">
+  <resultMap id="userDOResultMap" type="UserDO">
+    <id property="id" column="id"/>
+    <result property="ldtCreate" column="ldt_create"/>
+    <result property="ldtModified" column="ldt_modified"/>
+    <result property="photoURL" column="photo_url"/>
+    <result property="usedCapacity" column="used_capacity"/>
+    <result property="safePassword" column="safe_password"/>
+  </resultMap>
+  <sql id="columns">
+      id,
+      ldt_create,
+      ldt_modified,
+      username,
+      password,
+      nickname,
+      photo_url,
+      used_capacity,
+      safe_password
+  </sql>
+  <select id="get" parameterType="long" resultMap="userDOResultMap">
+    select
+      <include refid="columns" />
+      from user 
+      where id = #{id}
+  </select>
+  
+  <insert id="save" parameterType="UserDO" useGeneratedKeys="true" keyProperty="id">
+    insert into user 
+      (ldt_create,ldt_modified,username,password,nickname,photo_url,used_capacity,safe_password) 
+      values(#{ldtCreate},#{ldtModified},#{username},#{password},#{nickname},#{photoURL},#{usedCapacity},#{safePassword})
+  </insert>
+  
+  <update id="update" parameterType="UserDO">
+    update user set
+      ldt_modified = #{ldtModified},
+      username = #{username},
+      password = #{password},
+      nickname = #{nickname},
+      photo_url = #{photoURL},
+      used_capacity = #{usedCapacity},
+      safe_password = #{safePassword}
+    where id = #{id}
+  </update>
+  
+  <delete id="remove" parameterType="UserDO">
+    delete from user where id = #{id}
+  </delete>
+  
+  <select id="getByUsername" parameterType="string" resultMap="userDOResultMap">
+    select
+      <include refid="columns" />
+      from user 
+      where username = #{username}
+  </select>
+
+</mapper>

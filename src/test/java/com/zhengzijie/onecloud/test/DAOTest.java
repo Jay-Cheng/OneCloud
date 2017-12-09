@@ -1,14 +1,13 @@
 package com.zhengzijie.onecloud.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,13 +20,11 @@ import com.zhengzijie.onecloud.dao.FileDAO;
 import com.zhengzijie.onecloud.dao.LocalFileDAO;
 import com.zhengzijie.onecloud.dao.UserDAO;
 import com.zhengzijie.onecloud.dao.entity.LocalFileDO;
-import com.zhengzijie.onecloud.manager.DTOConvertor;
-import com.zhengzijie.onecloud.service.dto.UserDTO;
+import com.zhengzijie.onecloud.dao.entity.UserDO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { WebConfig.class,RootConfig.class } )
-@SuppressWarnings("unused")
 public class DAOTest {
     
     @Autowired
@@ -35,8 +32,29 @@ public class DAOTest {
     
     @Transactional @Test
     public void testUserDAO() {
-        assertEquals("admin", userDAO.get(1L).getUsername());
-        assertEquals("admin", userDAO.getByUsername("admin").getUsername());
+        UserDO getTest = userDAO.get(1L);
+        assertEquals("admin", getTest.getUsername());
+        
+        UserDO saveTest = new UserDO();
+        saveTest.setLdtCreate(LocalDateTime.now());
+        saveTest.setLdtModified(LocalDateTime.now());
+        saveTest.setUsername("save" + System.currentTimeMillis());
+        saveTest.setPassword("password");
+        saveTest.setNickname("nickname");
+        saveTest.setPhotoURL("save" + System.currentTimeMillis());
+        saveTest.setUsedCapacity(10000L);
+        userDAO.save(saveTest);
+        System.out.println(saveTest.getId());// 数据库生成的自增主键
+        
+        UserDO updateTest = userDAO.get(2L);
+        updateTest.setUsername("update" + System.currentTimeMillis());
+        updateTest.setPhotoURL("update" + System.currentTimeMillis());
+        userDAO.update(updateTest);
+        
+        UserDO removeTest = userDAO.get(9L);
+        userDAO.remove(removeTest);
+        
+        System.out.println(userDAO.getByUsername("admin"));
     }
     
     @Autowired
