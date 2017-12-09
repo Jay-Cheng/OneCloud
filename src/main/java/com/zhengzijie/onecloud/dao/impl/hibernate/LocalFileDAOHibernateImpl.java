@@ -25,7 +25,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public LocalFileDO getByPath(long userID, long parent, String localName, String localType) {
+    public LocalFileDO getByPath(Long userID, Long parent, String localName, String localType) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.userID = :userID and file.parent = :parent and file.localName = :localName and file.localType = :localType");
@@ -44,7 +44,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public List<LocalFileDO> listByParent(long parent) {
+    public List<LocalFileDO> listByParent(Long parent) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent = :parent");
@@ -54,7 +54,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
     
     @Override
-    public List<LocalFileDO> listRecentFile(long userID) {
+    public List<LocalFileDO> listRecentFile(Long userID) {
         Session session = sessionFactory.getCurrentSession();
         LocalDateTime aWeekAgo = LocalDateTime.now().minusDays(7);
         @SuppressWarnings("unchecked")
@@ -106,7 +106,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public List<LocalFileDO> listByName(long userID, String name) {
+    public List<LocalFileDO> listByName(Long userID, String name) {
         Session session = sessionFactory.getCurrentSession();
         @SuppressWarnings("unchecked")
         Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent!=2 and file.parent!=3 and file.userID=:userID and concat(file.localName, '.', file.localType) like :name");
@@ -117,7 +117,7 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
 
     @Override
-    public List<LocalFileDO> listByLocalType(long userID, String[] localTypes) {
+    public List<LocalFileDO> listByLocalType(Long userID, String[] localTypes) {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<LocalFileDO> cq = cb.createQuery(LocalFileDO.class);

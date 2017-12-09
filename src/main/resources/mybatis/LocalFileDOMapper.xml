@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhengzijie.onecloud.dao.LocalFileDAO">
+  <resultMap id="localFileDOResultMap" type="LocalFileDO">
+    <id property="id" column="id"/>
+    <result property="ldtCreate" column="ldt_create"/>
+    <result property="ldtModified" column="ldt_modified"/>
+    <result property="userID" column="user_id"/>
+    <result property="fileID" column="file_id"/>
+    <result property="localName" column="local_name"/>
+    <result property="localType" column="local_type"/>
+    <result property="parent" column="parent"/>
+  </resultMap>
+  <sql id="columns">
+      id,
+      ldt_create,
+      ldt_modified,
+      user_id,
+      file_id,
+      local_name,
+      local_type,
+      parent
+  </sql>
+  <select id="get" parameterType="long" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where id = #{id}
+  </select>
+  
+  <insert id="save" parameterType="LocalFileDO" useGeneratedKeys="true" keyProperty="id">
+    insert into local_file 
+      (ldt_create,ldt_modified,user_id,file_id,local_name,local_type,parent) 
+      values(#{ldtCreate},#{ldtModified},#{userID},#{fileID},#{localName},#{localType},#{parent})
+  </insert>
+  
+  <update id="update" parameterType="LocalFileDO">
+    update local_file set
+      ldt_modified = #{ldtModified},
+      user_id = #{userID},
+      file_id = #{fileID},
+      local_name = #{localName},
+      local_type = #{localType},
+      parent = #{parent}
+    where id = #{id}
+  </update>
+  
+  <delete id="remove" parameterType="LocalFileDO">
+    delete from local_file where id = #{id}
+  </delete>
+
+  <select id="getByPath" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where user_id = #{userID} 
+      and parent = #{parent} 
+      and local_name like #{localName}
+      and local_type = #{localType} 
+  </select>
+  
+  <select id="listByParent" parameterType="long" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where parent = #{parent}
+  </select>
+
+  <select id="listRecentFile" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= ldt_create
+  </select>
+
+
+  <select id="listByName" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where parent != 2 
+      and parent != 3 
+      and user_id = #{userID} 
+      and concat(local_name, '.', local_type) like '%${name}%'
+  </select>
+
+  <select id="listByLocalType" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where parent != 2 
+      and parent != 3 
+      and user_id = #{userID} 
+      and 
+      <foreach collection="localTypes" item="localType" open="(" close=")" separator=" or ">   
+        local_type = #{localType}
+      </foreach> 
+      
+  </select>
+
+</mapper>

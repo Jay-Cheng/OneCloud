@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -124,13 +123,36 @@ public class DAOTest {
     
     @Transactional @Test
     public void testLocalFileDAO() {
+        LocalFileDO getTest = localFileDAO.get(66L);
+        assertTrue(32L == getTest.getFileID());
         
-        String[] localTypes = {"txt", "mp4", "mp3"};
-        List<LocalFileDO> localFileList = localFileDAO.listByLocalType(1L, localTypes);
+        LocalFileDO saveTest = new LocalFileDO();
+        saveTest.setLdtCreate(LocalDateTime.now());
+        saveTest.setLdtModified(LocalDateTime.now());
+        saveTest.setUserID(System.currentTimeMillis());
+        saveTest.setFileID(System.currentTimeMillis());
+        saveTest.setLocalName("save test");
+        saveTest.setLocalType("save test");
+        saveTest.setParent(System.currentTimeMillis());
+        localFileDAO.save(saveTest);
+        System.out.println(saveTest.getId());// 数据库生成的自增主键
         
-        for (LocalFileDO file : localFileList) {
-            System.out.println(file);
-        }
+        LocalFileDO updateTest = localFileDAO.get(75L);
+        updateTest.setUserID(System.currentTimeMillis());
+        updateTest.setParent(System.currentTimeMillis());
+        updateTest.setLocalName("update test");
+        updateTest.setLocalType("update test");
+        updateTest.setParent(System.currentTimeMillis());
+        localFileDAO.update(updateTest);
+        
+        LocalFileDO removeTest = localFileDAO.get(saveTest.getId());
+        localFileDAO.remove(removeTest);
+        
+        System.out.println(localFileDAO.getByPath(1L, 6L, "文本", "txt"));
+        System.out.println(localFileDAO.listByParent(8L));
+        System.out.println(localFileDAO.listRecentFile(1L));
+        System.out.println(localFileDAO.listByName(1L, "本.t"));
+        System.out.println(localFileDAO.listByLocalType(1L, new String[]{"txt","mp3","mp4","gif"}));
     }
     
 }
