@@ -65,7 +65,7 @@ public class UploadServiceImpl implements UploadService {
             /* 新建一行LocalFile数据，并更新用户使用空间 */
             localFile.setLdtCreate(LocalDateTime.now());
             localFile.setLdtModified(localFile.getLdtCreate());
-            localFile.setId(localFileDAO.save(localFile));
+            localFileDAO.save(localFile);
             
             result.put("status_code", 222);System.out.println("222");
             result.put("msg", "instant uploading");
@@ -84,9 +84,9 @@ public class UploadServiceImpl implements UploadService {
         file.setUrl(URL_ROOT + file.getMd5());
         file.setLdtCreate(LocalDateTime.now());
         file.setLdtModified(file.getLdtCreate());
-        long fileID = fileDAO.save(file);
+        fileDAO.save(file);
         
-        localFile.setFileID(fileID);
+        localFile.setFileID(file.getId());
         /* 如果存在重名，则为文件名添加数字下标，直到无重名为止 */
         while (localFileDAO.getByPath(localFile.getUserID()
                 , localFile.getParent(), localFile.getLocalName(), localFile.getLocalType()) != null) {
@@ -95,7 +95,7 @@ public class UploadServiceImpl implements UploadService {
         /* 新建一行LocalFile数据，并更新用户使用空间 */
         localFile.setLdtCreate(LocalDateTime.now());
         localFile.setLdtModified(localFile.getLdtCreate());
-        localFile.setId(localFileDAO.save(localFile));
+        localFileDAO.save(localFile);
 
         Map<String, Object> result = new HashMap<>();
         result.put("status_code", 333);System.out.println("333");

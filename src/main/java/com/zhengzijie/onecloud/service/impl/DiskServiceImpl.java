@@ -179,8 +179,7 @@ public class DiskServiceImpl implements DiskService {
     public LocalFolderDTO newFolder(LocalFolderDO unsaved) {
         unsaved.setLdtCreate(LocalDateTime.now());
         unsaved.setLdtModified(unsaved.getLdtCreate());
-        long id = localFolderDAO.save(unsaved);
-        unsaved.setId(id);
+        localFolderDAO.save(unsaved);
         
         return convertor.convertToDTO(unsaved);
     }

@@ -1,5 +1,6 @@
 package com.zhengzijie.onecloud.dao.impl.hibernate;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,15 @@ public abstract class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
     }
     
     @Override
-    public long save(T obj) {
+    public void save(T obj) {
         Session session = sessionFactory.getCurrentSession();
-        return (long) session.save(obj);
+        long id = (long) session.save(obj);
+        try {
+            Method setId = type.getDeclaredMethod("setId", Long.class);
+            setId.invoke(obj, id);
+        } catch (Exception e) {
+            throw new RuntimeException("GenericDAO save method encounter a problem");
+        }
     }
     
     @Override

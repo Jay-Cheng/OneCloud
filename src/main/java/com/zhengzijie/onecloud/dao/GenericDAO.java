@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface GenericDAO<T extends Object> {
     /* 基本的增删改查操作 */
-    long save(T obj);
+    void save(T obj);
     T get(long id);
     void update(T obj);
     void remove(T obj);
