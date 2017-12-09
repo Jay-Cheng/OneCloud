@@ -61,7 +61,7 @@ public abstract class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
         session.delete(obj);
     }
 
-    @Override @Deprecated
+    @Override
     public T get(Map<String, Object> params) {
         List<T> result = list(params);
         if (result.size() == 1) {
@@ -73,7 +73,7 @@ public abstract class GenericDAOHibernateImpl<T> implements GenericDAO<T> {
         }
     }
 
-    @Override @Deprecated
+    @Override
     public List<T> list(Map<String, Object> params) {
         Session session = sessionFactory.getCurrentSession();
         
