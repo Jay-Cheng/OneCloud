@@ -67,7 +67,15 @@
       from local_file 
       where parent = #{parent}
   </select>
-
+  
+  <select id="listRootContents" resultMap="localFileDOResultMap">
+    select
+      <include refid="columns" />
+      from local_file 
+      where parent = #{parent}
+      and user_id = #{userID}
+  </select>
+  
   <select id="listRecentFile" resultMap="localFileDOResultMap">
     select
       <include refid="columns" />

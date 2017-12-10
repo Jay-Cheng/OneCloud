@@ -51,6 +51,13 @@
       from local_folder 
       where parent = #{parent}
   </select>
+  <select id="listRootContents" resultMap="localFolderDOResultMap">
+    select
+      <include refid="columns" />
+      from local_folder 
+      where parent = #{parent}
+      and user_id = #{userID}
+  </select>
 
   <select id="listByName" resultMap="localFolderDOResultMap">
     select

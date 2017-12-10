@@ -116,7 +116,7 @@ public class DAOTest {
         
         System.out.println(localFolderDAO.listByParent(1L));
         System.out.println(localFolderDAO.listByName(1L, "图"));
-        System.out.println(localFolderDAO.listRootContents(1L, 1L));
+        System.out.println(localFolderDAO.listRootContents(1L, 100L));
     }    
     
     @Autowired
@@ -154,7 +154,7 @@ public class DAOTest {
         System.out.println(localFileDAO.listRecentFile(1L));
         System.out.println(localFileDAO.listByName(1L, "本.t"));
         System.out.println(localFileDAO.listByLocalType(1L, new String[]{"txt","mp3","mp4","gif"}));
-        System.out.println(localFileDAO.listRootContents(1L, 1L));
+        System.out.println(localFileDAO.listRootContents(1L, 100L));
     }
     
 }
