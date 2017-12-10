@@ -89,19 +89,21 @@ public class DiskServiceImpl implements DiskService {
     
     @Override @Transactional(readOnly = true)
     public Map<String, Object> getFolderContents(long userID, long folderID, int sortType) {
-        /* 设置查询参数 */
-        Map<String, Object> queryParam = new HashMap<>();
-        if (folderID == 1L || folderID == 2L || folderID == 3L) {// 这三个文件夹ID为公用ID，分别代表网盘，保险箱，回收站
-            queryParam.put("userID", userID);
-        }
-        queryParam.put("parent", folderID);
         
-        List<LocalFolderDO> localFolderList = localFolderDAO.list(queryParam);
+        List<LocalFolderDO> localFolderList;
+        List<LocalFileDO> localFileList;
+        if (folderID == 1L || folderID == 2L || folderID == 3L) {// 这三个文件夹ID为公用ID，分别代表网盘，保险箱，回收站
+            localFolderList = localFolderDAO.listRootContents(folderID, userID);
+            localFileList = localFileDAO.listRootContents(folderID, userID);
+        } else {
+            localFolderList = localFolderDAO.listByParent(folderID);
+            localFileList = localFileDAO.listByParent(folderID);
+        }
+        
         List<LocalFolderDTO> folderDTOList = convertor.convertFolderList(localFolderList);
         LocalFolderDTO[] folderDTOArray = folderDTOList.toArray(new LocalFolderDTO[folderDTOList.size()]);
         sorter.sort(folderDTOArray, sortType);
         
-        List<LocalFileDO> localFileList = localFileDAO.list(queryParam);
         List<LocalFileDTO> fileDTOList = convertor.convertFileList(localFileList);
         LocalFileDTO[] fileDTOArray = fileDTOList.toArray(new LocalFileDTO[fileDTOList.size()]);
         sorter.sort(fileDTOArray, sortType);

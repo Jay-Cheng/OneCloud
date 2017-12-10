@@ -81,6 +81,7 @@
       <include refid="columns" />
       from local_file 
       where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= ldt_create
+      and user_id = #{userID}
   </select>
 
 
