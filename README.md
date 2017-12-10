@@ -1,6 +1,6 @@
 # OneCloud
 ## 一、简介
-这是一个基于Spring MVC、Hibernate的网盘单页应用（[SPA](https://en.wikipedia.org/wiki/Single-page_application)）。项目采用了前后端分离的架构，前端发送AJAX请求，后端提供[REST](https://en.wikipedia.org/wiki/Representational_state_transfer)ful风格的API返回JSON数据。Web端UI参考了[微云](https://www.weiyun.com/)和[百度网盘](https://pan.baidu.com/)。
+这是一个基于Spring & Spring MVC & MyBatis(Hibernate)的网盘单页应用（[SPA](https://en.wikipedia.org/wiki/Single-page_application)）。项目采用了前后端分离的架构，前端负责发送AJAX request请求数据，后端负责提供[REST](https://en.wikipedia.org/wiki/Representational_state_transfer)ful风格的API返回JSON数据。DAO层提供了Hibernate、Mybatis两种ORM框架的实现。Web端UI参考了[微云](https://www.weiyun.com/)和[百度网盘](https://pan.baidu.com/)。
 
 - 开发环境
     - OS：Ubuntu 16.04LTS
@@ -16,6 +16,7 @@
 - 后端框架
     - Spring v5.0.1
     - Hibernate v5.2.10
+    - MyBatis v3.4.5
 - 其它
     - Maven v3.5.0
     - [右键菜单](https://github.com/dgoguerra/bootstrap-menu)
@@ -50,10 +51,7 @@
 
 ![示例图片](https://github.com/zhengzijie96/OneCloud/blob/master/preview.png)
 
+其它：当前系统中默认使用的是Mybatis的DAO层实现，想要切换为HibernateImpl，请在src/main/resources/bean.xml中将MapperScannerConfigurer注释掉，并把tx:annotation-driven的transaction-manager属性设置为hibernateTransactionManager
+
 ## 四、实现
 // TDDO
-
-
-
-
-
