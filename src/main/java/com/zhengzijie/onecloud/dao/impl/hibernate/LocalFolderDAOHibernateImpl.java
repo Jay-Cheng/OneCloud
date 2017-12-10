@@ -25,7 +25,18 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
         List<LocalFolderDO> result = query.list();
         return result;
     }
-
+    
+    @Override
+    public List<LocalFolderDO> listRootContents(Long parent, Long userID) {
+        Session session = sessionFactory.getCurrentSession();
+        @SuppressWarnings("unchecked")
+        Query<LocalFolderDO> query = session.createQuery("from LocalFolderDO folder where folder.parent = :parent and folder.userID = :userID");
+        query.setParameter("parent", parent);
+        query.setParameter("userID", userID);
+        List<LocalFolderDO> result = query.list();
+        return result;
+    }
+    
     @Override
     public List<LocalFolderDO> listByName(Long userID, String name) {
         Session session = sessionFactory.getCurrentSession();
@@ -36,5 +47,7 @@ public class LocalFolderDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFo
         List<LocalFolderDO> result = query.list();
         return result;
     }
+
+
 
 }

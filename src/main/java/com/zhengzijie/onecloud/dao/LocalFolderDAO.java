@@ -8,5 +8,6 @@ import com.zhengzijie.onecloud.dao.entity.LocalFolderDO;
 
 public interface LocalFolderDAO extends GenericDAO<LocalFolderDO> {
     List<LocalFolderDO> listByParent(Long parent);
+    List<LocalFolderDO> listRootContents(@Param("parent")Long parent, @Param("userID")Long userID);
     List<LocalFolderDO> listByName(@Param("userID")Long userID, @Param("name")String name);
 }

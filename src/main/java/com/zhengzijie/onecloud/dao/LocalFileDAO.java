@@ -10,7 +10,7 @@ public interface LocalFileDAO extends GenericDAO<LocalFileDO> {
     LocalFileDO getByPath(@Param("userID")Long userID, @Param("parent")Long parent
             , @Param("localName")String localName, @Param("localType")String localType);
     List<LocalFileDO> listByParent(Long parent);
-    
+    List<LocalFileDO> listRootContents(@Param("parent")Long parent, @Param("userID")Long userID);
     List<LocalFileDO> listRecentFile(Long userID);
     
     /** 使用listByLocalType()方法替代 */

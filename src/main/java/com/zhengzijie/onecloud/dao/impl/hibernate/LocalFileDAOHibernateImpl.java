@@ -54,6 +54,17 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
     }
     
     @Override
+    public List<LocalFileDO> listRootContents(Long parent, Long userID) {
+        Session session = sessionFactory.getCurrentSession();
+        @SuppressWarnings("unchecked")
+        Query<LocalFileDO> query = session.createQuery("from LocalFileDO file where file.parent = :parent and file.userID = :userID");
+        query.setParameter("parent", parent);
+        query.setParameter("userID", userID);
+        List<LocalFileDO> result = query.list();
+        return result;
+    }
+    
+    @Override
     public List<LocalFileDO> listRecentFile(Long userID) {
         Session session = sessionFactory.getCurrentSession();
         LocalDateTime aWeekAgo = LocalDateTime.now().minusDays(7);
@@ -142,4 +153,5 @@ public class LocalFileDAOHibernateImpl extends GenericDAOHibernateImpl<LocalFile
         
         return result;
     }
+
 }
